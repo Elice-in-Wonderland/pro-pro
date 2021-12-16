@@ -2,11 +2,13 @@ const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const { logger, resFormatter } = require('./utils');
 const { statusCode, routes, responseMessage } = require('./globals');
 
 const globalRouter = require('./routes/globalRouter');
+const postRouter = require('./routes/postRouter');
 
 const { NoPageError } = require('./utils/errors/commonError');
 
@@ -19,6 +21,7 @@ connectDB();
 const app = express();
 
 //미들웨어 설정
+app.use(cors());
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -31,6 +34,7 @@ app.use(cookieParser());
 
 //라우터 설정
 app.use(routes.root, globalRouter);
+app.use(routes.post, postRouter);
 
 // 아래는 에러 핸들링 함수들
 app.use(function (req, res, next) {
