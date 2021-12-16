@@ -1,0 +1,18 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": ["airbnb-base"],
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "ignorePatterns": ["node_modules/"],
+  "rules": {
+    "quotes": ["error", "single"],
+    "no-console": 0,
+    "implicit-arrow-linebreak": ["error", "below"],
+    "consistent-return": [0, { "treatUndefinedAsUnspecified": true }]
+  }
+}
