@@ -16,4 +16,9 @@ module.exports = {
   POST_CREATED: '게시글 생성 성공',
   POST_UPDATED: '게시글 수정 성공',
   POST_DELETED: '게시글 삭제 성공',
+
+  // comment
+  COMMENT_CREATED: '댓글 생성 성공',
+  COMMENT_UPDATED: '댓글 수정 성공',
+  COMMENT_DELETED: '댓글 삭제 성공',
 };
