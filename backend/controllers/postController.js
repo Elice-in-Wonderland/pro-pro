@@ -11,11 +11,6 @@ exports.getPost = asyncHandler(async (req, res, next) => {
 
   const posts = await postService.getPost(category, skipSize, perPage);
 
-  // 정상적인 요청이지만 해당하는 데이터가 비어있을 경우
-  if (posts.length < 1) {
-    return res.status(statusCode.NO_CONTENT).send();
-  }
-
   return res
     .status(statusCode.OK)
     .send(resFormatter.success(responseMessage.SUCCESS, posts));
