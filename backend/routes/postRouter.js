@@ -5,9 +5,12 @@ const postController = require('../controllers/postController');
 
 const postRouter = express.Router();
 
-//controller
+// Auth 적용 전
 
-// 새글 작성 ( 중간에 auth)
+// 새 글 작성
 postRouter.post(routes.root, postController.createPost);
+
+// 게시글 수정
+postRouter.put(routes.postDetail, postController.updatePost);
 
 module.exports = postRouter;
