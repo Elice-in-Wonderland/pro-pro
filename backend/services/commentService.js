@@ -5,3 +5,19 @@ exports.createComment = async data => {
 
   return comment;
 };
+
+exports.updateComment = async (commentId, data) => {
+  const comment = await commentModel.findOneAndUpdate(
+    { _id: commentId },
+    data,
+    { new: true },
+  );
+  
+  return comment;
+};
+
+exports.deleteComment = async commentId => {
+  const comment = await commentModel.deleteOne({ _id: commentId });
+
+  return comment;
+};
