@@ -53,4 +53,7 @@ userRouter.delete(
   userController.deleteBookmark,
 );
 
+// 북마크 목록
+userRouter.get(routes.bookmark, checkToken, userController.getBookmarkList);
+
 module.exports = userRouter;

@@ -1,8 +1,24 @@
 const postModel = require('../models/post');
 const commentService = require('../services/commentService');
+const userService = require('../services/userService');
 const deepCopyObject = require('../utils/deepCopyObject');
 
 const { UnAuthorizedError } = require('../utils/errors/commonError');
+
+// 북마크된 게시글
+exports.getMarkedPost = async postId => {
+  let post = await postModel
+    .findById(postId)
+    .select(
+      'category title recruitmentStatus stacks sido capacity marks views createdAt registerDeadline',
+    );
+
+  post = deepCopyObject(post);
+  post.sido = post.sido || '온라인';
+  post.marks = await userService.getBookmarkCount(post._id);
+
+  return post;
+};
 
 // 게시글 목록
 exports.getPost = async (category, skipSize, perPage) => {
@@ -15,10 +31,16 @@ exports.getPost = async (category, skipSize, perPage) => {
       'category title recruitmentStatus stacks sido capacity marks views createdAt registerDeadline',
     );
 
-  posts = posts.map(post => {
-    post.sido = post.sido || '온라인';
-    return post;
-  });
+  posts = deepCopyObject(posts);
+
+  posts = await Promise.all(
+    posts.map(async post => {
+      post.sido = post.sido || '온라인';
+      post.marks = await userService.getBookmarkCount(post._id);
+      console.log('post', post);
+      return post;
+    }),
+  );
 
   return posts;
 };
@@ -26,10 +48,12 @@ exports.getPost = async (category, skipSize, perPage) => {
 // 게시글 상세 페이지
 exports.getPostDetail = async postId => {
   let post = await postModel.findById(postId).populate('author');
+  const marks = await userService.getBookmarkCount(postId);
   const comments = await commentService.getComments(postId);
 
   post = deepCopyObject(post);
   post.comments = comments;
+  post.marks = marks;
 
   return post;
 };
