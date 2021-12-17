@@ -3,6 +3,7 @@ const { resFormatter } = require('../utils');
 const asyncHandler = require('../utils/asyncHandler');
 const postService = require('../services/postService');
 
+// 게시글 목록
 exports.getPost = asyncHandler(async (req, res, next) => {
   const category = req.query.category;
   const page = Number(req.query.page || 1);
@@ -10,6 +11,16 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   const skipSize = (page - 1) * perPage;
 
   const posts = await postService.getPost(category, skipSize, perPage);
+
+  return res
+    .status(statusCode.OK)
+    .send(resFormatter.success(responseMessage.SUCCESS, posts));
+});
+
+// 게시글 상세페이지
+exports.getPostDetail = asyncHandler(async (req, res, next) => {
+  const { postId } = req.params;
+  const posts = await postService.getPostDetail(postId);
 
   return res
     .status(statusCode.OK)
