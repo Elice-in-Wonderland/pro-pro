@@ -46,6 +46,9 @@ const PostSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+    sido: {
+      type: String,
+    },
     startDate: {
       type: Date,
       default: Date.now,
