@@ -174,3 +174,26 @@ exports.postUser = asyncHandler(async (req, res, next) => {
     .status(statusCode.CREATED)
     .send(resFormatter.success(responseMessage.CREATED_USER, {}));
 });
+
+// 프로필 정보 가져오기
+exports.getUser = asyncHandler(async (req, res, next) => {
+  const { userId } = req.decoded;
+
+  const user = await userService.checkUser(userId);
+
+  const region = {
+    sido: user.sido,
+    sigungu: user.sigungu,
+  };
+  const { nickname, position, stacks, imageURL } = user;
+
+  return res.status(statusCode.OK).send(
+    resFormatter.success(responseMessage.SUCCESS, {
+      nickname,
+      position,
+      stacks,
+      imageURL,
+      region,
+    }),
+  );
+});

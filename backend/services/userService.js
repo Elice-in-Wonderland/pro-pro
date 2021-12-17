@@ -1,5 +1,6 @@
 const userModel = require('../models/user');
 
+// 회원 존재 여부 (By snsId, snsType)
 exports.isExistSnsId = async (snsType, snsId) => {
   const user = await userModel.findOne({
     snsType,
@@ -9,15 +10,17 @@ exports.isExistSnsId = async (snsType, snsId) => {
   return user;
 };
 
+// 회원 정보 저장
 exports.snsSignUp = async data => {
   const user = await userModel.create(data);
 
   return user;
 };
 
+// 회원 존재 여부 (By userId)
 exports.checkUser = async userId => {
-  const alreadyUser = await userModel.findOne({
+  const user = await userModel.findOne({
     _id: userId,
   });
-  return alreadyUser;
+  return user;
 };
