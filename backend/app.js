@@ -8,6 +8,7 @@ const { logger, resFormatter } = require('./utils');
 const { statusCode, routes, responseMessage } = require('./globals');
 
 const globalRouter = require('./routes/globalRouter');
+const userRouter = require('./routes/userRouter');
 const postRouter = require('./routes/postRouter');
 const commentRouter = require('./routes/commentRouter');
 
@@ -35,6 +36,7 @@ app.use(cookieParser());
 
 //라우터 설정
 app.use(routes.root, globalRouter);
+app.use(routes.user, userRouter);
 app.use(routes.post, postRouter);
 app.use(routes.comment, commentRouter);
 

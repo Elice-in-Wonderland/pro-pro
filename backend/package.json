@@ -10,6 +10,7 @@
     "before": "npm install pm2 -g"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "debug": "^4.3.3",
