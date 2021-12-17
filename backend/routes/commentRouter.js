@@ -7,7 +7,10 @@ const commentRouter = express.Router();
 
 //controller
 
-// 새글 작성 ( 중간에 auth)
 commentRouter.post(routes.root, commentController.createComment);
+
+commentRouter.put(routes.commentDetail, commentController.updateComment);
+
+commentRouter.delete(routes.commentDetail, commentController.deleteComment);
 
 module.exports = commentRouter;
