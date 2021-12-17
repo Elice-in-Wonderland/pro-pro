@@ -219,3 +219,21 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     .status(statusCode.OK)
     .send(resFormatter.success(responseMessage.USER_UPDATED, {}));
 });
+
+// 유저 닉네임 중복 체크
+exports.checkNickname = asyncHandler(async (req, res, next) => {
+  const { nickname } = req.params;
+
+  const user = await userService.isExistNickname(nickname);
+
+  // 이미 해당 닉네임을 가진 유저가 존재한다면
+  if (user) {
+    return res
+      .status(statusCode.CONFLICT)
+      .send(resFormatter.success(responseMessage.DUPLICATE_NICKNAME, {}));
+  }
+
+  return res
+    .status(statusCode.OK)
+    .send(resFormatter.success(responseMessage.AVAILABLE_NICKNAME, {}));
+});

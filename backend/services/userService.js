@@ -32,3 +32,12 @@ exports.updateUser = async (userId, data) => {
   });
   return user;
 };
+
+// 유저 닉네임 중복 체크
+exports.isExistNickname = async nickname => {
+  const user = await userModel.findOne({
+    nickname,
+  });
+
+  return user;
+};
