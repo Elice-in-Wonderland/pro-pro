@@ -237,3 +237,31 @@ exports.checkNickname = asyncHandler(async (req, res, next) => {
     .status(statusCode.OK)
     .send(resFormatter.success(responseMessage.AVAILABLE_NICKNAME, {}));
 });
+
+// 북마크 추가
+exports.postBookmark = asyncHandler(async (req, res, next) => {
+  const { postId } = req.params;
+  const { userId } = req.decoded;
+
+  const bookmarkCount = await userService.createBookmark(userId, postId);
+
+  return res.status(statusCode.CREATED).send(
+    resFormatter.success(responseMessage.CREATE_BOOKMARK_SUCCESS, {
+      bookmarkCount,
+    }),
+  );
+});
+
+// 북마크 삭제
+exports.deleteBookmark = asyncHandler(async (req, res, next) => {
+  const { postId } = req.params;
+  const { userId } = req.decoded;
+
+  const bookmarkCount = await userService.deleteBookmark(userId, postId);
+
+  return res.status(statusCode.OK).send(
+    resFormatter.success(responseMessage.DELETE_BOOKMARK_SUCCESS, {
+      bookmarkCount,
+    }),
+  );
+});

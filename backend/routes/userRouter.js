@@ -39,4 +39,18 @@ userRouter.put(routes.root, checkToken, userController.updateUser);
 // 유저 닉네임 중복 체크
 userRouter.get(routes.userCheckNickname, userController.checkNickname);
 
+// 북마크 추가
+userRouter.post(
+  routes.bookmark + routes.postDetail,
+  checkToken,
+  userController.postBookmark,
+);
+
+// 북마크 삭제
+userRouter.delete(
+  routes.bookmark + routes.postDetail,
+  checkToken,
+  userController.deleteBookmark,
+);
+
 module.exports = userRouter;

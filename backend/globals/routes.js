@@ -9,7 +9,6 @@ const USER_SIGNIN = '/token';
 const USER_EXIST = '/existence/:snsType/:snsId';
 const USER_CHECK_NICKNAME = '/check/:nickname';
 const BOOKMARK = '/mark';
-const BOOKMARK_DETAIL = '/:postId';
 const AUTH = '/auth';
 const KAKAO = '/kakao';
 const GOOGLE = '/google';
@@ -30,7 +29,6 @@ const routes = {
   userExist: USER_EXIST,
   userCheckNickname: USER_CHECK_NICKNAME,
   bookmark: BOOKMARK,
-  bookmarkDetail: BOOKMARK_DETAIL,
   auth: AUTH,
   kakao: KAKAO,
   google: GOOGLE,
