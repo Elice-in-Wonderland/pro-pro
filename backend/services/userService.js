@@ -24,3 +24,11 @@ exports.checkUser = async userId => {
   });
   return user;
 };
+
+// 프로필 정보 수정
+exports.updateUser = async (userId, data) => {
+  const user = await userModel.findOneAndUpdate({ _id: userId }, data, {
+    new: true,
+  });
+  return user;
+};

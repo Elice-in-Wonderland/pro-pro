@@ -33,4 +33,7 @@ userRouter.post(routes.root, userController.postUser);
 // 프로필 정보 가져오기
 userRouter.get(routes.root, checkToken, userController.getUser);
 
+// 프로필 정보 수정하기
+userRouter.put(routes.root, checkToken, userController.updateUser);
+
 module.exports = userRouter;

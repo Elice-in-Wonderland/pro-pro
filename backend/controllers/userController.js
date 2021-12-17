@@ -197,3 +197,25 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     }),
   );
 });
+
+// 프로필 정보 수정하기
+exports.updateUser = asyncHandler(async (req, res, next) => {
+  const { userId } = req.decoded;
+
+  // 데이터 전처리
+  const { nickname, position, stacks, region, imageURL } = req.body;
+  const { sido, sigungu } = region;
+
+  await userService.updateUser(userId, {
+    nickname,
+    position,
+    stacks,
+    sido,
+    sigungu,
+    imageURL,
+  });
+
+  return res
+    .status(statusCode.OK)
+    .send(resFormatter.success(responseMessage.USER_UPDATED, {}));
+});

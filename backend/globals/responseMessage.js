@@ -32,6 +32,9 @@ module.exports = {
   LOGOUT_SUCCESS: '로그아웃 성공',
   NO_USER: '존재하지 않는 회원입니다.',
 
+  // user
+  USER_UPDATED: '프로필 정보 수정 성공',
+
   // post
   POST_CREATED: '게시글 생성 성공',
   POST_UPDATED: '게시글 수정 성공',
