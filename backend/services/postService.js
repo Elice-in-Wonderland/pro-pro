@@ -1,4 +1,6 @@
 const postModel = require('../models/post');
+const commentService = require('../services/commentService');
+const deepCopyObject = require('../utils/deepCopyObject');
 
 // 게시글 목록
 exports.getPost = async (category, skipSize, perPage) => {
@@ -6,26 +8,28 @@ exports.getPost = async (category, skipSize, perPage) => {
     .find({ category })
     .sort({ createdAt: -1 })
     .skip(skipSize)
-    .limit(perPage);
+    .limit(perPage)
+    .select(
+      'category title recruitmentStatus stacks sido capacity marks views createdAt registerDeadline',
+    );
 
   posts = posts.map(post => {
-    const restructuredPost = {
-      _id: post._id,
-      category: post.category,
-      title: post.title,
-      recruitmentStatus: post.recruitmentStatus,
-      stacks: post.stacks,
-      sido: post.sido || '온라인',
-      capacity: post.capacity,
-      marks: post.marks,
-      views: post.views,
-      createdAt: post.createdAt,
-      registerDeadline: post.registerDeadline,
-    };
-    return restructuredPost;
+    post.sido = post.sido || '온라인';
+    return post;
   });
 
   return posts;
+};
+
+// 게시글 상세 페이지
+exports.getPostDetail = async postId => {
+  let post = await postModel.findOne({ _id: postId });
+  const comments = await commentService.getComments(postId);
+
+  post = deepCopyObject(post);
+  post.comments = comments;
+
+  return post;
 };
 
 // 게시글 생성
