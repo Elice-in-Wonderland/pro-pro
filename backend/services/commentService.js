@@ -12,7 +12,7 @@ exports.updateComment = async (commentId, data) => {
     data,
     { new: true },
   );
-  console.log(comment);
+  
   return comment;
 };
 
