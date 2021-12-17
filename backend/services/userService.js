@@ -1,4 +1,5 @@
 const userModel = require('../models/user');
+const bookmarkModel = require('../models/bookmark');
 
 // 회원 존재 여부 (By snsId, snsType)
 exports.isExistSnsId = async (snsType, snsId) => {
@@ -40,4 +41,40 @@ exports.isExistNickname = async nickname => {
   });
 
   return user;
+};
+
+// 북마크 추가
+exports.createBookmark = async (authorId, postId) => {
+  await bookmarkModel.create({
+    authorId: { _id: authorId },
+    postId: { _id: postId },
+  });
+
+  const bookmarkCount = await bookmarkModel
+    .countDocuments({
+      postId: { _id: postId },
+    })
+    .exec();
+
+  return bookmarkCount;
+};
+
+// 북마크 삭제
+exports.deleteBookmark = async (authorId, postId) => {
+  await bookmarkModel.deleteOne({
+    $and: [
+      {
+        authorId: { _id: authorId },
+        postId: { _id: postId },
+      },
+    ],
+  });
+
+  const bookmarkCount = await bookmarkModel
+    .countDocuments({
+      postId: { _id: postId },
+    })
+    .exec();
+
+  return bookmarkCount;
 };

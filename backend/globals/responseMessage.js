@@ -35,6 +35,8 @@ module.exports = {
 
   // user
   USER_UPDATED: '프로필 정보 수정 성공',
+  CREATE_BOOKMARK_SUCCESS: '북마크 추가 성공',
+  DELETE_BOOKMARK_SUCCESS: '북마크 삭제 성공',
 
   // post
   POST_CREATED: '게시글 생성 성공',
