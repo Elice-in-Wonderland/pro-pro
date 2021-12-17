@@ -36,4 +36,7 @@ userRouter.get(routes.root, checkToken, userController.getUser);
 // 프로필 정보 수정하기
 userRouter.put(routes.root, checkToken, userController.updateUser);
 
+// 유저 닉네임 중복 체크
+userRouter.get(routes.userCheckNickname, userController.checkNickname);
+
 module.exports = userRouter;

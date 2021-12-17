@@ -22,6 +22,7 @@ module.exports = {
   // 회원가입
   CREATED_USER: '회원 가입 성공',
   AVAILABLE_NICKNAME: '사용 가능한 닉네임입니다.',
+  DUPLICATE_NICKNAME: '이미 사용 중인 닉네임입니다',
   SUCCESS_SNS_CHECK: '가입되어 있는 계정입니다.',
   FAIL_SNS_CHECK: '가입되어 있지 않은 계정입니다.',
   //FAIL_SINGUP: '회원 가입 실패',
