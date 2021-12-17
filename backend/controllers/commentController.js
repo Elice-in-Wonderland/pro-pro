@@ -20,7 +20,6 @@ exports.createComment = asyncHandler(async (req, res, next) => {
 
 exports.updateComment = asyncHandler(async (req, res, next) => {
   const { userId, content, parentType, parentId } = req.body;
-  console.log(userId)
   const { commentId } = req.params;
 
   await commentService.updateComment(commentId, {
