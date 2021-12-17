@@ -4,9 +4,10 @@ const asyncHandler = require('../utils/asyncHandler');
 const commentService = require('../services/commentService');
 
 exports.createComment = asyncHandler(async (req, res, next) => {
-  const { content, parentType, parentId } = req.body;
+  const { userId, content, parentType, parentId } = req.body;
 
   await commentService.createComment({
+    userId,
     content,
     parentType,
     parentId,
@@ -18,11 +19,11 @@ exports.createComment = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateComment = asyncHandler(async (req, res, next) => {
-  const { content, parentType, parentId } = req.body;
-
+  const { userId, content, parentType, parentId } = req.body;
   const { commentId } = req.params;
 
   await commentService.updateComment(commentId, {
+    userId,
     content,
     parentType,
     parentId,
