@@ -76,6 +76,17 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
   });
 
   return res
-    .status(statusCode.NO_CONTENT)
+    .status(statusCode.OK)
     .send(resFormatter.success(responseMessage.POST_UPDATED, {}));
+});
+
+// 게시글 삭제
+exports.deletePost = asyncHandler(async (req, res, next) => {
+  const { postId } = req.params;
+
+  await postService.deletePost(postId);
+
+  return res
+    .status(statusCode.OK)
+    .send(resFormatter.success(responseMessage.POST_DELETED, {}));
 });

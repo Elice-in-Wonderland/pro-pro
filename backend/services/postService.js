@@ -15,3 +15,10 @@ exports.updatePost = async (postId, data) => {
 
   return post;
 };
+
+// 게시글 삭제
+exports.deletePost = async postId => {
+  const post = await postModel.deleteOne({ _id: postId });
+
+  return post;
+};
