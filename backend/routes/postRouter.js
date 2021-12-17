@@ -7,10 +7,11 @@ const postRouter = express.Router();
 
 // Auth 적용 전
 
-// 새 글 작성
+// 게시글 생성
 postRouter.post(routes.root, postController.createPost);
-
 // 게시글 수정
 postRouter.put(routes.postDetail, postController.updatePost);
+// 게시글 삭제
+postRouter.delete(routes.postDetail, postController.deletePost);
 
 module.exports = postRouter;
