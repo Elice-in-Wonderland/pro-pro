@@ -265,3 +265,23 @@ exports.deleteBookmark = asyncHandler(async (req, res, next) => {
     }),
   );
 });
+
+// 북마크 목록
+exports.getBookmarkList = asyncHandler(async (req, res, next) => {
+  const { userId } = req.decoded;
+  const category = req.query.category;
+  const page = Number(req.query.page || 1);
+  const perPage = Number(req.query.perPage || 10);
+  const skipSize = (page - 1) * perPage;
+
+  const bookmarkList = await userService.getBookmarkList(
+    userId,
+    category,
+    skipSize,
+    perPage,
+  );
+
+  return res
+    .status(statusCode.OK)
+    .send(resFormatter.success(responseMessage.SUCCESS, bookmarkList));
+});
