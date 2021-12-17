@@ -12,6 +12,26 @@ module.exports = {
   ENTITY_NOT_EXIST: 'DB에 없는 데이터 관련 요청입니다.',
   NO_PAGE_ERROR: '해당 라우트는 존재하지 않습니다.',
 
+  // token
+  EMPTY_TOKEN: '토큰 값이 없습니다.',
+  EXPIRED_TOKEN: '토큰 값이 만료되었습니다.',
+  INVALID_TOKEN: '유효하지 않은 토큰값입니다.',
+  AUTH_SUCCESS: '인증에 성공했습니다.',
+  ISSUE_SUCCESS: '새로운 토큰이 생성되었습니다.',
+
+  // 회원가입
+  CREATED_USER: '회원 가입 성공',
+  AVAILABLE_NICKNAME: '사용 가능한 닉네임입니다.',
+  SUCCESS_SNS_CHECK: '가입되어 있는 계정입니다.',
+  FAIL_SNS_CHECK: '가입되어 있지 않은 계정입니다.',
+  //FAIL_SINGUP: '회원 가입 실패',
+
+  // 로그인
+  LOGIN_SUCCESS: '로그인 성공',
+  //LOGIN_FAIL: '로그인 실패',
+  LOGOUT_SUCCESS: '로그아웃 성공',
+  NO_USER: '존재하지 않는 회원입니다.',
+
   // post
   POST_CREATED: '게시글 생성 성공',
   POST_UPDATED: '게시글 수정 성공',

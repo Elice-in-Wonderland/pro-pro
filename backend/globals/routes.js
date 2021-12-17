@@ -6,9 +6,14 @@ const ROOT = '/';
 // User
 const USER = '/users';
 const USER_SIGNIN = '/token';
+const USER_EXIST = '/existence/:snsType/:snsId';
 const USER_CHECK_NICKNAME = '/check/:nickname';
 const BOOKMARK = '/mark';
 const BOOKMARK_DETAIL = '/:postId';
+const AUTH = '/auth';
+const KAKAO = '/kakao';
+const GOOGLE = '/google';
+const CALLBACK = '/callback';
 
 // Post
 const POST = '/posts';
@@ -22,9 +27,14 @@ const routes = {
   root: ROOT,
   user: USER,
   token: USER_SIGNIN,
+  userExist: USER_EXIST,
   userCheckNickname: USER_CHECK_NICKNAME,
   bookmark: BOOKMARK,
   bookmarkDetail: BOOKMARK_DETAIL,
+  auth: AUTH,
+  kakao: KAKAO,
+  google: GOOGLE,
+  callback: CALLBACK,
   post: POST,
   postDetail: POST_DETAIL,
   comment: COMMENT,
