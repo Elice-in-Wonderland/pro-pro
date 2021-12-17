@@ -20,6 +20,11 @@ exports.getPost = asyncHandler(async (req, res, next) => {
 // 게시글 상세페이지
 exports.getPostDetail = asyncHandler(async (req, res, next) => {
   const { postId } = req.params;
+
+  // 조회수 증가
+  await postService.increaseView(postId);
+
+  // 상세페이지 정보 가져오기
   const posts = await postService.getPostDetail(postId);
 
   return res
@@ -30,6 +35,7 @@ exports.getPostDetail = asyncHandler(async (req, res, next) => {
 // 게시글 생성
 exports.createPost = asyncHandler(async (req, res, next) => {
   // 추후에 빈 값 체크
+  const { userId } = req.decoded;
   const {
     category,
     title,
@@ -48,6 +54,7 @@ exports.createPost = asyncHandler(async (req, res, next) => {
   };
 
   await postService.createPost({
+    author: { _id: userId },
     category,
     title,
     content,
@@ -68,6 +75,8 @@ exports.createPost = asyncHandler(async (req, res, next) => {
 
 // 게시글 수정
 exports.updatePost = asyncHandler(async (req, res, next) => {
+  const { userId } = req.decoded;
+  const { postId } = req.params;
   const {
     category,
     title,
@@ -78,15 +87,13 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
     executionPeriod,
     registerDeadline,
   } = req.body;
-
-  const { postId } = req.params;
-
   const [startDate, endDate] = executionPeriod;
   const location = {
     type: 'Point',
     coordinates: [lat, lng],
   };
 
+  await postService.authCheck(userId, postId);
   await postService.updatePost(postId, {
     category,
     title,
@@ -108,8 +115,10 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
 
 // 게시글 삭제
 exports.deletePost = asyncHandler(async (req, res, next) => {
+  const { userId } = req.decoded;
   const { postId } = req.params;
 
+  await postService.authCheck(userId, postId);
   await postService.deletePost(postId);
 
   return res
