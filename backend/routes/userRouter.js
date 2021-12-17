@@ -1,6 +1,7 @@
 const express = require('express');
 const routes = require('../globals/routes');
 
+const { checkToken } = require('../middlewares/auth.js');
 const userController = require('../controllers/userController.js');
 
 const userRouter = express.Router();
@@ -28,5 +29,8 @@ userRouter.get(routes.userExist, userController.checkSnsId);
 
 // 유저 생성
 userRouter.post(routes.root, userController.postUser);
+
+// 프로필 정보 가져오기
+userRouter.get(routes.root, checkToken, userController.getUser);
 
 module.exports = userRouter;
