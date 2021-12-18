@@ -11,28 +11,31 @@ const axios = require('axios');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const KAKAO_AUTH_URL = 'https://kauth.kakao.com/oauth';
-const KAKAO_AUTH_REDIRECT_URL =
-  'http://localhost:4000/users/auth/kakao/callback';
-const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
-const GOOGLE_AUTH_TOKEN_URL = 'https://oauth2.googleapis.com/token';
-const GOOGLE_AUTH_REDIRECT_URL =
-  'http://localhost:4000/users/auth/google/callback';
+const {
+  // KAKAO_AUTH_URL,
+  KAKAO_AUTH_REDIRECT_URL,
+  KAKAO_SERVER_URL,
+  KAKAO_TOKEN_URL,
+  KAKAO_ACCESS_URL,
+  // GOOGLE_AUTH_URL,
+  GOOGLE_AUTH_TOKEN_URL,
+  GOOGLE_AUTH_REDIRECT_URL,
+  GOOGLE_SERVER_URL,
+  GOOGLE_ACCESS_URL,
+} = require('../configs/oauth');
 
 // 카카오 OAuth 서버에 리다이랙트
 exports.authKakao = (req, res, next) => {
-  return res.redirect(
-    `${KAKAO_AUTH_URL}/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_AUTH_REDIRECT_URL}&response_type=code`,
-  );
+  return res.redirect(KAKAO_SERVER_URL);
 };
 
-// 카카오 OAuth로부터 각자 리다이랙트
+// 카카오 OAuth로부터 정보 받아오기
 exports.callbackKakao = asyncHandler(async (req, res, next) => {
   const { code } = req.query;
 
   const { data } = await axios({
     method: 'POST',
-    url: `${KAKAO_AUTH_URL}/token`,
+    url: KAKAO_TOKEN_URL,
     headers: {
       'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
     },
@@ -49,7 +52,7 @@ exports.callbackKakao = asyncHandler(async (req, res, next) => {
 
   const { data: me } = await axios({
     method: 'GET',
-    url: `https://kapi.kakao.com/v2/user/me`,
+    url: KAKAO_ACCESS_URL,
     headers: {
       authorization: `bearer ${kakao_access_token}`,
     },
@@ -69,12 +72,10 @@ exports.callbackKakao = asyncHandler(async (req, res, next) => {
 
 // 구글 OAuth 서버에 리다이랙트
 exports.authGoogle = (req, res, next) => {
-  return res.redirect(
-    `${GOOGLE_AUTH_URL}?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_AUTH_REDIRECT_URL}&response_type=code&include_granted_scopes=true&scope=https://www.googleapis.com/auth/userinfo.email`,
-  );
+  return res.redirect(GOOGLE_SERVER_URL);
 };
 
-// 구글 OAuth로부터 각자 리다이랙트
+// 구글 OAuth로부터 정보 받아오기
 exports.callbackGoogle = asyncHandler(async (req, res, next) => {
   const { code } = req.query;
 
@@ -95,9 +96,7 @@ exports.callbackGoogle = asyncHandler(async (req, res, next) => {
 
   const access_token = data['access_token'];
 
-  const { data: me } = await axios.get(
-    `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`,
-  );
+  const { data: me } = await axios.get(`${GOOGLE_ACCESS_URL}=${access_token}`);
 
   const { sub, picture } = me;
   const userInformation = {
