@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // 베이스
-const BASE_URL = `http://localhost:4000`;
+const BASE_URL = process.env.BASE_URL || `http://localhost:4000`;
 
 // 카카오
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth`;
