@@ -1,0 +1,22 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "ignorePatterns": ["node_modules/"],
+  "rules": {
+    "quotes": ["error", "single"],
+    "linebreak-style": "off",
+    "no-new": "off",
+    "no-console": "off",
+    "class-methods-use-this": "off",
+    "no-else-return": "off",
+    "implicit-arrow-linebreak": ["error", "below"],
+    "consistent-return": ["off", { "treatUndefinedAsUnspecified": true }]
+  }
+}
