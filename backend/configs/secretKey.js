@@ -5,7 +5,7 @@ module.exports = {
   secretKey: process.env.JWT_SECERT,
   options: {
     algorithm: process.env.JWT_ALGO,
-    expiresIn: '7d',
+    expiresIn: '1d',
     issuer: 'jay',
   },
   refreshOptions: {

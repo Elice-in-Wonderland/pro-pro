@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { PROFILE_URL } = require('../configs/profileImage');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -19,8 +20,7 @@ const UserSchema = new mongoose.Schema(
     },
     imageURL: {
       type: String,
-      default:
-        'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
+      default: PROFILE_URL,
       required: true,
     },
     snsType: {

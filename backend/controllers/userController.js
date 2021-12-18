@@ -11,6 +11,7 @@ const axios = require('axios');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const { PROFILE_URL } = require('../configs/profileImage');
 const {
   // KAKAO_AUTH_URL,
   KAKAO_AUTH_REDIRECT_URL,
@@ -62,7 +63,7 @@ exports.callbackKakao = asyncHandler(async (req, res, next) => {
   const userInformation = {
     snsId: id,
     snsType: 'kakao',
-    imageURL: kakao_account.profile.thumbnail_image_url || '',
+    imageURL: kakao_account.profile.thumbnail_image_url || PROFILE_URL,
   };
 
   return res
@@ -102,7 +103,7 @@ exports.callbackGoogle = asyncHandler(async (req, res, next) => {
   const userInformation = {
     snsId: sub,
     snsType: 'google',
-    imageURL: picture || '',
+    imageURL: picture || PROFILE_URL,
   };
 
   return res

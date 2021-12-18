@@ -3,6 +3,7 @@ const { resFormatter } = require('../utils');
 const asyncHandler = require('../utils/asyncHandler');
 const commentService = require('../services/commentService');
 
+// 댓글 생성
 exports.createComment = asyncHandler(async (req, res, next) => {
   const { userId, content, parentType, parentId } = req.body;
 
@@ -18,6 +19,7 @@ exports.createComment = asyncHandler(async (req, res, next) => {
     .send(resFormatter.success(responseMessage.COMMENT_CREATED, {}));
 });
 
+// 댓글 수정
 exports.updateComment = asyncHandler(async (req, res, next) => {
   const { userId, content, parentType, parentId } = req.body;
   const { commentId } = req.params;
@@ -34,6 +36,7 @@ exports.updateComment = asyncHandler(async (req, res, next) => {
     .send(resFormatter.success(responseMessage.COMMENT_UPDATED, {}));
 });
 
+// 댓글 삭제
 exports.deleteComment = asyncHandler(async (req, res, next) => {
   const { commentId } = req.params;
 

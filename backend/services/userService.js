@@ -51,11 +51,7 @@ exports.createBookmark = async (authorId, postId) => {
     postId: { _id: postId },
   });
 
-  const bookmarkCount = await bookmarkModel
-    .countDocuments({
-      postId: { _id: postId },
-    })
-    .exec();
+  const bookmarkCount = await this.getBookmarkCount(postId);
 
   return bookmarkCount;
 };
@@ -71,11 +67,7 @@ exports.deleteBookmark = async (authorId, postId) => {
     ],
   });
 
-  const bookmarkCount = await bookmarkModel
-    .countDocuments({
-      postId: { _id: postId },
-    })
-    .exec();
+  const bookmarkCount = await this.getBookmarkCount(postId);
 
   return bookmarkCount;
 };
