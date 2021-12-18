@@ -9,7 +9,7 @@ const userRouter = express.Router();
 // 카카오 OAuth 서버에 리다이랙트
 userRouter.get(routes.auth + routes.kakao, userController.authKakao);
 
-// 카카오 OAuth로부터 각자 리다이랙트되는 주소
+// 카카오 OAuth로부터 정보 받아오기
 userRouter.get(
   routes.auth + routes.kakao + routes.callback,
   userController.callbackKakao,
@@ -18,7 +18,7 @@ userRouter.get(
 // 구글 OAuth 서버에 리다이랙트
 userRouter.get(routes.auth + routes.google, userController.authGoogle);
 
-// 구글 OAuth로부터 각자 리다이랙트되는 주소
+// 구글 OAuth로부터 정보 받아오기
 userRouter.get(
   routes.auth + routes.google + routes.callback,
   userController.callbackGoogle,
