@@ -14,8 +14,11 @@
     "linebreak-style": "off",
     "no-new": "off",
     "no-console": "off",
+    "no-underscore-dangle": "off",
     "class-methods-use-this": "off",
+    "no-restricted-syntax": "off",
     "no-else-return": "off",
+    "no-restricted-globals": ["off"],
     "implicit-arrow-linebreak": ["error", "below"],
     "consistent-return": ["off", { "treatUndefinedAsUnspecified": true }]
   }
