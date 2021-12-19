@@ -16,13 +16,13 @@ export default class DetailPage extends Component {
 
     // 게시글 정보 GET
     // 댓글 정보 GET
-    
+
       // 임시 더미 데이터
     this._state = { 
       post : {
         title: "00 서비스 프로젝트",
         author: "홍길동",
-        imageURL: "../../assets/icons/javascript.png",
+        imageURL: "",
         stacks: ["JavaScript", "HTML", "CSS", "NodeJS"],
         address: "서울 강동구",
         capacity: "5",
@@ -57,8 +57,7 @@ export default class DetailPage extends Component {
 
     // 컴포넌트 생성
     this.stacks = new stacks({
-      stackList : this._state.post.stacks,
-      type : "detail"
+      stackList : this._state.post.stacks
     })
 
     this.comments = new comments({
@@ -132,9 +131,9 @@ export default class DetailPage extends Component {
       <div class="commentSection">
         <hr />
         <ul class="comments"></ul>
-        <form action="POST">
-          <input type="text" />
-          <input type="button" value="등록" />
+        <form class="commentForm" action="POST">
+          <textarea placeholder="댓글을 남겨주세요." class="writeComment" type="text" ></textarea>
+          <input class="submitComment" type="button" value="등록" />
         </form>
       </div>
     `;
