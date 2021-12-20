@@ -1,0 +1,17 @@
+.stacks {
+  display: flex;
+  align-items: center;
+  .stackList {
+    display: flex;
+    font-size: 16px;
+    gap: 18px;
+    li:first-child {
+      margin-left: 18px;
+    }
+    li {
+      padding: 12px 20px 8px;
+      border-radius: 30px;
+      background-color: var(--gray);
+    }
+  }
+}

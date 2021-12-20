@@ -1,0 +1,122 @@
+@import '../../styles/index.css';
+
+#root {
+  background-color: var(--gray);
+  padding-bottom: 50px;
+}
+
+.detailContainer {
+  margin: 50px;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+  gap: 30px;
+}
+
+.detailTitle {
+  font-size: 36px;
+  font-weight: 600;
+  align-self: center;
+}
+
+.userWrapper {
+  font-size: 11px;
+  font-weight: bold;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  margin-bottom: 30px;
+  .banner,
+  .infos {
+    aspect-ratio: 1;
+  }
+  .banner {
+    // 임시, 추후에는 기술스택 종류에 따라 동적으로 변할 것.
+    background-color: #ffe29a;
+  }
+  .infos {
+    ul {
+      padding: 50px 0px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      height: 100%;
+    }
+    .info {
+      div:first-child:not(.viewWrapper) {
+        font-size: 18px;
+        color: var(--black);
+        opacity: 0.6;
+        margin-bottom: 5px;
+      }
+      div:last-child:not(.bookmarkWrapper) {
+        font-size: 24px;
+      }
+    }
+
+    .info:last-child {
+      display: flex;
+      opacity: 0.6;
+      .viewWrapper {
+        display: flex;
+        .view {
+          // 아이콘 구현 예정
+        }
+      }
+      .bookmarkWrapper {
+        display: flex;
+        .bookmark {
+          // 아이콘 구현 예정
+        }
+      }
+    }
+  }
+}
+
+.descriptionWrapper,
+.mapWarpper {
+  h3 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+  h4 {
+    font-size: 18px;
+    opacity: 0.6;
+  }
+}
+
+hr {
+  width: 100%;
+  opacity: 0.4;
+}
+
+.commentForm {
+  display: flex;
+  position: relative;
+}
+
+.writeComment {
+  padding: 15px;
+  width: 100%;
+  height: 100px;
+}
+
+.submitComment {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 12px 20px 8px;
+  border-radius: 30px;
+  font-weight: 600;
+  opacity: 0.6;
+}
