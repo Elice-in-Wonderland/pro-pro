@@ -9,7 +9,6 @@ const UserSchema = new mongoose.Schema(
     },
     position: {
       type: String,
-      required: true,
     },
     stacks: [String],
     sido: {

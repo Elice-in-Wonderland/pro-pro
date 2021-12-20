@@ -3,6 +3,7 @@ const { resFormatter } = require('../utils');
 const { COOKIE_TOKEN_FEILD } = require('../middlewares/auth');
 const jwt = require('../libs/jwt.js');
 const asyncHandler = require('../utils/asyncHandler');
+const nicknameGenerator = require('../libs/nicknameGenerator');
 
 const userService = require('../services/userService');
 // const logger = require('../utils/logger');
@@ -13,6 +14,7 @@ dotenv.config();
 
 const { PROFILE_URL } = require('../configs/profileImage');
 const {
+  CLIENT_URL,
   // KAKAO_AUTH_URL,
   KAKAO_AUTH_REDIRECT_URL,
   KAKAO_SERVER_URL,
@@ -60,15 +62,48 @@ exports.callbackKakao = asyncHandler(async (req, res, next) => {
   });
 
   const { id, kakao_account } = me;
+  const nickname = await nicknameGenerator.generateNickname();
+
   const userInformation = {
     snsId: id,
     snsType: 'kakao',
     imageURL: kakao_account.profile.thumbnail_image_url || PROFILE_URL,
+    nickname,
+  };
+
+  const alreadyUser = await userService.isExistSnsId(
+    userInformation.snsType,
+    userInformation.snsId,
+  );
+
+  // 이미 존재하는 유저인 경우 토큰 생성
+  if (alreadyUser) {
+    const alreadyUserJwt = await jwt.sign(alreadyUser);
+
+    const cookieOption = {
+      domain: req.hostname,
+      // second to milisecond
+      expires: new Date(alreadyUserJwt.expires * 1000),
+    };
+    return res
+      .cookie(COOKIE_TOKEN_FEILD, alreadyUserJwt.accessToken, cookieOption)
+      .redirect(CLIENT_URL);
+  }
+
+  // 존재하지 않는 유저인 경우 정보 저장 후 토큰 생성
+  const newUser = await userService.snsSignUp(userInformation);
+
+  const newUserJwt = await jwt.sign(newUser);
+
+  const cookieOption = {
+    domain: req.hostname,
+    // second to milisecond
+    expires: new Date(newUserJwt.expires * 1000),
   };
 
   return res
-    .status(statusCode.OK)
-    .send(resFormatter.success(responseMessage.SUCCESS, userInformation));
+    .cookie(COOKIE_TOKEN_FEILD, newUserJwt.accessToken, cookieOption)
+    .redirect(CLIENT_URL);
 });
 
 // 구글 OAuth 서버에 리다이랙트
@@ -100,15 +135,48 @@ exports.callbackGoogle = asyncHandler(async (req, res, next) => {
   const { data: me } = await axios.get(`${GOOGLE_ACCESS_URL}=${access_token}`);
 
   const { sub, picture } = me;
+  const nickname = await nicknameGenerator.generateNickname();
+
   const userInformation = {
     snsId: sub,
     snsType: 'google',
     imageURL: picture || PROFILE_URL,
+    nickname,
+  };
+
+  const alreadyUser = await userService.isExistSnsId(
+    userInformation.snsType,
+    userInformation.snsId,
+  );
+
+  // 이미 존재하는 유저인 경우 토큰 생성
+  if (alreadyUser) {
+    const alreadyUserJwt = await jwt.sign(alreadyUser);
+
+    const cookieOption = {
+      domain: req.hostname,
+      // second to milisecond
+      expires: new Date(alreadyUserJwt.expires * 1000),
+    };
+    return res
+      .cookie(COOKIE_TOKEN_FEILD, alreadyUserJwt.accessToken, cookieOption)
+      .redirect(CLIENT_URL);
+  }
+
+  // 존재하지 않는 유저인 경우 정보 저장 후 토큰 생성
+  const newUser = await userService.snsSignUp(userInformation);
+
+  const newUserJwt = await jwt.sign(newUser);
+
+  const cookieOption = {
+    domain: req.hostname,
+    // second to milisecond
+    expires: new Date(newUserJwt.expires * 1000),
   };
 
   return res
-    .status(statusCode.OK)
-    .send(resFormatter.success(responseMessage.SUCCESS, userInformation));
+    .cookie(COOKIE_TOKEN_FEILD, newUserJwt.accessToken, cookieOption)
+    .redirect(CLIENT_URL);
 });
 
 // 유저 존재 여부 체크
