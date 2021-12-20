@@ -1,0 +1,157 @@
+$white: #ffffff;
+$gray: #f9f9f9;
+$black: #000000;
+$light: #def0fb;
+$bright: #afd9f1;
+$medium: #515caa;
+$medium2: #4b9cce;
+$dark: #24274a;
+
+@mixin inputBox() {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+}
+
+body {
+  background-color: $gray;
+  box-sizing: border-box;
+  form {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    background-color: $white;
+    margin: 50px 100px;
+    div {
+      margin: 50px 0 50px 50px;
+      h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+      p {
+        font-size: 16px;
+      }
+    }
+    .Category {
+      P {
+        label {
+          input[type='radio'] {
+            filter: invert(3%) hue-rotate(372deg) brightness(0.9) contrast(90%);
+          }
+        }
+        label:first-child {
+          margin-right: 300px;
+        }
+      }
+    }
+    .Title {
+      input {
+        width: 700px;
+        height: 25px;
+        @include inputBox();
+      }
+    }
+    .Region {
+      select {
+        width: 100px;
+        height: 25px;
+        @include inputBox();
+        margin-right: 20px;
+      }
+    }
+    .Period {
+      p {
+        label {
+          margin-right: 40px;
+          color: $medium;
+          font-size: 14px;
+          font-weight: bold;
+          select {
+            width: 80px;
+            height: 25px;
+            @include inputBox();
+            margin-right: 20px;
+          }
+          input {
+            display: none;
+          }
+        }
+      }
+    }
+    .Capacity {
+      input {
+        border: none;
+        background-color: $white;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      input:nth-child(2) {
+        width: 24px;
+        height: 24px;
+        @include inputBox();
+        border-radius: 50%;
+        text-align: center;
+      }
+      input:last-child {
+        color: $medium;
+      }
+    }
+    .RegisterDeadline {
+      p {
+        select {
+          width: 80px;
+          height: 25px;
+          @include inputBox();
+          margin-right: 20px;
+        }
+        input {
+          display: none;
+        }
+      }
+    }
+    .Stacks {
+      p {
+        display: flex;
+        flex-wrap: wrap;
+        label {
+          width: 25%;
+          height: 50px;
+          input[type='checkbox'] {
+            @include inputBox();
+          }
+          input[type='checkbox']:checked {
+            @include inputBox();
+            filter: invert(3%) hue-rotate(372deg) brightness(0.9) contrast(90%);
+          }
+        }
+      }
+    }
+    .Content {
+      textarea {
+        @include inputBox();
+        resize: none;
+        width: 90%;
+        padding: 20px;
+      }
+    }
+    .Btns {
+      text-align: right;
+      padding-right: 10%;
+      input {
+        border: 1px solid #c4c4c4;
+        border-radius: 15px;
+        width: 120px;
+        height: 52px;
+        background-color: $white;
+        font-size: 16px;
+        font-weight: bold;
+        transition: color 200ms, background-color 200ms;
+        cursor: pointer;
+        margin-left: 40px;
+      }
+      :hover {
+        color: $white;
+        background-color: $dark;
+      }
+    }
+  }
+}
