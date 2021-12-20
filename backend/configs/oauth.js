@@ -4,6 +4,7 @@ dotenv.config();
 
 // 베이스
 const BASE_URL = process.env.BASE_URL || `http://localhost:4000`;
+const CLIENT_URL = process.env.CLIENT_URL || `http://localhost:9000`;
 
 // 카카오
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth`;
@@ -20,6 +21,7 @@ const GOOGLE_SERVER_URL = `${GOOGLE_AUTH_URL}?client_id=${process.env.GOOGLE_CLI
 const GOOGLE_ACCESS_URL = `https://www.googleapis.com/oauth2/v3/userinfo?access_token`;
 
 module.exports = {
+  CLIENT_URL,
   KAKAO_AUTH_URL,
   KAKAO_AUTH_REDIRECT_URL,
   KAKAO_SERVER_URL,
