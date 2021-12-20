@@ -1,0 +1,70 @@
+@import '../../styles/index.css';
+
+.login-modal-wrapper {
+  position: relative;
+  width: 582px;
+  height: 644px;
+  background-color: var(--white);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+}
+
+.login-exit-btn {
+  position: absolute;
+  right: 50px;
+  top: 50px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.login-header {
+}
+
+.login-greeting {
+  color: var(--black);
+  font-style: normal;
+  font-weight: normal;
+  font-size: 36px;
+  line-height: 42px;
+  margin-bottom: 31px;
+  text-align: center;
+}
+
+.login-image {
+  display: block;
+  margin: 0px auto;
+}
+
+.login-btn-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.login-sns {
+  text-align: center;
+}
+
+.login-btn {
+  display: block;
+  margin: 54px 15px 20px 15px;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: transform 500ms;
+  }
+}
+
+.login-text {
+  color: var(--black);
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+}
