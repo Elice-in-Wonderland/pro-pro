@@ -42,6 +42,13 @@
   .banner {
     // 임시, 추후에는 기술스택 종류에 따라 동적으로 변할 것.
     background-color: #ffe29a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .bannerLogo {
+      width: 25%;
+      box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    }
   }
   .infos {
     ul {
@@ -65,17 +72,25 @@
 
     .info:last-child {
       display: flex;
-      opacity: 0.6;
+      gap: 15px;
       .viewWrapper {
         display: flex;
+        align-items: center;
+        gap: 10px;
         .view {
-          // 아이콘 구현 예정
+          height: 20px;
+        }
+        .viewCount {
         }
       }
       .bookmarkWrapper {
         display: flex;
+        align-items: center;
+        gap: 10px;
         .bookmark {
-          // 아이콘 구현 예정
+          height: 25px;
+        }
+        .bookmarkCount {
         }
       }
     }
@@ -92,6 +107,13 @@
   h4 {
     font-size: 18px;
     opacity: 0.6;
+  }
+  .postDescription {
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .mapDescription {
+    font-size: 16px;
   }
 }
 
@@ -119,4 +141,5 @@ hr {
   border-radius: 30px;
   font-weight: 600;
   opacity: 0.6;
+  border: 0;
 }
