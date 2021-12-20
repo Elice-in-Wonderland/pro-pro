@@ -1,9 +1,11 @@
 const postModel = require('../models/post');
 const commentService = require('../services/commentService');
 const userService = require('../services/userService');
-const deepCopyObject = require('../utils/deepCopyObject');
 
-const { UnAuthorizedError } = require('../utils/errors/commonError');
+const {
+  UnAuthorizedError,
+  EntityNotExistError,
+} = require('../utils/errors/commonError');
 
 // 북마크된 게시글
 exports.getMarkedPost = async postId => {
@@ -11,9 +13,9 @@ exports.getMarkedPost = async postId => {
     .findById(postId)
     .select(
       'category title recruitmentStatus stacks sido capacity marks views createdAt registerDeadline',
-    );
+    )
+    .lean();
 
-  post = deepCopyObject(post);
   post.sido = post.sido || '온라인';
   post.marks = await userService.getBookmarkCount(post._id);
 
@@ -29,15 +31,13 @@ exports.getPost = async (category, skipSize, perPage) => {
     .limit(perPage)
     .select(
       'category title recruitmentStatus stacks sido capacity marks views createdAt registerDeadline',
-    );
-
-  posts = deepCopyObject(posts);
+    )
+    .lean();
 
   posts = await Promise.all(
     posts.map(async post => {
       post.sido = post.sido || '온라인';
       post.marks = await userService.getBookmarkCount(post._id);
-      console.log('post', post);
       return post;
     }),
   );
@@ -47,11 +47,10 @@ exports.getPost = async (category, skipSize, perPage) => {
 
 // 게시글 상세 페이지
 exports.getPostDetail = async postId => {
-  let post = await postModel.findById(postId).populate('author');
+  const post = await postModel.findById(postId).populate('author').lean();
   const marks = await userService.getBookmarkCount(postId);
   const comments = await commentService.getComments(postId);
 
-  post = deepCopyObject(post);
   post.comments = comments;
   post.marks = marks;
 
@@ -81,6 +80,7 @@ exports.deletePost = async postId => {
   return post;
 };
 
+// 조회수 증가
 exports.increaseView = async postId => {
   const post = postModel.findByIdAndUpdate(postId, { $inc: { views: 1 } });
 
@@ -91,7 +91,22 @@ exports.increaseView = async postId => {
 exports.authCheck = async (userId, postId) => {
   const post = await postModel.findById(postId).populate('author');
 
-  if (post.author._id != userId) {
+  if (post.author._id !== userId) {
     throw new UnAuthorizedError();
+  }
+
+  return post;
+};
+
+// 게시글 존재 여부
+exports.isExistPost = async postId => {
+  try {
+    const post = await postModel.findOne({
+      _id: postId,
+    });
+
+    return post;
+  } catch (err) {
+    throw new EntityNotExistError();
   }
 };

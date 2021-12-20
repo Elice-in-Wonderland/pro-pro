@@ -1,6 +1,6 @@
 const userModel = require('../models/user');
 const bookmarkModel = require('../models/bookmark');
-const postService = require('../services/postService');
+const postService = require('./postService');
 
 // 회원 존재 여부 (By snsId, snsType)
 exports.isExistSnsId = async (snsType, snsId) => {

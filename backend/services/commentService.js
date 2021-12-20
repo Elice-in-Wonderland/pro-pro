@@ -1,8 +1,11 @@
 const commentModel = require('../models/comment');
-const deepCopyObject = require('../utils/deepCopyObject');
+const userService = require('./userService');
 
-const { UnAuthorizedError } = require('../utils/errors/commonError');
-const { EntityNotExistError } = require('../utils/errors/commonError');
+const {
+  UnAuthorizedError,
+  EntityNotExistError,
+} = require('../utils/errors/commonError');
+
 // 댓글 생성
 exports.createComment = async data => {
   const comment = await commentModel.create(data);
@@ -37,16 +40,18 @@ exports.deleteComment = async commentId => {
 
 // 댓글 목록 가져오기
 exports.getComments = async postId => {
-  let comments = await commentModel.find({
-    parentType: 'post',
-    parentId: postId,
-  });
-
-  comments = deepCopyObject(comments);
+  let comments = await commentModel
+    .find({
+      parentType: 'post',
+      parentId: postId,
+    })
+    .lean();
 
   // getNestedComments
   await Promise.all(
     comments.map(async comment => {
+      const author = await userService.checkUser(comment.userId);
+      comment.author = author;
       comment.nestedComments = await this.getNestedComments(comment._id);
     }),
   );
@@ -56,10 +61,20 @@ exports.getComments = async postId => {
 
 // 대댓글 목록 가져오기
 exports.getNestedComments = async commentId => {
-  const comments = await commentModel.find({
-    parentType: 'comment',
-    parentId: commentId,
-  });
+  let comments = await commentModel
+    .find({
+      parentType: 'comment',
+      parentId: commentId,
+    })
+    .lean();
+
+  await Promise.all(
+    comments.map(async comment => {
+      const author = await userService.checkUser(comment.userId);
+      comment.author = author;
+    }),
+  );
+
   return comments;
 };
 
