@@ -1,0 +1,100 @@
+label {
+  b {
+    color: var(--dark);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28.13px;
+  }
+}
+
+.profile-page-wrapper {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  background-color: var(--white);
+  width: 1264px;
+  height: 846px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userImg {
+  width: 157px;
+  height: 157px;
+  margin-top: 22px;
+  margin-bottom: 100px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  &:nth-child(2) {
+    display: inline;
+    label {
+      display: block;
+    }
+  }
+
+  select,
+  input {
+    margin-top: 5px;
+    border-radius: 5px;
+    border-width: 1px;
+  }
+}
+
+.nickname-input {
+  width: 150px;
+}
+
+.sido-select {
+  width: 80px;
+  margin-right: 5px;
+}
+.sigungu-select {
+  width: 120px;
+}
+.position-select {
+  width: 150px;
+}
+.stack-select {
+  display: grid;
+  row-gap: 10px;
+  column-gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  input {
+    margin-right: 8px;
+    border-radius: 15px;
+
+    &:checked {
+      background: red;
+    }
+  }
+}
+
+.check-with-label:checked + .label-for-check {
+  color: var(--medium2);
+}
