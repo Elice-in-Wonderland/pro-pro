@@ -1,12 +1,12 @@
 class Component {
   $dom;
 
-  _props;
+  props;
 
-  _state;
+  state;
 
   constructor(props) {
-    this._props = props;
+    this.props = props;
   }
 
   setState = nextState => {
@@ -17,9 +17,10 @@ class Component {
   createDom = (tagName, attrs) => {
     const $dom = document.createElement(tagName);
     for (const [key, value] of Object.entries(attrs)) {
+      console.log(attrs);
       $dom[key] = value;
     }
-
+    console.log($dom);
     return $dom;
   };
 
