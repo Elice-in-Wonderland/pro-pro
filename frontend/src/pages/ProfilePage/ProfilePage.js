@@ -23,7 +23,7 @@ export default class ProfilePage extends Component {
       className: 'profile-page-wrapper',
     });
 
-    props.$app.appendChild(this.$dom);
+    props.appendChild(this.$dom);
 
     this.render();
     // render 후 데이터 불러오기
