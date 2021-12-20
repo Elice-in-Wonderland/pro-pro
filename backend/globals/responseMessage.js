@@ -47,4 +47,5 @@ module.exports = {
   COMMENT_CREATED: '댓글 생성 성공',
   COMMENT_UPDATED: '댓글 수정 성공',
   COMMENT_DELETED: '댓글 삭제 성공',
+  PARENT_TYPE_ERROR: '부모는 post 혹은 comment여야 합니다.',
 };

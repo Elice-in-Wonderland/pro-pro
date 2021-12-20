@@ -1,6 +1,8 @@
 const commentModel = require('../models/comment');
 const deepCopyObject = require('../utils/deepCopyObject');
 
+const { UnAuthorizedError } = require('../utils/errors/commonError');
+const { EntityNotExistError } = require('../utils/errors/commonError');
 // 댓글 생성
 exports.createComment = async data => {
   const comment = await commentModel.create(data);
@@ -10,20 +12,27 @@ exports.createComment = async data => {
 
 // 댓글 수정
 exports.updateComment = async (commentId, data) => {
-  const comment = await commentModel.findOneAndUpdate(
-    { _id: commentId },
-    data,
-    { new: true },
-  );
-
-  return comment;
+  try {
+    const comment = await commentModel.findOneAndUpdate(
+      { _id: commentId },
+      data,
+      { new: true },
+    );
+    return comment;
+  } catch (err) {
+    throw new EntityNotExistError();
+  }
 };
 
 // 댓글 삭제
 exports.deleteComment = async commentId => {
-  const comment = await commentModel.deleteOne({ _id: commentId });
+  try {
+    const comment = await commentModel.deleteOne({ _id: commentId });
 
-  return comment;
+    return comment;
+  } catch (err) {
+    throw new EntityNotExistError();
+  }
 };
 
 // 댓글 목록 가져오기
@@ -52,4 +61,27 @@ exports.getNestedComments = async commentId => {
     parentId: commentId,
   });
   return comments;
+};
+
+// 댓글 존재 여부
+exports.isExistComment = async commentId => {
+  try {
+    const comment = await commentModel.findOne({
+      _id: commentId,
+    });
+    return comment;
+  } catch (err) {
+    throw new EntityNotExistError();
+  }
+};
+
+// 댓글 수정, 삭제 권한확인
+exports.authCheck = async (userId, commentId) => {
+  const comment = await commentModel.findById(commentId).populate('userId');
+
+  if (comment.userId._id !== userId) {
+    throw new UnAuthorizedError();
+  }
+
+  return comment;
 };
