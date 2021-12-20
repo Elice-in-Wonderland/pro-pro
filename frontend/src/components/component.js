@@ -17,10 +17,8 @@ class Component {
   createDom = (tagName, attrs) => {
     const $dom = document.createElement(tagName);
     for (const [key, value] of Object.entries(attrs)) {
-      console.log(attrs);
       $dom[key] = value;
     }
-    console.log($dom);
     return $dom;
   };
 
