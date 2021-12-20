@@ -91,7 +91,7 @@ exports.increaseView = async postId => {
 exports.authCheck = async (userId, postId) => {
   const post = await postModel.findById(postId).populate('author');
 
-  if (post.author._id !== userId) {
+  if (post.author._id != userId) {
     throw new UnAuthorizedError();
   }
 

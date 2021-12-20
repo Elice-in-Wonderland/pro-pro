@@ -21,6 +21,9 @@ exports.getPost = asyncHandler(async (req, res, next) => {
 exports.getPostDetail = asyncHandler(async (req, res, next) => {
   const { postId } = req.params;
 
+  // 게시글이 존재하지 않을 때
+  await postService.isExistPost(postId);
+
   // 조회수 증가
   await postService.increaseView(postId);
 
@@ -93,7 +96,12 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
     coordinates: [lat, lng],
   };
 
+  // 게시글이 존재하지 않을 때
+  await postService.isExistPost(postId);
+
+  // 권한 확인
   await postService.authCheck(userId, postId);
+
   await postService.updatePost(postId, {
     category,
     title,
@@ -118,7 +126,12 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
   const { userId } = req.decoded;
   const { postId } = req.params;
 
+  // 게시글이 존재하지 않을 때
+  await postService.isExistPost(postId);
+
+  // 권한 확인
   await postService.authCheck(userId, postId);
+
   await postService.deletePost(postId);
 
   return res

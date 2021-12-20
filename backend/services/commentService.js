@@ -94,7 +94,7 @@ exports.isExistComment = async commentId => {
 exports.authCheck = async (userId, commentId) => {
   const comment = await commentModel.findById(commentId).populate('userId');
 
-  if (comment.userId._id !== userId) {
+  if (comment.userId._id != userId) {
     throw new UnAuthorizedError();
   }
 
