@@ -24,9 +24,6 @@ module.exports = {
     client: {
       overlay: true,
     },
-    proxy: {
-      '/api': 'http://localhost:4000/',
-    },
   },
   optimization: {
     minimizer:
