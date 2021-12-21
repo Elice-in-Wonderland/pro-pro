@@ -35,8 +35,6 @@ module.exports = {
 
   // user
   USER_UPDATED: '프로필 정보 수정 성공',
-  CREATE_BOOKMARK_SUCCESS: '북마크 추가 성공',
-  DELETE_BOOKMARK_SUCCESS: '북마크 삭제 성공',
 
   // post
   POST_CREATED: '게시글 생성 성공',
@@ -48,4 +46,10 @@ module.exports = {
   COMMENT_UPDATED: '댓글 수정 성공',
   COMMENT_DELETED: '댓글 삭제 성공',
   PARENT_TYPE_ERROR: '부모는 post 혹은 comment여야 합니다.',
+
+  // bookmark
+  CREATE_BOOKMARK_SUCCESS: '북마크 추가 성공',
+  DELETE_BOOKMARK_SUCCESS: '북마크 삭제 성공',
+  ALREADY_BOOKMARK: '이미 북마크로 등록되어 있습니다.',
+  NO_BOOKMARK: '북마크로 등록하신 적이 없습니다.',
 };

@@ -93,3 +93,16 @@ exports.getBookmarkList = async (userId, category, skipSize, perPage) => {
 
   return posts;
 };
+
+// 북마크 존재 여부 체크
+exports.isExistBookmark = async (authorId, postId) => {
+  const alreadyBookmark = await bookmarkModel.findOne({
+    $and: [
+      {
+        authorId: { _id: authorId },
+        postId: { _id: postId },
+      },
+    ],
+  });
+  return alreadyBookmark;
+};
