@@ -32,25 +32,12 @@
 .hero {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(400px, 1fr));
+  grid-template-rows: 1fr;
   gap: 50px;
   margin-bottom: 30px;
-  .banner,
   .infos {
     aspect-ratio: 1;
-  }
-  .banner {
-    // 임시, 추후에는 기술스택 종류에 따라 동적으로 변할 것.
-    background-color: #ffe29a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .bannerLogo {
-      width: 25%;
-      box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
-    }
-  }
-  .infos {
     ul {
       padding: 50px 0px;
       display: flex;
