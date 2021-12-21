@@ -16,6 +16,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve('./dist'),
+    publicPath: '/',
     assetModuleFilename: '[name][ext]?[hash]',
   },
   devServer: {
