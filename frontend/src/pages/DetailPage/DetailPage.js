@@ -10,9 +10,7 @@ import comments from '../../components/Comments/Comments';
 import PostBanner from '../../components/PostBanner/PostBanner';
 
 import RouterContext from '../../router/RouterContext';
-import axios from 'axios';
-
-const baseURL = 'http://localhost:4000/posts/';
+import axiosInstance from '../../utils/api';
 
 export default class DetailPage extends Component {
   constructor(props) {
@@ -24,7 +22,7 @@ export default class DetailPage extends Component {
     const { postId } = RouterContext.state.params;
 
     // 게시글 정보 GET
-    axios.get(baseURL + postId).then(res => {
+    axiosInstance.get('/posts/' + postId).then(res => {
       this.state = res.data.data;
 
       // 컴포넌트 생성
