@@ -1,5 +1,5 @@
 import Component from '../../components/component';
-import styles from './detailPage.scss';
+import './detailPage.scss';
 import viewIcon from '../../assets/icons/view.svg';
 import markIcon from '../../assets/icons/mark.svg';
 import javascriptLogo from '../../assets/icons/javascript.svg';

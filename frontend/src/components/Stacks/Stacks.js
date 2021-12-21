@@ -1,5 +1,5 @@
 import Component from '../component';
-import styles from './stacks.scss';
+import './stacks.scss';
 
 export default class stacks extends Component {
   constructor(props) {
