@@ -6,7 +6,16 @@ const asyncHandler = require('../utils/asyncHandler');
 const nicknameGenerator = require('../libs/nicknameGenerator');
 
 const userService = require('../services/userService');
-// const logger = require('../utils/logger');
+
+const { ValidationError } = require('../utils/errors/commonError');
+const {
+  AlreadyBookmarkError,
+  NoBookmarkError,
+} = require('../utils/errors/bookmarkError');
+const {
+  CategoryTypeError,
+  StackNotLowerCaseError,
+} = require('../utils/errors/postError');
 
 const axios = require('axios');
 const dotenv = require('dotenv');
@@ -179,7 +188,7 @@ exports.callbackGoogle = asyncHandler(async (req, res, next) => {
     .redirect(CLIENT_URL);
 });
 
-// 유저 존재 여부 체크
+// 유저 존재 여부 체크 (실제 사용하지 않을 예정)
 exports.checkSnsId = asyncHandler(async (req, res, next) => {
   const { snsType, snsId } = req.params;
 
@@ -209,7 +218,7 @@ exports.checkSnsId = asyncHandler(async (req, res, next) => {
     .send(resFormatter.success(responseMessage.LOGIN_SUCCESS, {}));
 });
 
-// 유저 생성
+// 유저 생성 (실제 사용하지 않을 예정)
 exports.postUser = asyncHandler(async (req, res, next) => {
   // 데이터 전처리
   const { snsType, snsId, nickname, position, stacks, region, imageURL } =
@@ -274,13 +283,20 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   const { nickname, position, stacks, region, imageURL } = req.body;
   const { sido, sigungu } = region;
 
+  if (!nickname) throw new ValidationError();
+
+  // 스택 소문자로만 이루어진 형식인지 체크
+  stacks.forEach(stack => {
+    if (!/^[a-z]+$/.test(stack)) throw new StackNotLowerCaseError();
+  });
+
   await userService.updateUser(userId, {
     nickname,
     position,
     stacks,
     sido,
     sigungu,
-    imageURL,
+    imageURL: imageURL || PROFILE_URL,
   });
 
   return res
@@ -288,7 +304,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     .send(resFormatter.success(responseMessage.USER_UPDATED, {}));
 });
 
-// 유저 닉네임 중복 체크
+// 유저 닉네임 중복 체크 (실제 사용하지 않을 예정)
 exports.checkNickname = asyncHandler(async (req, res, next) => {
   const { nickname } = req.params;
 
@@ -311,6 +327,10 @@ exports.postBookmark = asyncHandler(async (req, res, next) => {
   const { postId } = req.params;
   const { userId } = req.decoded;
 
+  // 이미 존재하는 북마크인지 체크
+  const alreadyBookmark = await userService.isExistBookmark(userId, postId);
+  if (alreadyBookmark) throw new AlreadyBookmarkError();
+
   const bookmarkCount = await userService.createBookmark(userId, postId);
 
   return res.status(statusCode.CREATED).send(
@@ -324,6 +344,10 @@ exports.postBookmark = asyncHandler(async (req, res, next) => {
 exports.deleteBookmark = asyncHandler(async (req, res, next) => {
   const { postId } = req.params;
   const { userId } = req.decoded;
+
+  // 이미 존재하는 북마크인지 체크
+  const alreadyBookmark = await userService.isExistBookmark(userId, postId);
+  if (!alreadyBookmark) throw new NoBookmarkError();
 
   const bookmarkCount = await userService.deleteBookmark(userId, postId);
 
@@ -341,6 +365,10 @@ exports.getBookmarkList = asyncHandler(async (req, res, next) => {
   const page = Number(req.query.page || 1);
   const perPage = Number(req.query.perPage || 10);
   const skipSize = (page - 1) * perPage;
+
+  // 카테고리 체크
+  if (category !== 'project' && category !== 'study')
+    throw new CategoryTypeError();
 
   const bookmarkList = await userService.getBookmarkList(
     userId,

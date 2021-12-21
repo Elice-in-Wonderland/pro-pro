@@ -23,7 +23,7 @@ connectDB();
 const app = express();
 
 //미들웨어 설정
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(
   helmet({
     contentSecurityPolicy: false,

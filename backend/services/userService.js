@@ -1,6 +1,6 @@
 const userModel = require('../models/user');
 const bookmarkModel = require('../models/bookmark');
-const postService = require('../services/postService');
+const postService = require('./postService');
 
 // 회원 존재 여부 (By snsId, snsType)
 exports.isExistSnsId = async (snsType, snsId) => {
@@ -92,4 +92,17 @@ exports.getBookmarkList = async (userId, category, skipSize, perPage) => {
   );
 
   return posts;
+};
+
+// 북마크 존재 여부 체크
+exports.isExistBookmark = async (authorId, postId) => {
+  const alreadyBookmark = await bookmarkModel.findOne({
+    $and: [
+      {
+        authorId: { _id: authorId },
+        postId: { _id: postId },
+      },
+    ],
+  });
+  return alreadyBookmark;
 };
