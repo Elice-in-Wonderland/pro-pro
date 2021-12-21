@@ -1,4 +1,4 @@
-import CreatPostPage from './pages/CreatePost/CreatePost';
+import CreatPostPage from './pages/CreatePostPage/CreatePostPage';
 import MainPage from './pages/MainPage/MainPage';
 import BookmarkPage from './pages/BookmarkPage/BookmarkPage';
 import DetailPage from './pages/DetailPage/DetailPage';
