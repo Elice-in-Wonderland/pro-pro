@@ -1,7 +1,23 @@
 @import '../../styles/index.css';
 
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.53);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-background.hidden {
+  display: none;
+}
+
 .login-modal-wrapper {
-  position: relative;
   width: 582px;
   height: 644px;
   background-color: var(--white);
@@ -10,6 +26,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .login-container {

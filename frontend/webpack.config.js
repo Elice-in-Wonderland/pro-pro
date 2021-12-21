@@ -20,9 +20,9 @@ module.exports = {
     assetModuleFilename: '[name][ext]?[hash]',
   },
   devServer: {
-    historyApiFallback: true,
     port: 9000,
     hot: true,
+    historyApiFallback: true,
   },
   optimization: {
     minimizer:
