@@ -1,0 +1,33 @@
+.gnb {
+  position: absolute;
+  background-color: var(--white);
+  height: 80px;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 5%;
+  padding-right: 5%;
+  align-items: center;
+
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+}
+
+.nav-list {
+  display: flex;
+
+  li {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    a,
+    a:link,
+    .login-text {
+      font-size: 15px;
+      font-weight: bold;
+      text-decoration: none;
+      color: var(--medium);
+      cursor: pointer;
+    }
+  }
+}

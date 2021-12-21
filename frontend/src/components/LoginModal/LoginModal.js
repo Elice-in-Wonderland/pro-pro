@@ -12,51 +12,68 @@ export default class LoginModal extends Component {
     super(props);
 
     this.$dom = this.createDom('div', {
-      className: 'login-modal-wrapper',
+      className: 'modalBackground hidden',
     });
 
-    props.$app.appendChild(this.$dom);
-
     this.render();
-
-    this.addEvent();
   }
 
   render = () => {
     this.$dom.insertAdjacentHTML(
       'beforeend',
       `
-    <img class="login-exit-btn" src="${xButton}" />
-    <div class="login-container">
-      <div class="login-header">
-        <div class="login-greeting">
-          환영합니다!
+        <div class="login-modal-wrapper">
+            <img class="login-exit-btn" src="${xButton}" />
+            <div class="login-container">
+              <div class="login-header">
+                <div class="login-greeting">
+                  환영합니다!
+                </div>
+                <img class="login-image" src="${proproLogo}" />
+              </div>
+              <div class="login-btn-wrapper">
+                <div class="login-sns google">
+                  <img class="login-btn" src="${googleLogo}" />
+                  <div class="login-text">Google로 로그인</div>
+                </div>
+                <div class="login-sns kakao">
+                  <img class="login-btn" src="${kakaoLogo}" />
+                  <div class="login-text">Kakao로 로그인</div>
+                </div>
+              </div>
+            </div>
         </div>
-        <img class="login-image" src="${proproLogo}" />
-      </div>
-      <div class="login-btn-wrapper">
-        <div class="login-sns google">
-          <img class="login-btn" src="${googleLogo}" />
-          <div class="login-text">Google로 로그인</div>
-        </div>
-        <div class="login-sns kakao">
-          <img class="login-btn" src="${kakaoLogo}" />
-          <div class="login-text">Kakao로 로그인</div>
-        </div>
-      </div>
-    </div>
-  `,
+      `,
     );
+
+    this.addEvent();
+  };
+
+  displayModal = () => {
+    this.$dom.classList.toggle('hidden');
   };
 
   addEvent = () => {
+    const $modalContainer = this.$dom.querySelector('.login-modal-wrapper');
     const BASE_URL = 'http://localhost:4000';
 
-    document.querySelector('.google').addEventListener('click', () => {
-      location.href = `${BASE_URL}/users/auth/google`;
+    this.$dom.querySelector('.google').addEventListener('click', () => {
+      // location.href = `${BASE_URL}/users/auth/google`;
+      alert('잠시 꺼둠');
     });
-    document.querySelector('.kakao').addEventListener('click', () => {
-      location.href = `${BASE_URL}/users/auth/kakao`;
+    this.$dom.querySelector('.kakao').addEventListener('click', () => {
+      // location.href = `${BASE_URL}/users/auth/kakao`;
+      alert('잠시 꺼둠');
+    });
+
+    this.$dom.addEventListener('click', e => {
+      if (e.target.classList.contains('login-exit-btn')) {
+        this.$dom.classList.add('hidden');
+      }
+
+      if (!$modalContainer.contains(e.target)) {
+        this.$dom.classList.add('hidden');
+      }
     });
   };
 }
