@@ -7,10 +7,12 @@ import javascriptLogo from '../../assets/icons/javascript.svg';
 // 컴포넌트 import
 import stacks from '../../components/Stacks/Stacks';
 import comments from '../../components/Comments/Comments';
-// get api import
+import PostBanner from '../../components/PostBanner/PostBanner';
+
+import RouterContext from '../../router/RouterContext';
 import axios from 'axios';
 
-const baseURL = 'http://localhost:4000';
+const baseURL = 'http://localhost:4000/posts/';
 
 export default class DetailPage extends Component {
   constructor(props) {
@@ -18,16 +20,19 @@ export default class DetailPage extends Component {
     this.$dom = this.createDom('article', {
       className: 'detailContainer',
     });
-    // 라우팅 연결
-    props.appendchild(this.$dom);
+    this.props.appendChild(this.$dom);
+    const { postId } = RouterContext.state.params;
 
     // 게시글 정보 GET
-    // 라우터 구현시, 예시 postId 교체
-    axios.get(baseURL + '/posts' + '/61bca3f4014bc4fbc0a84c0f').then(res => {
+    axios.get(baseURL + postId).then(res => {
       this.state = res.data.data;
 
       // 컴포넌트 생성
       this.stacks = new stacks({
+        stackList: this.state.stacks,
+      });
+
+      this.postBanner = new PostBanner({
         stackList: this.state.stacks,
       });
 
@@ -113,7 +118,7 @@ export default class DetailPage extends Component {
       <div class="commentSection">
         <hr />
         <div class="comments"></div>
-        <form action="${baseURL}/comments" class="commentForm" method="POST">
+        <form action="http://localhost:4000/comments" class="commentForm" method="POST">
           <textarea placeholder="댓글을 남겨주세요." class="writeComment" type="text" ></textarea>
           <input class="submitComment" type="submit" value="등록" />
         </form>
@@ -126,6 +131,10 @@ export default class DetailPage extends Component {
       this.stacks.$dom,
     );
     this.replaceElement(
+      this.$dom.querySelector('.banner'),
+      this.postBanner.$dom,
+    );
+    this.replaceElement(
       this.$dom.querySelector('.comments'),
       this.comments.$dom,
     );
@@ -133,8 +142,8 @@ export default class DetailPage extends Component {
 
   addEvent = () => {
     document.querySelector('.commentForm').addEventListener('submit', event => {
-      event.preventDefault();
       const commentContent = document.querySelector('.writeComment').value;
+      // axios.post('url', { withCredentials: true });
     });
   };
 }
