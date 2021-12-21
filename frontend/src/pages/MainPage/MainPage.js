@@ -1,7 +1,8 @@
 /* eslint-disable implicit-arrow-linebreak */
 import Component from '../../components/component';
-import './mainPage.css';
+import './mainPage.scss';
 import bannerImg from '../../assets/images/banerImg.png';
+import searchIcon from '../../assets/icons/search-icon.svg';
 import { posts } from '../../library/MainPage';
 import Card from '../../components/Card/Card';
 
@@ -60,7 +61,15 @@ export default class MainPage extends Component {
       </div>
     </div>
     <div class="filterBtnRightContainer">
-      <input type="text" id="searchInput"/>
+      <div class="wrapper">
+        <div class="searchDiv">
+          <input type="text" id="searchInput"/>
+          <img
+            src="${searchIcon}"
+            alt="search image"
+            class="searchIconImg"/> 
+        </div>
+      </div>
       <div class="skills">
         <svg xmlns="http://www.w3.org/2000/svg">
           <path d="M15 3.5H0m10 4H5m7 4H3" stroke="#403845"/>
