@@ -1,3 +1,17 @@
-.comment {
+.commentContent {
   margin-top: 15px;
+  font-weight: 600;
+}
+
+.comment,
+.nestedComment {
+  margin: 30px 0px;
+}
+
+.nestedComment {
+  margin: 30px;
+}
+
+.commentedTime {
+  opacity: 0.6;
 }

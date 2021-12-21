@@ -1,0 +1,85 @@
+:root {
+  --cpp: rgb(198, 198, 255);
+  --django: #bbbbbb;
+  --flutter: rgb(164, 164, 255);
+  --go: rgb(152, 222, 255);
+  --java: #ffeee2;
+  --javascript: #fff0cb;
+  --kotlin: rgb(152, 185, 255);
+  --nodejs: rgb(229, 255, 213);
+  --python: rgb(155, 195, 255);
+  --react: rgb(226, 244, 255);
+  --spring: rgb(218, 255, 210);
+  --swift: rgb(255, 239, 210);
+  --typescript: rgb(208, 208, 255);
+  --vue: rgb(227, 255, 220);
+}
+
+.banner {
+  aspect-ratio: 1;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+  padding: 20px;
+  .bannerLogo {
+    width: 100%;
+    justify-self: center;
+    align-self: center;
+  }
+  .bannerLogo:first-child {
+    grid-column: 2;
+  }
+}
+
+.cpp {
+  background-color: var(--cpp);
+}
+.django {
+  background-color: var(--django);
+}
+
+.flutter {
+  background-color: var(--flutter);
+}
+
+.go {
+  background-color: var(--go);
+}
+
+.java {
+  background-color: var(--java);
+}
+
+.javascript {
+  background-color: var(--javascript);
+}
+
+.kotlin {
+  background-color: var(--kotlin);
+}
+
+.nodejs {
+  background-color: var(--nodejs);
+}
+
+.python {
+  background-color: var(--python);
+}
+
+.react {
+  background-color: var(--react);
+}
+
+.spring {
+  background-color: var(--spring);
+}
+.swift {
+  background-color: var(--swift);
+}
+.typescript {
+  background-color: var(--typescript);
+}
+.vue {
+  background-color: var(--vue);
+}
