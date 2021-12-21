@@ -1,7 +1,7 @@
 import Component from '../../components/component';
 import Card from '../../components/Card/Card';
 import axios from 'axios';
-import styles from './bookmarkPage.scss';
+import styles from './BookmarkPage.scss';
 
 export default class BookmarkPage extends Component {
   constructor(props) {
@@ -9,62 +9,64 @@ export default class BookmarkPage extends Component {
 
     this.$dom = this.createDom('div', { className: 'bookmark-page-wrapper' });
 
-    // const cardsList = [];
+    const data = async () => {
+      try {
+        return await axios
+          .get('localhost:4000/users/mark?category=project&page=1&perPage=10', {
+            params: {
+              category: 'project',
+              page: 1,
+              perPage: 10,
+            },
+          })
+          .then(res => {
+            console.log(res);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-    axios
-      .get(
-        'http://localhost:4000/users/mark?category=project&page=1&perPage=10',
-        { withCredentials: true },
-      )
-      .then(res => {
-        return res.data.data;
-      })
-      .then(cards => {
-        this.state = cards;
-      });
+    data();
 
-    const $fragment = document.createDocumentFragment();
-    $fragment.appendChild(this.$dom);
+    const objects = [
+      {
+        title: '자바스크립트 스터디',
+        area: '서울',
+        number: 5,
+        view: 10,
+        bookmark: 10,
+      },
+      {
+        title: '스프링 스터디',
+        area: '경기',
+        number: 6,
+        view: 12,
+        bookmark: 14,
+      },
+      {
+        title: '파이썬 스터디',
+        area: '경기',
+        number: 8,
+        view: 12,
+        bookmark: 20,
+      },
+    ];
+    objects.map(object => {
+      this.Card = new Card(object);
+      this.$dom.appendChild(this.Card.$dom);
+    });
 
-    props.appendChild($fragment);
+    props.$app.appendChild(this.$dom);
 
     this.render();
-    this.addEvent();
   }
 
   render = () => {
     this.$dom.innerHTML = `
-      <section class="filter-buttons">
-        <button type="button">내가 참여중인 프로젝트/스터디</button>
-        <button type="button" id="bookmark-button">북마크한 프로젝트/스터디</button>
-      </section>
-      <section class="cards">
-        <div class="card-elements"></div>
-      </section>
+      <div>내가 참여중인 프로젝트/스터디</div>
+      <div class="Card"></div>
     `;
-    this.addEvent();
-  };
-
-  addEvent = () => {
-    const createCard = () => {
-      const cards = this.$dom.querySelector('.card-elements');
-      const $createFrag = document.createDocumentFragment();
-
-      this.cardList = this.state.map(item => {
-        const newCard = new Card(item);
-        return newCard.$dom;
-      });
-
-      this.cardList.forEach(item => {
-        $createFrag.appendChild(item);
-      });
-      this.replaceElement(cards, $createFrag);
-    };
-
-    const bookmarkBtn = this.$dom.querySelector('#bookmark-button');
-
-    bookmarkBtn.addEventListener('click', () => {
-      createCard();
-    });
+    this.replaceElement(this.$dom.querySelector('.Card'), this.Card.$dom);
   };
 }
