@@ -270,21 +270,20 @@ const defaultPosition = [
 ];
 
 const defaultStacks = [
-  'Javascript',
-  'C',
-  'Kotiln',
-  'Java',
-  'React',
-  'C++',
-  'Django',
-  'Spring',
-  'Vue',
-  'C#',
-  'Go',
-  'Flutter',
-  'Node',
-  'Typescript',
-  'Swift',
+  'cpp',
+  'django',
+  'flutter',
+  'go',
+  'java',
+  'javascript',
+  'kotlin',
+  'nodejs',
+  'python',
+  'react',
+  'spring',
+  'swift',
+  'typescript',
+  'vue', 
 ];
 
 export { defaultSigungu, defaultSido, defaultPosition, defaultStacks };
