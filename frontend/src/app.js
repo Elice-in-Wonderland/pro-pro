@@ -9,6 +9,9 @@ import Router from './router/Router';
 class App {
   constructor(target) {
     this.target = target;
+    // {
+    //   BookmarkPage = target;
+    // }
 
     this.routes = [
       { path: '/', component: MainPage },

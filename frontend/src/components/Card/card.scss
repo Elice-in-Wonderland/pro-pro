@@ -4,18 +4,16 @@
   background-color: white;
   width: 280px;
   height: 320px;
+  margin: 60px;
   border-radius: 12px;
   filter: drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.25));
 }
 
 .card-img {
   flex-basis: 50%;
-  background-color: #ffe29a;
+  border-radius: 12px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .card-body {
