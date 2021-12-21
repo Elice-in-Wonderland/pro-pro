@@ -1,6 +1,6 @@
 import Component from '../component';
 import './postBanner.scss';
-// import { defaultStacks } from '../../library/Profile'
+import { defaultStacks } from '../../library/Profile';
 
 import cpp from '../../assets/icons/cpp.svg';
 import django from '../../assets/icons/django-icon.svg';

@@ -1,7 +1,7 @@
 import Component from '../component';
-import javascriptImage from '../../assets/images/javascript.png';
 import viewImage from '../../assets/images/view.png';
 import bookmarkImage from '../../assets/images/bookmark.png';
+import CardImage from '../CardImage/CardImage';
 import styles from './card.scss';
 
 export default class Card extends Component {
@@ -9,49 +9,47 @@ export default class Card extends Component {
     super(props);
 
     this.$dom = this.createDom('div', {
-      className: `card-wrapper`,
+      className: 'card-wrapper',
     });
 
     this.render();
   }
 
   render = () => {
-    this.$dom.insertAdjacentHTML(
-      'beforeend',
-      `<div class="card-img">
-            <img src="${javascriptImage}" />
+    this.$dom.innerHTML = `
+        <div class="card-img">
+          <div class="image"></div>
         </div>
         <div class="card-body">
-            <div class="card-title">${this._props.title}</div>
+            <div class="card-title">${this.props.title}</div>
             <div class="card-info-wrapper">
                 <div class="card-info">
                     <div class="card-info-detail">
-                        <div class="text">${this._props.area}</div>
+                        <div class="text">${this.props.sido}</div>
                     </div>
                     <div class="card-info-detail">
-                        <div class="text">${this._props.number}명</div>
+                        <div class="text">${this.props.capacity}명</div>
                     </div>
                 </div>
                 <div class="card-info-number">
                     <div class="card-info-number-detail">
                         <img src="${viewImage}"/>
-                        <div>${this._props.view}</div>
+                        <div>${this.props.views}</div>
                     </div>
                     <div class="card-info-number-detail">
                         <img src="${bookmarkImage}"/>
-                        <div>${this._props.bookmark}</div>
+                        <div>${this.props.capacity}</div>
                     </div>
                 </div>
                 </div>
             </div>
         </div>
-      `,
-    );
+    `;
+    this.addEvent();
   };
 
-  //   addEvent = () => {
-  //     this.$dom
-  //       .querySelector(`.${styles['confirm-button']}`)
-  //       .addEventListener('click', this._props.onClickOk);
-  //   };
+  addEvent = () => {
+    const images = this.$dom.querySelector('.image');
+    this.replaceElement(images, new CardImage(this.props.stacks).$dom);
+  };
 }

@@ -1,6 +1,9 @@
+/* eslint-disable implicit-arrow-linebreak */
 import Component from '../../components/component';
 import './mainPage.css';
 import bannerImg from '../../assets/images/banerImg.png';
+import { posts } from '../../library/MainPage';
+import Card from '../../components/Card/Card';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -8,9 +11,13 @@ export default class MainPage extends Component {
     this.$dom = this.createDom('div', {
       className: 'main-page-wraper',
     });
+    const $fragment = document.createDocumentFragment();
+    $fragment.appendChild(this.$dom);
 
-    this.props.$app.appendChild(this.$dom);
+    this.state = posts;
+    props.appendChild($fragment);
     this.render();
+    this.addEvent();
   }
 
   render = () => {
@@ -68,6 +75,52 @@ export default class MainPage extends Component {
       </div>
     </div>
     </section>
+    <section class="mainPostCards">
+    </section>
+    </section>
     `;
+    this.addEvent();
+  };
+
+  addEvent = () => {
+    const createCard = () => {
+      const mainPostCards = this.$dom.querySelector('.mainPostCards');
+      const $createFrag = document.createDocumentFragment();
+      this.cardList = this.state.map(el => {
+        const newCard = new Card(el);
+        return newCard.$dom;
+      });
+      this.cardList.forEach(el => {
+        $createFrag.appendChild(el);
+      });
+      this.replaceElement(mainPostCards, $createFrag);
+    };
+
+    const populate = this.$dom.querySelector('.populate');
+    populate.addEventListener('click', () => {
+      const statelist = posts.sort(
+        (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
+      );
+      this.setState(statelist);
+      createCard();
+    });
+    const recent = this.$dom.querySelector('.recent');
+    recent.addEventListener('click', () => {
+      const statelist = posts.sort((a, b) => {
+        if (a.createdAt < b.createdAt) return 1;
+        if (a.createdAt > b.createdAt) return -1;
+        return 0;
+      });
+      this.setState(statelist);
+      createCard();
+    });
+    const avail = this.$dom.querySelector('.avail');
+    avail.addEventListener('click', () => {
+      const statelist = posts.filter(
+        post => post.recruitmentStatus === '모집중',
+      );
+      this.setState(statelist);
+      createCard();
+    });
   };
 }

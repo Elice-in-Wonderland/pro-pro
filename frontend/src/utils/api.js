@@ -7,6 +7,3 @@ const axiosInstance = axios.create({
 });
 
 export default axiosInstance;
-
-// example
-// axiosInstance.get('/write') === http://localhost:4000/write
