@@ -1,6 +1,6 @@
 @import '../../styles/index.css';
 
-.modalBackground {
+.modal-background {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,7 +13,7 @@
   z-index: 100;
 }
 
-.modalBackground.hidden {
+.modal-background.hidden {
   display: none;
 }
 

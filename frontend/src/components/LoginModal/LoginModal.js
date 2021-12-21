@@ -1,7 +1,5 @@
 import Component from '../component';
-
 import './loginModal.scss';
-
 import proproLogo from '../../assets/images/pro-pro.png';
 import kakaoLogo from '../../assets/images/kakao-logo.svg';
 import googleLogo from '../../assets/images/google-logo.svg';
@@ -12,7 +10,7 @@ export default class LoginModal extends Component {
     super(props);
 
     this.$dom = this.createDom('div', {
-      className: 'modalBackground hidden',
+      className: 'modal-background hidden',
     });
 
     this.render();
