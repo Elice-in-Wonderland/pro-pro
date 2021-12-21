@@ -10,7 +10,7 @@ class Component {
   }
 
   setState = nextState => {
-    this._state = nextState;
+    this.state = nextState;
     this.render();
   };
 

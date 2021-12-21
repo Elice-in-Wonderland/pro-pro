@@ -98,3 +98,27 @@ label {
 .check-with-label:checked + .label-for-check {
   color: var(--medium2);
 }
+
+.clearfix {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+
+  button {
+    border-radius: 10px;
+    border: none;
+    background: none;
+    padding: 8px 15px;
+    cursor: pointer;
+  }
+
+  .updateBtn {
+    margin-left: 15px;
+    background-color: var(--dark);
+    color: white;
+  }
+
+  .unsubscribeBtn {
+    background-color: var(--gray);
+  }
+}
