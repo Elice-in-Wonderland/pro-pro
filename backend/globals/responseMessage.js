@@ -40,6 +40,8 @@ module.exports = {
   POST_CREATED: '게시글 생성 성공',
   POST_UPDATED: '게시글 수정 성공',
   POST_DELETED: '게시글 삭제 성공',
+  POST_TYPE_CHECK: '카테고리는 project 혹은 study여야 합니다.',
+  STACK_CHECK: 'stack은 모두 소문자로만 이루어져야만 합니다.',
 
   // comment
   COMMENT_CREATED: '댓글 생성 성공',

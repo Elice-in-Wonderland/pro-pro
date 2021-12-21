@@ -12,6 +12,10 @@ const {
   AlreadyBookmarkError,
   NoBookmarkError,
 } = require('../utils/errors/bookmarkError');
+const {
+  CategoryTypeError,
+  StackNotLowerCaseError,
+} = require('../utils/errors/postError');
 
 const axios = require('axios');
 const dotenv = require('dotenv');
@@ -281,6 +285,11 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 
   if (!nickname) throw new ValidationError();
 
+  // 스택 소문자로만 이루어진 형식인지 체크
+  stacks.forEach(stack => {
+    if (!/^[a-z]+$/.test(stack)) throw new StackNotLowerCaseError();
+  });
+
   await userService.updateUser(userId, {
     nickname,
     position,
@@ -356,6 +365,10 @@ exports.getBookmarkList = asyncHandler(async (req, res, next) => {
   const page = Number(req.query.page || 1);
   const perPage = Number(req.query.perPage || 10);
   const skipSize = (page - 1) * perPage;
+
+  // 카테고리 체크
+  if (category !== 'project' && category !== 'study')
+    throw new CategoryTypeError();
 
   const bookmarkList = await userService.getBookmarkList(
     userId,
