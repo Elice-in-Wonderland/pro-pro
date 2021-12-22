@@ -2,6 +2,7 @@ const { statusCode, responseMessage } = require('../globals');
 const { resFormatter } = require('../utils');
 const asyncHandler = require('../utils/asyncHandler');
 const postService = require('../services/postService');
+const userService = require('../services/userService');
 
 const { ValidationError } = require('../utils/errors/commonError');
 const {
@@ -191,6 +192,9 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
   await postService.authCheck(userId, postId);
 
   await postService.deletePost(postId);
+
+  // 게시글과 연결된 북마크도 삭제
+  await userService.deleteAllBookmarks(postId);
 
   return res
     .status(statusCode.OK)
