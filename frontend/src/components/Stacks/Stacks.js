@@ -1,7 +1,7 @@
 import Component from '../component';
 import './stacks.scss';
 
-export default class stacks extends Component {
+export default class Stacks extends Component {
   constructor(props) {
     super(props);
     this.state = {
