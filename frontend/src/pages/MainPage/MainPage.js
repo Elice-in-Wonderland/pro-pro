@@ -5,6 +5,7 @@ import bannerImg from '../../assets/images/banerImg.png';
 import searchIcon from '../../assets/icons/search-icon.svg';
 import { posts } from '../../library/MainPage';
 import Card from '../../components/Card/Card';
+import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -85,6 +86,8 @@ export default class MainPage extends Component {
     </div>
     </section>
     <section class="mainPostCards">
+      <div class="replaceDiv">
+      </div>
     </section>
     </section>
     `;
@@ -93,7 +96,6 @@ export default class MainPage extends Component {
 
   addEvent = () => {
     const createCard = () => {
-      const mainPostCards = this.$dom.querySelector('.mainPostCards');
       const $createFrag = document.createDocumentFragment();
       this.cardList = this.state.map(el => {
         const newCard = new Card(el);
@@ -102,7 +104,11 @@ export default class MainPage extends Component {
       this.cardList.forEach(el => {
         $createFrag.appendChild(el);
       });
-      this.replaceElement(mainPostCards, $createFrag);
+      const cardContainer = document.createElement('div');
+      cardContainer.className = 'cardContainer';
+      cardContainer.appendChild($createFrag);
+      const replaceDiv = this.$dom.querySelector('.replaceDiv');
+      this.replaceElement(replaceDiv, cardContainer);
     };
 
     const populate = this.$dom.querySelector('.populate');
@@ -130,6 +136,40 @@ export default class MainPage extends Component {
       );
       this.setState(statelist);
       createCard();
+    });
+    const searchInput = this.$dom.querySelector('#searchInput');
+    const searchbtn = this.$dom.querySelector('.searchIconImg');
+    const createNot = () => {
+      const searchNotFound = new SearchNotFound();
+      const searchNotFoundContainer = document.createElement('div');
+      searchNotFoundContainer.className = 'searchNotFoundContainer';
+      searchNotFoundContainer.appendChild(searchNotFound.$dom);
+      const replaceDiv = this.$dom.querySelector('.replaceDiv');
+      this.replaceElement(replaceDiv, searchNotFoundContainer);
+    };
+    const searchEventhandler = () => {
+      if (!searchInput.value) {
+        return;
+      }
+      const searchList = posts.filter(character => {
+        return character.title.includes(searchInput.value);
+      });
+      if (searchList.length === 0) {
+        this.setState([]);
+        createNot();
+        return;
+      }
+      this.setState(searchList);
+      createCard();
+    };
+
+    searchbtn.addEventListener('click', () => {
+      searchEventhandler();
+    });
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        searchEventhandler();
+      }
     });
   };
 }
