@@ -1,3 +1,5 @@
+import auth from '../utils/auth';
+
 const getPathname = () => {
   return window.location.pathname;
 };
@@ -30,8 +32,9 @@ const pathValidation = (currentPath, routePath) => {
 
 const loginValidation = isRequired => {
   let isPass = true;
-  // TODO: 로그인 상태관련 관리
-  const loginState = true; // getLoginState()
+
+  const token = auth.getToken();
+  const loginState = token !== undefined; // getLoginState()
   if (isRequired) isPass = loginState;
 
   return isPass;

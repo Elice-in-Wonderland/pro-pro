@@ -48,6 +48,12 @@ export default class Navigation extends Component {
                 text: '프로필',
                 className: 'nav-profile router',
               },
+              {
+                type: 'a',
+                href: '/',
+                text: '로그아웃',
+                className: 'nav-logout router',
+              },
             ],
           },
         ].map(li => new NavItem(li))

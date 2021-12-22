@@ -36,11 +36,11 @@ export default class ProfilePage extends Component {
       onClick: this.submitProfileData,
     });
 
-    this.$unsubscribeBtn = new Button({
-      className: 'unsubscribeBtn',
-      buttonText: '회원 탈퇴',
-      onClick: this.unsubscribeService,
-    });
+    // this.$unsubscribeBtn = new Button({
+    //   className: 'unsubscribeBtn',
+    //   buttonText: '회원 탈퇴',
+    //   onClick: this.unsubscribeService,
+    // });
 
     if (props.childNodes[1]) props.replaceChild(this.$dom, props.childNodes[1]);
     else props.appendChild(this.$dom);
@@ -115,7 +115,7 @@ export default class ProfilePage extends Component {
         </div>
     `;
     const $btns = this.$dom.querySelector('.clearfix');
-    $btns.appendChild(this.$unsubscribeBtn.$dom);
+    // $btns.appendChild(this.$unsubscribeBtn.$dom);
     $btns.appendChild(this.$updateBtn.$dom);
     const $userImg = this.$dom.querySelector('.userImg');
     const $nickname = this.$dom.querySelector('.nickname');

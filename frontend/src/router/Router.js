@@ -5,6 +5,8 @@ import {
   pathValidation,
   loginValidation,
 } from './utils';
+import { state } from '../utils/store';
+import auth from '../utils/auth';
 
 class Router {
   constructor(target, routes, NotFoundPage, Navigation) {
@@ -35,9 +37,10 @@ class Router {
     RouterContext.setState({ goBack: () => this.goBack() });
   }
 
-  route() {
+  async route() {
     const currentPath = this.RouterContext.state.pathname.slice(1).split('/');
     // history.pushState(null, null, location.href.replace(/#.*/, ''));
+    await auth.getMyInfo();
 
     for (let i = 0; i < this.routes.length; i += 1) {
       const routePath = this.routes[i].path.slice(1).split('/');
@@ -53,8 +56,12 @@ class Router {
       const Page = this.routes[i].component;
 
       // render Header & Page
-      // TODO: 로그인 상태관련 관리
-      new this.Navigation({ $root: this.target, loginState: true });
+      const token = auth.getToken();
+      const loginState = state.myInfo !== undefined && token !== undefined;
+      new this.Navigation({
+        $root: this.target,
+        loginState,
+      });
       new Page(this.target);
       return;
     }
