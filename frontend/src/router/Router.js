@@ -1,4 +1,4 @@
-import routerContext from './RouterContext';
+import RouterContext from './RouterContext';
 import {
   getPathname,
   getQuery,
@@ -10,24 +10,34 @@ class Router {
   constructor(target, routes, NotFoundPage, Navigation) {
     this.target = target;
     this.routes = routes;
-    this.NotFoundPage = NotFoundPage;
     this.Navigation = Navigation;
-    this.routerContext = routerContext;
-    this.push = this.push.bind(this);
-    this.goBack = this.goBack.bind(this);
-    this.set();
+    this.NotFoundPage = NotFoundPage;
+    this.RouterContext = RouterContext;
+    this.initRouter();
     this.route();
-    this.addLinkChangeHandler();
-    this.addBackChangeHandler();
   }
 
-  set() {
-    routerContext.setState({ push: url => this.push(url) });
-    routerContext.setState({ goBack: () => this.goBack() });
+  initRouter() {
+    this.target.addEventListener('click', e => {
+      const closest = e.target.closest('a');
+      if (!closest || !closest.classList.contains('router')) return;
+      e.preventDefault();
+      const pathname = closest.getAttribute('href') || '/NOTFOUND';
+      this.push(pathname);
+    });
+
+    window.addEventListener('popstate', () => {
+      RouterContext.setState({ pathname: getPathname(), query: getQuery() });
+      this.route();
+    });
+
+    RouterContext.setState({ push: url => this.push(url) });
+    RouterContext.setState({ goBack: () => this.goBack() });
   }
 
   route() {
-    const currentPath = this.routerContext.state.pathname.slice(1).split('/');
+    const currentPath = this.RouterContext.state.pathname.slice(1).split('/');
+    // history.pushState(null, null, location.href.replace(/#.*/, ''));
 
     for (let i = 0; i < this.routes.length; i += 1) {
       const routePath = this.routes[i].path.slice(1).split('/');
@@ -36,50 +46,33 @@ class Router {
       const params = pathValidation(currentPath, routePath);
       if (!params) continue;
 
-      // login check 여부에 따라 세션에서 제거하면서 뒤로가기
       const next = loginValidation(loginRequired);
-      if (!next) {
-        this.replace('/');
-        return;
-      }
-      routerContext.setState({ params });
+      if (!next) return this.replace('/');
+
+      RouterContext.setState({ params });
       const Page = this.routes[i].component;
 
-      new this.Navigation(this.target);
+      // render Header & Page
+      // TODO: 로그인 상태관련 관리
+      new this.Navigation({ $root: this.target, loginState: true });
       new Page(this.target);
       return;
     }
     new this.NotFoundPage(this.target);
   }
 
-  addLinkChangeHandler() {
-    this.target.addEventListener('click', e => {
-      const { target } = e;
-      const closest = target.closest('a');
-      if (!closest || closest.getAttribute('target')) return;
-      e.preventDefault();
-      const pathname = closest.getAttribute('href');
-      this.push(pathname);
-    });
-  }
-
-  addBackChangeHandler() {
-    window.addEventListener('popstate', () => {
-      routerContext.setState({ pathname: getPathname(), query: getQuery() });
-      this.route();
-    });
-  }
-
   push(url) {
     window.history.pushState(null, '', url);
-    routerContext.setState({ pathname: url, query: getQuery() });
-    this.route();
+    this.setCurURL(url);
   }
 
   replace(url) {
-    // 현재 권한 없는 페이지는 기본 페이지로 이동
     window.history.replaceState(null, '', url);
-    routerContext.setState({ pathname: url, query: getQuery() });
+    this.setCurURL(url);
+  }
+
+  setCurURL(url) {
+    RouterContext.setState({ pathname: url, query: getQuery() });
     this.route();
   }
 
