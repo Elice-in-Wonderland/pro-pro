@@ -34,13 +34,15 @@ exports.getPost = async (category, skipSize, perPage) => {
     )
     .lean();
 
-  posts = await Promise.all(
-    posts.map(async post => {
-      post.sido = post.sido || '온라인';
-      post.marks = await userService.getBookmarkCount(post._id);
-      return post;
-    }),
-  );
+  if (posts.length !== 0) {
+    posts = await Promise.all(
+      posts.map(async post => {
+        post.sido = post.sido || '온라인';
+        post.marks = await userService.getBookmarkCount(post._id);
+        return post;
+      }),
+    );
+  }
 
   return posts;
 };
