@@ -1,5 +1,7 @@
 import Component from '../component';
 import LoginModal from '../LoginModal/LoginModal';
+import auth from '../../utils/auth';
+import { state, removeState } from '../../utils/store';
 
 export default class NavItem extends Component {
   constructor(props) {
@@ -28,7 +30,9 @@ export default class NavItem extends Component {
         className: 'profile',
       });
       const $img = this.createDom('img', {
-        src: 'https://images.unsplash.com/photo-1638913658211-c999de7fe786?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2371&q=80',
+        src:
+          `${state.myInfo.imageURL}` ||
+          'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
         alt: 'profile',
       });
       const $menu = this.createDom('div', {
@@ -43,6 +47,12 @@ export default class NavItem extends Component {
           className: li.className,
           innerText: li.text,
         });
+        if (li.text === '로그아웃') {
+          $a.addEventListener('click', () => {
+            auth.removeToken();
+            removeState('myInfo');
+          });
+        }
         $li.appendChild($a);
         $ul.appendChild($li);
       });
