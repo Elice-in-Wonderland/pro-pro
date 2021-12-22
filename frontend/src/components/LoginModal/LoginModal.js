@@ -56,8 +56,8 @@ export default class LoginModal extends Component {
     const BASE_URL = 'http://localhost:4000';
 
     this.$dom.querySelector('.google').addEventListener('click', () => {
-      // location.href = `${BASE_URL}/users/auth/google`;
-      alert('잠시 꺼둠');
+      location.href = `${BASE_URL}/users/auth/google`;
+      // alert('잠시 꺼둠');
     });
     this.$dom.querySelector('.kakao').addEventListener('click', () => {
       // location.href = `${BASE_URL}/users/auth/kakao`;

@@ -5,7 +5,7 @@ export default class Logo extends Component {
   constructor(props) {
     super(props);
     this.$dom = this.createDom('a', {
-      className: 'logo',
+      className: 'logo router',
       href: '/',
     });
     this.render();

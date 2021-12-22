@@ -87,9 +87,11 @@ exports.getBookmarkCount = async postId => {
 exports.getBookmarkList = async (userId, category, skipSize, perPage) => {
   let posts = await bookmarkModel.find({ authorId: userId });
 
-  posts = await Promise.all(
-    posts.map(async post => await postService.getMarkedPost(post.postId)),
-  );
+  if (posts.length !== 0) {
+    posts = await Promise.all(
+      posts.map(async post => await postService.getMarkedPost(post.postId)),
+    );
+  }
 
   return posts;
 };
@@ -105,4 +107,13 @@ exports.isExistBookmark = async (authorId, postId) => {
     ],
   });
   return alreadyBookmark;
+};
+
+// post가 지워졌을 때 북마크도 모두 삭제
+exports.deleteAllBookmarks = async postId => {
+  const deletedInfo = await bookmarkModel.deleteMany({
+    postId: { _id: postId },
+  });
+
+  return deletedInfo;
 };

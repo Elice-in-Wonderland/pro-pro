@@ -10,11 +10,62 @@ export default class Navigation extends Component {
       className: 'gnb',
     });
     this.$logo = new Logo();
-    this.$navItems = [
-      { type: 'a', href: '/', text: '프로젝트', className: 'nav-write' },
-      { type: 'a', href: '/', text: '스터디', className: 'nav-write' },
-      { type: 'modal', text: '로그인', className: 'nav-login' },
-    ].map(li => new NavItem(li));
+
+    this.$navItems = this.props.loginState
+      ? [
+          {
+            type: 'a',
+            href: '/',
+            text: '프로젝트',
+            className: 'nav-project router',
+          },
+          {
+            type: 'a',
+            href: '/',
+            text: '스터디',
+            className: 'nav-study router',
+          },
+          {
+            type: 'a',
+            href: '/write',
+            text: '새 글 쓰기',
+            className: 'nav-write router',
+          },
+          {
+            type: 'profile',
+            text: '프로필',
+            className: 'nav-profile',
+            list: [
+              {
+                type: 'a',
+                href: '/bookmark',
+                text: '내 북마크',
+                className: 'nav-bookmark router',
+              },
+              {
+                type: 'a',
+                href: '/profile',
+                text: '프로필',
+                className: 'nav-profile router',
+              },
+            ],
+          },
+        ].map(li => new NavItem(li))
+      : [
+          {
+            type: 'a',
+            href: '/',
+            text: '프로젝트',
+            className: 'nav-project router',
+          },
+          {
+            type: 'a',
+            href: '/',
+            text: '스터디',
+            className: 'nav-study router',
+          },
+          { type: 'modal', text: '로그인', className: 'nav-login' },
+        ].map(li => new NavItem(li));
 
     this.render();
   }
@@ -36,6 +87,6 @@ export default class Navigation extends Component {
     });
     $navList.appendChild(fragment);
 
-    this.props.parentElement.prepend(this.$dom);
+    this.appendRoot(this.props.$root, this.$dom, true);
   };
 }

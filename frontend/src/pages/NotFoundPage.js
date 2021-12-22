@@ -1,7 +1,7 @@
 import Component from '../components/component';
 
 // TODO: 리팩토링 및 개선점 찾아보기
-export default class ProfilePage extends Component {
+export default class NotFoundPage extends Component {
   constructor(props) {
     super(props);
 

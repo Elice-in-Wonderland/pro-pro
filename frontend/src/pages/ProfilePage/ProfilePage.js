@@ -42,7 +42,9 @@ export default class ProfilePage extends Component {
       onClick: this.unsubscribeService,
     });
 
-    props.appendChild(this.$dom);
+    if (props.childNodes[1]) props.replaceChild(this.$dom, props.childNodes[1]);
+    else props.appendChild(this.$dom);
+    // props.appendChild(this.$dom);
 
     this.render();
     this.getInitState();
@@ -226,8 +228,7 @@ export default class ProfilePage extends Component {
   };
 
   unsubscribeService = () => {
-    console.log('회원 탈퇴');
-    console.log(Object.values(this.data).every(x => x === null || x === ''));
+    console.log('회원 탈퇴는 아직 미구현');
   };
 
   addEvent = () => {

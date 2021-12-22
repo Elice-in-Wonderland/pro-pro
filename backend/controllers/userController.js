@@ -262,10 +262,11 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     sido: user.sido,
     sigungu: user.sigungu,
   };
-  const { nickname, position, stacks, imageURL } = user;
+  const { _id, nickname, position, stacks, imageURL } = user;
 
   return res.status(statusCode.OK).send(
     resFormatter.success(responseMessage.SUCCESS, {
+      _id,
       nickname,
       position,
       stacks,

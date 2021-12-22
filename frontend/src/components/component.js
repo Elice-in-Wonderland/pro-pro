@@ -26,6 +26,17 @@ class Component {
     $old.parentElement.replaceChild($new, $old);
   };
 
+  appendRoot = ($root, $new, isNav = false) => {
+    if (isNav) {
+      if ($root.childNodes[0]) $root.replaceChild($new, $root.childNodes[0]);
+      else $root.appendChild($new);
+      return;
+    }
+
+    if ($root.childNodes[1]) $root.replaceChild($new, $root.childNodes[1]);
+    else $root.appendChild($new);
+  };
+
   addEvent = () => {};
 
   render = () => {};
