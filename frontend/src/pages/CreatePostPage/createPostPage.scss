@@ -21,6 +21,7 @@ body {
     border-radius: 20px;
     background-color: $white;
     margin: 50px 100px;
+    padding-top: 30px;
     div {
       margin: 50px 0 50px 50px;
       h3 {
@@ -33,19 +34,40 @@ body {
     }
     .Category {
       P {
-        label {
-          input[type='radio'] {
-            filter: invert(3%) hue-rotate(372deg) brightness(0.9) contrast(90%);
-          }
+        display: flex;
+        align-items: center;
+        line-height: 50px;
+        input {
+          display: none;
         }
-        label:first-child {
-          margin-right: 300px;
+        span {
+          display: inline-block;
+          width: 15px;
+          height: 15px;
+          color: transparent;
+          border: 1px solid black;
+          border-radius: 50%;
+          text-align: center;
+          line-height: 16px;
+          margin-right: 10px;
+          font-size: 12px;
+        }
+        label {
+          margin-right: 250px;
+        }
+        input:checked + span {
+          color: $medium2;
+          background-color: white;
+          border: 1px solid $medium2;
+        }
+        input:checked + span + label {
+          color: $medium2;
         }
       }
     }
     .Title {
       input {
-        width: 700px;
+        width: 90%;
         height: 25px;
         @include inputBox();
       }
@@ -60,9 +82,13 @@ body {
     }
     .Period {
       p {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
         label {
           margin-right: 40px;
-          color: $medium;
+          margin-bottom: 10px;
+          color: $medium2;
           font-size: 14px;
           font-weight: bold;
           select {
@@ -92,7 +118,7 @@ body {
         text-align: center;
       }
       input:last-child {
-        color: $medium;
+        color: $medium2;
       }
     }
     .RegisterDeadline {
@@ -112,16 +138,32 @@ body {
       p {
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
+        line-height: 50px;
+        input {
+          display: none;
+        }
+        span {
+          display: inline-block;
+          width: 15px;
+          height: 15px;
+          color: transparent;
+          @include inputBox();
+          text-align: center;
+          line-height: 15px;
+          margin-right: 10px;
+          font-size: 12px;
+        }
         label {
-          width: 25%;
+          width: calc(25% - 30px);
           height: 50px;
-          input[type='checkbox'] {
-            @include inputBox();
-          }
-          input[type='checkbox']:checked {
-            @include inputBox();
-            filter: invert(3%) hue-rotate(372deg) brightness(0.9) contrast(90%);
-          }
+        }
+        input:checked + span {
+          color: white;
+          background-color: $medium2;
+        }
+        input:checked + span + label {
+          color: $medium2;
         }
       }
     }
@@ -154,6 +196,123 @@ body {
         :hover {
           color: $white;
           background-color: $dark;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 834px) {
+  body {
+    form {
+      .Stacks {
+        p {
+          label {
+            width: calc(33% - 30px);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 744px) {
+  body {
+    form {
+      .Category {
+        P {
+          label {
+            margin-right: 150px;
+          }
+        }
+      }
+      .Btns {
+        text-align: center;
+        padding-right: 0;
+        margin-left: 0;
+        transform: translateX(-20px);
+      }
+    }
+  }
+}
+
+@media (max-width: 375px) {
+  body {
+    form {
+      margin: 50px 20px 0 20px;
+      div {
+        margin: 30px 0 20px 20px;
+        h3 {
+          font-size: 16px;
+          margin-bottom: 20px;
+        }
+        p {
+          font-size: 12px;
+        }
+      }
+      .Category {
+        P {
+          label:first-child {
+            margin-right: 80px;
+          }
+        }
+      }
+      .Region {
+        select {
+          width: 70px;
+          height: 25px;
+          @include inputBox();
+          margin-right: 20px;
+          font-size: 10px;
+        }
+      }
+      .Period {
+        p {
+          label {
+            margin-right: 40px;
+            margin-bottom: 10px;
+            color: $medium;
+            font-size: 10px;
+            font-weight: bold;
+            select {
+              width: 60px;
+              height: 25px;
+              @include inputBox();
+              margin-right: 10px;
+            }
+            input {
+              display: none;
+            }
+          }
+        }
+      }
+      .RegisterDeadline {
+        p {
+          select {
+            width: 70px;
+            font-size: 10px;
+          }
+        }
+      }
+      .Btns {
+        text-align: center;
+        padding-right: 0;
+        margin-left: 0;
+        transform: translateX(-20px);
+        a {
+          display: inline-block;
+          width: 120px;
+          margin-left: 40px;
+          input {
+            border: 1px solid #c4c4c4;
+            border-radius: 15px;
+            width: 100px;
+            height: 42px;
+            background-color: $white;
+            font-size: 12px;
+            font-weight: bold;
+            transition: color 200ms, background-color 200ms;
+            cursor: pointer;
+          }
         }
       }
     }
