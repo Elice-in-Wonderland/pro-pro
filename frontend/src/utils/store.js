@@ -15,7 +15,7 @@ function setState(key, value) {
 
 function removeState(key) {
   delete state[key];
-  localStorage.setItem(GLOBAL_STATE_KEY);
+  localStorage.setItem(GLOBAL_STATE_KEY, JSON.stringify(state));
 }
 
 function reset() {
@@ -23,9 +23,4 @@ function reset() {
   location.reload();
 }
 
-export default {
-  state,
-  setState,
-  removeState,
-  reset,
-};
+export { state, setState, removeState, reset };
