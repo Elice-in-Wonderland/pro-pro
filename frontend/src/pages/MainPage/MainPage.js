@@ -3,9 +3,10 @@ import Component from '../../components/component';
 import './mainPage.scss';
 import bannerImg from '../../assets/images/banerImg.png';
 import searchIcon from '../../assets/icons/search-icon.svg';
-import { posts } from '../../library/MainPage';
+import { posts, defaultStacks } from '../../library/MainPage';
 import Card from '../../components/Card/Card';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
+import SkillStacksDropDown from '../../components/SkillStacksDropDown/SkillStacksDropDown';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -76,6 +77,7 @@ export default class MainPage extends Component {
           <path d="M15 3.5H0m10 4H5m7 4H3" stroke="#403845"/>
         </svg>        
         <div class="skillsTitle">기술스택 필터링</div>
+        <div class="drop-content"></div>
       </div>
       <div class="avail">
         <svg xmlns="http://www.w3.org/2000/svg">
@@ -91,6 +93,11 @@ export default class MainPage extends Component {
     </section>
     </section>
     `;
+    const dropContent = this.$dom.querySelector('.drop-content');
+    const stacks = new SkillStacksDropDown({
+      stackList: defaultStacks,
+    });
+    dropContent.appendChild(stacks.$dom);
     this.addEvent();
   };
 
@@ -169,6 +176,15 @@ export default class MainPage extends Component {
     searchInput.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         searchEventhandler();
+      }
+    });
+    const skillIcon = this.$dom.getElementsByClassName('skill-icon')[0];
+
+    skillIcon.addEventListener('click', e => {
+      if (e.target && e.target.nodeName === 'IMG') {
+        const statelist = posts.filter(el => el.stacks.includes(e.target.id));
+        this.setState(statelist);
+        createCard();
       }
     });
   };
