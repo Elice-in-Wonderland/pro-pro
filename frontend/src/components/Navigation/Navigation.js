@@ -36,6 +36,6 @@ export default class Navigation extends Component {
     });
     $navList.appendChild(fragment);
 
-    this.props.parentElement.prepend(this.$dom);
+    this.appendRoot(this.props, this.$dom, true);
   };
 }

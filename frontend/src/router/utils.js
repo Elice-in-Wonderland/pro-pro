@@ -28,4 +28,13 @@ const pathValidation = (currentPath, routePath) => {
   return params;
 };
 
-export { getPathname, getQuery, pathValidation };
+const loginValidation = isRequired => {
+  let isPass = true;
+  // TODO: 로그인 상태관련 관리
+  const loginState = true; // getLoginState()
+  if (isRequired) isPass = loginState;
+
+  return isPass;
+};
+
+export { getPathname, getQuery, pathValidation, loginValidation };
