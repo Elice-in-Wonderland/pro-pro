@@ -42,7 +42,7 @@ export default class ProfilePage extends Component {
       onClick: this.unsubscribeService,
     });
 
-    props.appendChild(this.$dom);
+    this.appendRoot(props, this.$dom);
 
     this.render();
     this.getInitState();

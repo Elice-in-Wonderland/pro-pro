@@ -14,11 +14,15 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .container {
   background-color: var(--white);
-  width: 1264px;
+  margin-top: 150px;
+  padding: 50px;
+  width: 1200px;
   height: 846px;
   border-radius: 20px;
   display: flex;
@@ -29,7 +33,6 @@ label {
 .userImg {
   width: 157px;
   height: 157px;
-  margin-top: 22px;
   margin-bottom: 100px;
 
   img {
@@ -85,6 +88,7 @@ label {
   row-gap: 10px;
   column-gap: 20px;
   grid-template-columns: repeat(4, 1fr);
+
   input {
     margin-right: 8px;
     border-radius: 15px;

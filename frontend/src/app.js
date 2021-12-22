@@ -10,22 +10,22 @@ import Navigation from './components/Navigation/Navigation';
 class App {
   constructor(target) {
     this.target = target;
-    this.navigation = new Navigation(target);
+    this.navigation = Navigation;
 
     this.routes = [
-      { path: '/', component: MainPage },
-      { path: '/detail/:postId', component: DetailPage },
-      { path: '/bookmark', component: BookmarkPage },
-      { path: '/write', component: CreatPostPage },
+      { path: '/', component: MainPage, loginRequired: false },
+      { path: '/detail/:postId', component: DetailPage, loginRequired: false },
+      { path: '/bookmark', component: BookmarkPage, loginRequired: true },
+      { path: '/write', component: CreatPostPage, loginRequired: true },
       // { path: '/write/:postId', component: PostPage },
-      { path: '/profile', component: ProfilePage },
+      { path: '/profile', component: ProfilePage, loginRequired: true },
     ];
     this.NotFoundPage = NotFoundPage;
     this.render();
   }
 
   render() {
-    new Router(this.target, this.routes, this.NotFoundPage);
+    new Router(this.target, this.routes, this.NotFoundPage, this.navigation);
   }
 }
 
