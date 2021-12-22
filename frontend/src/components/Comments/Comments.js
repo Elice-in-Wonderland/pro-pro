@@ -1,7 +1,7 @@
 import Component from '../component';
-import styles from './comments.scss';
+import './comments.scss';
 
-export default class stacks extends Component {
+export default class Comments extends Component {
   constructor(props) {
     super(props);
     this.$dom = this.createDom('div', {
@@ -16,8 +16,8 @@ export default class stacks extends Component {
   makeCommentHTML = (comment, parent) => {
     return `<div class=${parent === 'post' ? 'comment' : 'nestedComment'}>
       <div class="userWrapper">
-          <img src=${comment.imageURL} width="30px" height="30px" />
-          <h4 class="userName">${comment.author}</h4>
+          <img src=${comment.author.imageURL} width="30px" height="30px" />
+          <h4 class="userName">${comment.author.nickname}</h4>
           <h5 class="commentedTime" >${comment.updatedAt.slice(0, 10)}</h5>
       </div>
       <h6 class="commentContent">${comment.content}</h6>
