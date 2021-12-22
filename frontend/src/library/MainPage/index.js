@@ -68,7 +68,7 @@ export const posts = [
   {
     _id: '61bc97593f6bf6eb62ee7890',
     category: 'project',
-    title: 'project6',
+    title: '팀1',
     recruitmentStatus: '모집중',
     stacks: ['React', 'JavaScript'],
     capacity: 5,
@@ -81,7 +81,7 @@ export const posts = [
   {
     _id: '61bc97593f6bf6eb62ee7890',
     category: 'project',
-    title: 'project7',
+    title: '팀2',
     recruitmentStatus: '모집중',
     stacks: ['React', 'JavaScript'],
     capacity: 5,
