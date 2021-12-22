@@ -4,10 +4,10 @@ import viewIcon from '../../assets/icons/view.svg';
 import markIcon from '../../assets/icons/mark.svg';
 import javascriptLogo from '../../assets/icons/javascript.svg';
 
-// 컴포넌트 import
-import stacks from '../../components/Stacks/Stacks';
-import comments from '../../components/Comments/Comments';
+import Stacks from '../../components/Stacks/Stacks';
+import Comments from '../../components/Comments/Comments';
 import PostBanner from '../../components/PostBanner/PostBanner';
+// import EditButtons from '../../components/EditButtons/EditButtons';
 
 import RouterContext from '../../router/RouterContext';
 import axiosInstance from '../../utils/api';
@@ -19,32 +19,42 @@ export default class DetailPage extends Component {
       className: 'detailContainer',
     });
     this.props.appendChild(this.$dom);
-    const { postId } = RouterContext.state.params;
+    this.postId = RouterContext.state.params.postId;
 
-    // 게시글 정보 GET
-    axiosInstance.get('/posts/' + postId).then(res => {
-      this.state = res.data.data;
-
-      // 컴포넌트 생성
-      this.stacks = new stacks({
-        stackList: this.state.stacks,
+    axiosInstance
+      .get('/posts/' + this.postId)
+      .then(res => {
+        return res.data.data;
+      })
+      .then(postDetailData => {
+        this.setState(postDetailData);
       });
-
-      this.postBanner = new PostBanner({
-        stackList: this.state.stacks,
-      });
-
-      this.comments = new comments({
-        commentList: this.state.comments,
-      });
-
-      this.render();
-      this.addEvent();
-    });
   }
 
   setState = nextState => {
+    this.state = nextState;
+    this.makeComponent();
     this.render();
+    this.addEvent();
+  };
+
+  makeComponent = () => {
+    // 스토어에 저장된 id 와 게시글 작성자의 id 비교
+    // if (loggedUser === postUser) {
+    // this.EditButtons = new EditButtons();
+    // }
+
+    this.stacks = new Stacks({
+      stackList: this.state.stacks,
+    });
+
+    this.postBanner = new PostBanner({
+      stackList: this.state.stacks,
+    });
+
+    this.comments = new Comments({
+      commentList: this.state.comments,
+    });
   };
 
   render = () => {
@@ -123,7 +133,6 @@ export default class DetailPage extends Component {
       </div>
     `;
 
-    // 만든 컴포턴트들을 기존 노드와 교체.
     this.replaceElement(
       this.$dom.querySelector('.stacksReplace'),
       this.stacks.$dom,
@@ -140,8 +149,27 @@ export default class DetailPage extends Component {
 
   addEvent = () => {
     document.querySelector('.commentForm').addEventListener('submit', event => {
+      event.preventDefault();
       const commentContent = document.querySelector('.writeComment').value;
-      // axios.post('url', { withCredentials: true });
+      document.querySelector('.writeComment').value = '';
+      axiosInstance.post(
+        'comments',
+        {
+          content: commentContent,
+          parentType: 'post',
+          parentId: this.postId,
+        },
+        { withCredentials: true },
+      );
     });
+    document
+      .querySelector('.bookmarkWrapper')
+      .addEventListener('click', event => {
+        axiosInstance.post(
+          'users/mark/' + this.postId,
+          {},
+          { withCredentials: true },
+        );
+      });
   };
 }
