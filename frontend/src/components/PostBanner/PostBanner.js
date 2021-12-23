@@ -7,14 +7,14 @@ import django from '../../assets/icons/django-icon.svg';
 import flutter from '../../assets/icons/flutter.svg';
 import go from '../../assets/icons/go.svg';
 import java from '../../assets/icons/java.svg';
-import JavaScript from '../../assets/icons/javascript.svg';
+import javascript from '../../assets/icons/javascript.svg';
 import kotlin from '../../assets/icons/kotlin.svg';
 import nodejs from '../../assets/icons/nodejs-icon.svg';
 import python from '../../assets/icons/python.svg';
 import react from '../../assets/icons/react.svg';
 import spring from '../../assets/icons/spring.svg';
 import swift from '../../assets/icons/swift.svg';
-import TypeScript from '../../assets/icons/typescript.svg';
+import typescript from '../../assets/icons/typescript.svg';
 import vue from '../../assets/icons/vue.svg';
 
 const stackLogos = [
@@ -23,14 +23,14 @@ const stackLogos = [
   flutter,
   go,
   java,
-  JavaScript,
+  javascript,
   kotlin,
   nodejs,
   python,
   react,
   spring,
   swift,
-  TypeScript,
+  typescript,
   vue,
 ];
 
