@@ -1,12 +1,11 @@
 import Component from '../component';
+import './searchNoResult.scss';
 
-export default class StackList extends Component {
+export default class Navigation extends Component {
   constructor(props) {
     super(props);
-
-    // top node
     this.$dom = this.createDom('div', {
-      className: 'stack-select',
+      className: 'searchNotFound',
     });
 
     this.render();
@@ -14,6 +13,7 @@ export default class StackList extends Component {
 
   render = () => {
     this.$dom.innerHTML = `
-    `;
+        <p>검색 결과가 없습니다.</p>
+      `;
   };
 }

@@ -1,9 +1,12 @@
 /* eslint-disable implicit-arrow-linebreak */
 import Component from '../../components/component';
-import './mainPage.css';
+import './mainPage.scss';
 import bannerImg from '../../assets/images/banerImg.png';
-import { posts } from '../../library/MainPage';
+import searchIcon from '../../assets/icons/search-icon.svg';
+import { posts, defaultStacks } from '../../library/MainPage';
 import Card from '../../components/Card/Card';
+import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
+import SkillStacksDropDown from '../../components/SkillStacksDropDown/SkillStacksDropDown';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -60,12 +63,21 @@ export default class MainPage extends Component {
       </div>
     </div>
     <div class="filterBtnRightContainer">
-      <input type="text" id="searchInput"/>
+      <div class="wrapper">
+        <div class="searchDiv">
+          <input type="text" id="searchInput"/>
+          <img
+            src="${searchIcon}"
+            alt="search image"
+            class="searchIconImg"/> 
+        </div>
+      </div>
       <div class="skills">
         <svg xmlns="http://www.w3.org/2000/svg">
           <path d="M15 3.5H0m10 4H5m7 4H3" stroke="#403845"/>
         </svg>        
         <div class="skillsTitle">기술스택 필터링</div>
+        <div class="drop-content"></div>
       </div>
       <div class="avail">
         <svg xmlns="http://www.w3.org/2000/svg">
@@ -76,15 +88,21 @@ export default class MainPage extends Component {
     </div>
     </section>
     <section class="mainPostCards">
+      <div class="replaceDiv">
+      </div>
     </section>
     </section>
     `;
+    const dropContent = this.$dom.querySelector('.drop-content');
+    const stacks = new SkillStacksDropDown({
+      stackList: defaultStacks,
+    });
+    dropContent.appendChild(stacks.$dom);
     this.addEvent();
   };
 
   addEvent = () => {
     const createCard = () => {
-      const mainPostCards = this.$dom.querySelector('.mainPostCards');
       const $createFrag = document.createDocumentFragment();
       this.cardList = this.state.map(el => {
         const newCard = new Card(el);
@@ -93,7 +111,12 @@ export default class MainPage extends Component {
       this.cardList.forEach(el => {
         $createFrag.appendChild(el);
       });
-      this.replaceElement(mainPostCards, $createFrag);
+      const cardContainer = this.createDom('div', {
+        classNams: 'cardContainer',
+      });
+      cardContainer.appendChild($createFrag);
+      const replaceDiv = this.$dom.querySelector('.replaceDiv');
+      this.replaceElement(replaceDiv, cardContainer);
     };
 
     const populate = this.$dom.querySelector('.populate');
@@ -121,6 +144,49 @@ export default class MainPage extends Component {
       );
       this.setState(statelist);
       createCard();
+    });
+    const searchInput = this.$dom.querySelector('#searchInput');
+    const searchbtn = this.$dom.querySelector('.searchIconImg');
+    const createNot = () => {
+      const searchNotFound = new SearchNotFound();
+      const searchNotFoundContainer = document.createElement('div');
+      searchNotFoundContainer.className = 'searchNotFoundContainer';
+      searchNotFoundContainer.appendChild(searchNotFound.$dom);
+      const replaceDiv = this.$dom.querySelector('.replaceDiv');
+      this.replaceElement(replaceDiv, searchNotFoundContainer);
+    };
+    const searchEventhandler = () => {
+      if (!searchInput.value) {
+        return;
+      }
+      const searchList = posts.filter(character => {
+        return character.title.includes(searchInput.value);
+      });
+      if (searchList.length === 0) {
+        this.setState([]);
+        createNot();
+        return;
+      }
+      this.setState(searchList);
+      createCard();
+    };
+
+    searchbtn.addEventListener('click', () => {
+      searchEventhandler();
+    });
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        searchEventhandler();
+      }
+    });
+    const skillIcon = this.$dom.getElementsByClassName('skill-icon')[0];
+
+    skillIcon.addEventListener('click', e => {
+      if (e.target && e.target.nodeName === 'IMG') {
+        const statelist = posts.filter(el => el.stacks.includes(e.target.id));
+        this.setState(statelist);
+        createCard();
+      }
     });
   };
 }

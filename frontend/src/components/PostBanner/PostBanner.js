@@ -37,9 +37,10 @@ const stackLogos = [
 export default class PostBanner extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       stackList: props.stackList,
-      firstStack: props.stackList[0],
+      firstStack: props.stackList[0].toLowerCase(),
     };
 
     this.$dom = this.createDom('div', {
@@ -50,7 +51,7 @@ export default class PostBanner extends Component {
 
     this.state.stackList.forEach(stack => {
       for (let i = 0; i < defaultStacks.length; i++) {
-        if (defaultStacks[i] === stack) {
+        if (defaultStacks[i] === stack.toLowerCase()) {
           this.state.stackLogoURLs.push(stackLogos[i]);
           break;
         }

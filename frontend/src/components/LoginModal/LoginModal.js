@@ -60,8 +60,8 @@ export default class LoginModal extends Component {
       // alert('잠시 꺼둠');
     });
     this.$dom.querySelector('.kakao').addEventListener('click', () => {
-      // location.href = `${BASE_URL}/users/auth/kakao`;
-      alert('잠시 꺼둠');
+      location.href = `${BASE_URL}/users/auth/kakao`;
+      // alert('잠시 꺼둠');
     });
 
     this.$dom.addEventListener('click', e => {
