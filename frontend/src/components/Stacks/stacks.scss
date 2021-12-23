@@ -1,17 +1,25 @@
 .stacks {
   display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
   align-items: center;
+  h4 {
+    font-weight: 500;
+  }
   .stackList {
     display: flex;
     font-size: 16px;
-    gap: 18px;
-    li:first-child {
-      margin-left: 18px;
-    }
+    gap: 15px;
     li {
       padding: 12px 20px 8px;
       border-radius: 30px;
       background-color: var(--gray);
     }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .stacks {
+    justify-content: center;
   }
 }

@@ -65,7 +65,7 @@ export default class PostBanner extends Component {
     this.$dom.innerHTML = this.state.stackLogoURLs
       .map(stack => {
         return `
-        <img class="bannerLogo" src='${stack}' alt="${stack}" />
+        <img class="bannerLogo" src='${stack}' />
         `;
       })
       .join('');

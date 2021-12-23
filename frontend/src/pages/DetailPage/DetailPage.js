@@ -64,7 +64,8 @@ export default class DetailPage extends Component {
         <img src=${this.state.author.imageURL} width="30px" height="30px" />
         <h4 class="userName">${this.state.author.nickname}</h4>
       </div>
-      <div class="stacks">기술스택
+      <div class="stacks">
+        <h4 class="stacksTitle">기술스택<h4>
         <ul class="stacksReplace">
         </ul>
       </div>
