@@ -18,7 +18,7 @@ export default class MainPage extends Component {
     $fragment.appendChild(this.$dom);
 
     this.state = posts;
-    props.appendChild($fragment);
+    this.appendRoot(props, $fragment);
     this.render();
     this.addEvent();
   }
@@ -105,7 +105,8 @@ export default class MainPage extends Component {
     const createCard = () => {
       const $createFrag = document.createDocumentFragment();
       this.cardList = this.state.map(el => {
-        const newCard = new Card(el);
+        // TODO: 바꿔야 할 부분
+        const newCard = new Card({ post: el, postList: posts });
         return newCard.$dom;
       });
       this.cardList.forEach(el => {
