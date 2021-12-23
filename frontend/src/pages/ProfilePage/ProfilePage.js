@@ -8,13 +8,13 @@ import {
   defaultStacks,
 } from '../../library/Profile';
 import Button from '../../components/Profile/Button';
+import Stack from '../../components/Profile/Stack';
 
 // TODO: 리팩토링 및 개선점 찾아보기
 export default class ProfilePage extends Component {
   constructor(props) {
     super(props);
 
-    // 전송 시 보내야할 데이터
     this.data = {
       nickname: '',
       region: {
@@ -41,10 +41,6 @@ export default class ProfilePage extends Component {
     //   buttonText: '회원 탈퇴',
     //   onClick: this.unsubscribeService,
     // });
-
-    if (props.childNodes[1]) props.replaceChild(this.$dom, props.childNodes[1]);
-    else props.appendChild(this.$dom);
-    // props.appendChild(this.$dom);
 
     this.render();
     this.getInitState();
@@ -114,6 +110,9 @@ export default class ProfilePage extends Component {
             </div>
         </div>
     `;
+
+    this.appendRoot(this.props, this.$dom);
+
     const $btns = this.$dom.querySelector('.clearfix');
     // $btns.appendChild(this.$unsubscribeBtn.$dom);
     $btns.appendChild(this.$updateBtn.$dom);
@@ -122,27 +121,27 @@ export default class ProfilePage extends Component {
     const $sidoSelect = this.$dom.querySelector('.sido-select');
     const $positionSelect = this.$dom.querySelector('.position-select');
     const $stackSelect = this.$dom.querySelector('.stack-select');
-    const img = this.createDom('img', {
+    const $img = this.createDom('img', {
       src: this.data.imageURL,
       alt: 'profile',
     });
-    $userImg.appendChild(img);
-    const lab = this.createDom('label', {
+    $userImg.appendChild($img);
+    const $lab = this.createDom('label', {
       htmlFor: 'nickname',
     });
-    const b = this.createDom('b', {
+    const $b = this.createDom('b', {
       innerText: '닉네임',
     });
-    const inp = this.createDom('input', {
+    const $inp = this.createDom('input', {
       type: 'text',
       id: 'nickname',
       className: 'nickname-input',
       value: this.data.nickname || '',
       placeholder: '닉네임을 입력하세요.',
     });
-    lab.appendChild(b);
-    $nickname.appendChild(lab);
-    $nickname.appendChild(inp);
+    $lab.appendChild($b);
+    $nickname.appendChild($lab);
+    $nickname.appendChild($inp);
 
     let fragment = new DocumentFragment();
     defaultSido.forEach(sido => {
@@ -167,22 +166,11 @@ export default class ProfilePage extends Component {
 
     fragment = new DocumentFragment();
     defaultStacks.forEach(stack => {
-      const div = document.createElement('div');
-      const label = document.createElement('label');
-      const input = document.createElement('input');
-      input.type = 'checkbox';
-      input.classList.add('check-with-label');
-      input.value = stack;
-      input.id = stack;
-      input.name = 'stacks';
-      label.setAttribute('for', stack);
-      label.classList.add('label-for-check');
-      label.innerHTML = stack;
-
-      if (this.data.stacks.indexOf(stack) !== -1) input.checked = true;
-      div.appendChild(input);
-      div.appendChild(label);
-      fragment.appendChild(div);
+      const $stack = new Stack({
+        stack,
+        selectedStack: this.data.stacks,
+      });
+      fragment.appendChild($stack.$dom);
     });
     $stackSelect.appendChild(fragment);
 
@@ -191,10 +179,7 @@ export default class ProfilePage extends Component {
 
   sigunguChange(sido) {
     const $sigungu = document.querySelector('#sigungu');
-
     const selectedSido = defaultSigungu[sido];
-
-    // sigungu reset
     $sigungu.options.length = 1;
 
     // eslint-disable-next-line guard-for-in
@@ -211,7 +196,7 @@ export default class ProfilePage extends Component {
   }
 
   submitProfileData = () => {
-    console.log('프로필 업데이트 요청', this.data);
+    // TODO: 값 체크 checkEmptyField();
     axiosInstance
       .put(
         '/users',
@@ -220,7 +205,10 @@ export default class ProfilePage extends Component {
           withCredentials: true,
         },
       )
-      .then(data => this.getInitState());
+      .then(data => {
+        alert('임시 메시지: 프로필 수정 성공');
+        this.getInitState();
+      });
   };
 
   checkEmptyField = () => {
@@ -228,7 +216,7 @@ export default class ProfilePage extends Component {
   };
 
   unsubscribeService = () => {
-    console.log('회원 탈퇴는 아직 미구현');
+    console.log('탈퇴는 아직...');
   };
 
   addEvent = () => {
