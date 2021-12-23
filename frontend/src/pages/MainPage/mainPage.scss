@@ -7,102 +7,106 @@ $medium: #515caa;
 $medium2: #4b9cce;
 $dark: #24274a;
 .main-page-wraper {
-    #home{
-        background: url('../../assets/images/background.png');
-        // text-align:center;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        height:600px;
-        padding: 40px;
-        // display: flex;
-        padding-top: 120px;
+  #home {
+    background: url('../../assets/images/background.png');
+    // text-align:center;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
+    padding: 40px;
+    // display: flex;
+    padding-top: 120px;
 
-        .banerContainer{
-            margin-left: 200px;
-            .banerWord{
-                margin-left: 100px;
-                float: left;
-                width:500px;
-                .homeTitle{
-                    font-size: 30px;
-                    margin: 16px 0px ;
-                }
-                .homeDescription{
-                    font-size: 16px;
-                    margin: 8px,0;
-                }
-            }
-            .banerImg{
-                float:right;
-                width: 400px;
-                margin-right: 100px;
-            }
+    .banerContainer {
+      margin-left: 200px;
+      .banerWord {
+        margin-left: 100px;
+        float: left;
+        width: 500px;
+        .homeTitle {
+          font-size: 30px;
+          margin: 16px 0px;
         }
-
-
-        
+        .homeDescription {
+          font-size: 16px;
+          margin: 8px, 0;
+        }
+      }
+      .banerImg {
+        float: right;
+        width: 400px;
+        margin-right: 100px;
+      }
     }
-    #hmoe:after {
-        content: "";
-        display: block;
-        clear:both;
+  }
+  #home:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  #serchBar {
+    svg {
+      fill: none;
+      width: 20px;
+      height: 15px;
     }
-    #serchBar{
-        svg {
-            fill:none;
-            width:20px;
-            height:15px;
+    display: flex;
+    justify-content: space-between;
+    .filterBtnLeftContainer {
+      margin-left: 30px;
+      text-align: center;
+      display: flex;
+      .recomand {
+        margin: 10px;
+        .recomandTitle {
+          font-size: 5px;
         }
-        display: flex;
-        justify-content: space-between;
-        .filterBtnLeftContainer{
-            margin-left:30px;
-            text-align: center;
-            display: flex;
-            .recomand{
-                margin: 10px;
-                .recomandTitle{
-                    font-size: 5px;
-                }
-            }
-            .recent{
-                margin: 10px;
-                .recentTitle{
-                    font-size:5px;
-                }
-            }
-            .populate{
-                margin: 10px;
-                .populateTitle{
-                    font-size: 5px;
-                }
-            }
+      }
+      .recent {
+        margin: 10px;
+        .recentTitle {
+          font-size: 5px;
         }
-        .filterBtnRightContainer{
-            margin-right:30px;
-            text-align: center;
-            display: flex;
-            #searchInput {
-                margin: auto;
-                outline-style: none;
-                height: 25px;
-                line-height: 25px;
-                border-radius: 50px;
-                border: solid 1px grey;
-            }
-            .skills{
-                margin:10px;
-                .skillsTitle{
-                    font-size: 12px;
-                }
-            }
-            .avail{
-                margin: 10px;
-                .availTitle{
-                    font-size: 12px;
-                }
-            }
+      }
+      .populate {
+        margin: 10px;
+        .populateTitle {
+          font-size: 5px;
         }
+      }
     }
+    .filterBtnRightContainer {
+      margin-right: 30px;
+      text-align: center;
+      display: flex;
+      .searchDiv {
+        height: 100%;
+        background-color: #ffffff;
+        border: 1px solid gray;
+        border-radius: 50px;
+        #searchInput {
+          outline-style: none;
+          height: 80%;
+          border-radius: 80px;
+          border: none;
+        }
+        .searchIconImg {
+          transform: translate(0%, 40%);
+        }
+      }
+      .skills {
+        margin: 10px;
+        .skillsTitle {
+          font-size: 12px;
+        }
+      }
+      .avail {
+        margin: 10px;
+        .availTitle {
+          font-size: 12px;
+        }
+      }
+    }
+  }
 }
