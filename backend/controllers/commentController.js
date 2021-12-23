@@ -2,7 +2,7 @@ const { statusCode, responseMessage } = require('../globals');
 const { resFormatter } = require('../utils');
 const asyncHandler = require('../utils/asyncHandler');
 const commentService = require('../services/commentService');
-const postService = require('../services/PostService');
+const postService = require('../services/postService');
 const {
   ValidationError,
   EntityNotExistError,
