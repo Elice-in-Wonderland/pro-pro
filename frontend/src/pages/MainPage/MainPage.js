@@ -111,8 +111,9 @@ export default class MainPage extends Component {
       this.cardList.forEach(el => {
         $createFrag.appendChild(el);
       });
-      const cardContainer = document.createElement('div');
-      cardContainer.className = 'cardContainer';
+      const cardContainer = this.createDom('div', {
+        classNams: 'cardContainer',
+      });
       cardContainer.appendChild($createFrag);
       const replaceDiv = this.$dom.querySelector('.replaceDiv');
       this.replaceElement(replaceDiv, cardContainer);
