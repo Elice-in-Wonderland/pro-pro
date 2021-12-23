@@ -7,11 +7,13 @@
 
 .detailContainer {
   margin: 50px;
+  margin-top: 100px;
   padding: 50px;
   display: flex;
   flex-direction: column;
   background-color: var(--white);
   gap: 30px;
+  filter: drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.25));
 }
 
 .detailTitle {
@@ -27,6 +29,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  img {
+    border-radius: 50%;
+  }
 }
 
 .hero {
@@ -65,9 +70,10 @@
         align-items: center;
         gap: 10px;
         .view {
-          height: 20px;
+          height: 25px;
         }
         .viewCount {
+          font-size: 22px;
         }
       }
       .bookmarkWrapper {
@@ -75,9 +81,10 @@
         align-items: center;
         gap: 10px;
         .bookmark {
-          height: 25px;
+          height: 30px;
         }
         .bookmarkCount {
+          font-size: 22px;
         }
       }
     }
@@ -112,6 +119,7 @@ hr {
 .commentForm {
   display: flex;
   position: relative;
+  margin: 30px 0px;
 }
 
 .writeComment {
