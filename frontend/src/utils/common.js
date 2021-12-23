@@ -26,8 +26,86 @@ function throttle(callback, wait = 1000) {
   };
 }
 
-export default {
+function addressSearch(address) {
+  const geocoder = new window.kakao.maps.services.Geocoder();
+
+  return new Promise((resolve, reject) => {
+    geocoder.addressSearch(address, (result, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        const region = {
+          lat: result[0].y,
+          lng: result[0].x,
+          address,
+          sido: result[0].road_address.region_1depth_name,
+        };
+        resolve(region);
+      } else {
+        reject(status);
+      }
+    });
+  });
+}
+
+function createPostCode() {
+  return new Promise((resolve, reject) => {
+    new window.daum.Postcode({
+      async oncomplete(data) {
+        const region = await addressSearch(data.address);
+        resolve(region);
+      },
+      onclose(state) {
+        if (state === 'FORCE_CLOSE') {
+          reject(state);
+        }
+      },
+    }).open();
+  });
+}
+
+function createMap($container, region) {
+  const coords = new window.kakao.maps.LatLng(region.lat, region.lng);
+
+  const mapOption = {
+    center: coords,
+    draggable: false,
+    level: 3,
+  };
+
+  // add map
+  const map = new window.kakao.maps.Map($container, mapOption);
+
+  // add marker
+  new window.kakao.maps.Marker({
+    map,
+    position: coords,
+  });
+
+  // map.setCenter(coords);
+}
+
+export {
   padding,
   debounce,
   throttle,
+  createPostCode,
+  addressSearch,
+  createMap,
 };
+
+/* <div style="margin-top:100px;">
+<input type="button" class='postcode-search' value="우편번호 찾기"><br>
+<div id="map" style="height: 300px;width:300px"></div>
+</div> */
+
+// const postcodeSearch = this.$dom.querySelector('.postcode-search');
+// const mapContainer = document.getElementById('map');
+
+// postcodeSearch.addEventListener('click', async () => {
+//   try {
+//     const region = await createPostCode();
+//     console.log(region);
+//     createMap(mapContainer, region);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// });

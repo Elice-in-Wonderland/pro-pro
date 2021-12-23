@@ -5,6 +5,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const mode = process.env.NODE_ENV || 'development';
 
@@ -56,7 +59,7 @@ module.exports = {
         type: 'asset',
         parser: {
           dataUrlCondition: {
-            maxSize: 20 * 1024, // 기준으로 20kb 로 변경
+            maxSize: 4 * 1024, // 기준으로 20kb 로 변경
           },
         },
       },
@@ -69,13 +72,14 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      VERSION: JSON.stringify('v.1.2.3'), // 전역으로 불러올 수 있는 변수
+      'process.env': JSON.stringify(process.env),
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html', // 읽어 올 템플릿 경로 지정
       favicon: './public/favicon.png',
       templateParameters: {
         env: process.env.NODE_ENV === 'development' ? '(개발용)' : '',
+        kakaoURL: process.env.KAKAO_API_KEY,
       },
       minify:
         process.env.NODE_ENV === 'production'
