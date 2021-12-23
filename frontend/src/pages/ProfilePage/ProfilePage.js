@@ -70,7 +70,6 @@ export default class ProfilePage extends Component {
 
   setData = nextData => {
     this.data = { ...this.data, ...nextData };
-    console.log('데이터 관리:', this.data);
   };
 
   render = () => {
@@ -195,24 +194,46 @@ export default class ProfilePage extends Component {
     }
   }
 
-  submitProfileData = () => {
-    // TODO: 값 체크 checkEmptyField();
-    axiosInstance
-      .put(
-        '/users',
-        { ...this.data },
-        {
-          withCredentials: true,
-        },
-      )
-      .then(data => {
+  submitProfileData = async () => {
+    const isFullField = this.checkEmptyField();
+    if (isFullField) {
+      try {
+        await axiosInstance.put(
+          '/users',
+          { ...this.data },
+          {
+            withCredentials: true,
+          },
+        );
+
         alert('임시 메시지: 프로필 수정 성공');
         this.getInitState();
-      });
+      } catch (e) {
+        alert('프로필 수정 실패');
+      }
+    }
   };
 
   checkEmptyField = () => {
-    console.log('checkEmpty Field');
+    const { nickname, position, region, stacks } = this.data;
+    if (nickname === '') {
+      alert('닉네임을 입력하세요.');
+      return false;
+    }
+    if (region.sido === '' || region.sigungu === '') {
+      alert('지역을 입력하세요');
+      return false;
+    }
+    if (position === '') {
+      alert('직무를 선택하세요.');
+      return false;
+    }
+    if (stacks.length === 0) {
+      alert('하나 이상의 기술 스택을 선택하세요');
+      return false;
+    }
+
+    return true;
   };
 
   unsubscribeService = () => {
