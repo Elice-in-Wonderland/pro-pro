@@ -40,8 +40,8 @@ export default class Comments extends Component {
           }
           </div>
       <h6 class="commentContent">${comment.content}</h6>
-      <hr>
       </div>
+      <hr>
       `;
   };
 
@@ -103,9 +103,11 @@ export default class Comments extends Component {
   deleteComment = event => {
     const replyBtn = event.target;
     const targetComment = replyBtn.parentNode.parentNode;
+    const hr = targetComment.nextSibling.nextSibling;
     axiosInstance.delete(`comments/${targetComment.id}`, {
       withCredentials: true,
     });
     targetComment.parentNode.removeChild(targetComment);
+    hr.parentNode.removeChild(hr);
   };
 }

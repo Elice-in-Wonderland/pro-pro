@@ -1,6 +1,7 @@
 import Component from '../component';
 import './commentForm.scss';
 import axiosInstance from '../../utils/api';
+import Comment from '../../components/Comments/Comments';
 
 export default class CommentForm extends Component {
   constructor(props) {
@@ -38,19 +39,29 @@ export default class CommentForm extends Component {
   };
 
   addEvent = () => {
-    this.$dom.addEventListener('submit', event => {
-      event.preventDefault();
-      const commentContent = this.$dom.querySelector('.writeComment').value;
-      this.$dom.querySelector('.writeComment').value = '';
-      axiosInstance.post(
-        'comments',
-        {
-          content: commentContent,
-          parentType: this.state.parentType,
-          parentId: this.state.targetId,
-        },
-        { withCredentials: true },
-      );
-    });
+    this.$dom.addEventListener('submit', this.postComment);
+  };
+
+  postComment = event => {
+    event.preventDefault();
+    const commentContent = this.$dom.querySelector('.writeComment').value;
+    this.$dom.querySelector('.writeComment').value = '';
+    axiosInstance.post(
+      'comments',
+      {
+        content: commentContent,
+        parentType: this.state.parentType,
+        parentId: this.state.targetId,
+      },
+      { withCredentials: true },
+    );
+    location.reload();
+    // this.paintComment(commentContent);
+  };
+
+  paintComment = content => {
+    const comments = this.$dom.previousSibling.previousSibling;
+    const newComment = new Comment({});
+    comments.appendChild(newComment);
   };
 }
