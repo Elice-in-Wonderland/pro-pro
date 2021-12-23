@@ -18,11 +18,11 @@ export default class DetailPage extends Component {
     this.$dom = this.createDom('article', {
       className: 'detailContainer',
     });
-    this.props.appendChild(this.$dom);
+    this.appendRoot(props, this.$dom);
     this.postId = RouterContext.state.params.postId;
 
     axiosInstance
-      .get('/posts/' + this.postId)
+      .get(`/posts/${this.postId}`)
       .then(res => {
         return res.data.data;
       })
@@ -166,7 +166,7 @@ export default class DetailPage extends Component {
       .querySelector('.bookmarkWrapper')
       .addEventListener('click', event => {
         axiosInstance.post(
-          'users/mark/' + this.postId,
+          `users/mark/${this.postId}`,
           {},
           { withCredentials: true },
         );
