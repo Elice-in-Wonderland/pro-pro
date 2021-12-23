@@ -26,7 +26,7 @@ export default class BookmarkPage extends Component {
     const $fragment = document.createDocumentFragment();
     $fragment.appendChild(this.$dom);
 
-    props.appendChild($fragment);
+    this.appendRoot(props, $fragment);
   }
 
   render = () => {

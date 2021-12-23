@@ -1,7 +1,7 @@
 import Component from '../../components/component';
 import scss from './createPostPage.scss';
-import { defaultSigungu, defaultStacks } from './../../library/Profile/index';
-import axiosInstance from './../../utils/api';
+import { defaultSigungu, defaultStacks } from '../../library/Profile/index';
+import axiosInstance from '../../utils/api';
 
 export default class CreatePostPage extends Component {
   constructor(props) {
@@ -9,12 +9,13 @@ export default class CreatePostPage extends Component {
     this.$dom = this.createDom('div', {
       className: 'CreatePostPage',
     });
-    props.appendChild(this.$dom);
+    // props.appendChild(this.$dom);
+    this.appendRoot(props, this.$dom);
     this.render();
     this.addEvent();
   }
 
-  //스택 추가
+  // 스택 추가
   appendStack() {
     const stacks = document.querySelector('.Stacks p');
 
@@ -27,10 +28,10 @@ export default class CreatePostPage extends Component {
       .join('');
   }
 
-  //지역 추가
+  // 지역 추가
   appendRegion() {
-    const sido = document.forms[0].sido;
-    const sigungu = document.forms[0].sigungu;
+    const { sido } = document.forms[0];
+    const { sigungu } = document.forms[0];
 
     sido.innerHTML = Object.keys(defaultSigungu)
       .map(sido => {
@@ -45,11 +46,11 @@ export default class CreatePostPage extends Component {
       .join('');
   }
 
-  //시작일 추가
+  // 시작일 추가
   appendStartDate() {
-    const startDateYear = document.forms[0].startDateYear;
-    const startDateMonth = document.forms[0].startDateMonth;
-    const startDateDate = document.forms[0].startDateDate;
+    const { startDateYear } = document.forms[0];
+    const { startDateMonth } = document.forms[0];
+    const { startDateDate } = document.forms[0];
 
     this.defaultDate(startDateYear, startDateMonth, startDateDate);
     this.transferData([
@@ -60,11 +61,11 @@ export default class CreatePostPage extends Component {
     ]);
   }
 
-  //종료일 추가
+  // 종료일 추가
   appendEndDate() {
-    const endDateYear = document.forms[0].endDateYear;
-    const endDateMonth = document.forms[0].endDateMonth;
-    const endDateDate = document.forms[0].endDateDate;
+    const { endDateYear } = document.forms[0];
+    const { endDateMonth } = document.forms[0];
+    const { endDateDate } = document.forms[0];
 
     this.defaultDate(endDateYear, endDateMonth, endDateDate);
     this.transferData([
@@ -75,11 +76,11 @@ export default class CreatePostPage extends Component {
     ]);
   }
 
-  //마감일 추가
+  // 마감일 추가
   appendRegisterDeadline() {
-    const registerDeadlineYear = document.forms[0].registerDeadlineYear;
-    const registerDeadlineMonth = document.forms[0].registerDeadlineMonth;
-    const registerDeadlineDate = document.forms[0].registerDeadlineDate;
+    const { registerDeadlineYear } = document.forms[0];
+    const { registerDeadlineMonth } = document.forms[0];
+    const { registerDeadlineDate } = document.forms[0];
 
     this.defaultDate(
       registerDeadlineYear,
@@ -94,10 +95,10 @@ export default class CreatePostPage extends Component {
     ]);
   }
 
-  //기본 날짜 표시
+  // 기본 날짜 표시
   defaultDate(dfYear, dfMonth, dfDate) {
     let yearStart = new Date().getFullYear();
-    let yearEnd = yearStart + 3;
+    const yearEnd = yearStart + 3;
     let years = '';
     let months = '';
     let dates = '';
@@ -122,7 +123,7 @@ export default class CreatePostPage extends Component {
     dfDate.innerHTML = dates;
   }
 
-  //년월에 따른 날짜갯수 변경
+  // 년월에 따른 날짜갯수 변경
   dateAppendRemove([year, month, date]) {
     const days = new Date(Number(year.value), Number(month.value), 0).getDate();
     const printed = date.children.length;
@@ -143,7 +144,7 @@ export default class CreatePostPage extends Component {
     }
   }
 
-  //서버 전송을 위한 date폼에 data입력
+  // 서버 전송을 위한 date폼에 data입력
   transferData([year, month, date, data]) {
     let dataMonth = month.value;
     dataMonth = dataMonth.length !== 1 ? dataMonth : `0${dataMonth}`;
@@ -154,7 +155,7 @@ export default class CreatePostPage extends Component {
     data.value = `${year.value}-${dataMonth}-${dataDate}`;
   }
 
-  //form validation
+  // form validation
   checkform(formData) {
     if (formData.title.trim() === '') {
       alert('제목을 입력하세요');
@@ -258,7 +259,7 @@ export default class CreatePostPage extends Component {
   };
 
   addEvent = () => {
-    //수행 인원 증감 이벤트
+    // 수행 인원 증감 이벤트
     const minusBtn = document.querySelector('#minus');
     const plusBtn = document.querySelector('#plus');
     const count = document.querySelector('#count');
@@ -272,7 +273,7 @@ export default class CreatePostPage extends Component {
       count.value = Number(count.value) + 1;
     });
 
-    //년월에 따른 일 변경, 서버 전송을 위한 date폼 data변경
+    // 년월에 따른 일 변경, 서버 전송을 위한 date폼 data변경
     const periodSelects = document.querySelectorAll('.Period select');
     const startSelects = Array.from(periodSelects).slice(0, 3);
     const endSelects = Array.from(periodSelects).slice(3);
@@ -280,21 +281,21 @@ export default class CreatePostPage extends Component {
       document.querySelectorAll('.RegisterDeadline select'),
     );
 
-    //사작일
+    // 사작일
     startSelects.forEach(startSelect => {
       startSelect.addEventListener('change', () => {
         this.dateAppendRemove(startSelects);
         this.transferData([...startSelects, document.forms[0].startDate]);
       });
     });
-    //종료일
+    // 종료일
     endSelects.forEach(endSelect => {
       endSelect.addEventListener('change', () => {
         this.dateAppendRemove(endSelects);
         this.transferData([...endSelects, document.forms[0].endDate]);
       });
     });
-    //마감일
+    // 마감일
     registerDeadlineSelects.forEach(registerDeadlineSelect => {
       registerDeadlineSelect.addEventListener('change', () => {
         this.dateAppendRemove(registerDeadlineSelects);
@@ -305,9 +306,9 @@ export default class CreatePostPage extends Component {
       });
     });
 
-    //시도 선택에 따른 시군구 변경
+    // 시도 선택에 따른 시군구 변경
     document.forms[0].sido.addEventListener('change', e => {
-      let selectedSido = e.target.value;
+      const selectedSido = e.target.value;
       document.forms[0].sigungu.innerHTML = defaultSigungu[selectedSido]
         .map(sigungu => {
           return `<option value=${sigungu}>${sigungu}</option>`;
