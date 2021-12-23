@@ -6,11 +6,15 @@ import javascriptLogo from '../../assets/icons/javascript.svg';
 
 import Stacks from '../../components/Stacks/Stacks';
 import Comments from '../../components/Comments/Comments';
+import CommentForm from '../../components/CommentForm/CommentForm';
 import PostBanner from '../../components/PostBanner/PostBanner';
-// import EditButtons from '../../components/EditButtons/EditButtons';
+import EditButtons from '../../components/EditButtons/EditButtons';
 
 import RouterContext from '../../router/RouterContext';
 import axiosInstance from '../../utils/api';
+
+const localData = localStorage.getItem('pro-pro-state');
+const loggedUserInfo = JSON.parse(localData).myInfo;
 
 export default class DetailPage extends Component {
   constructor(props) {
@@ -32,18 +36,21 @@ export default class DetailPage extends Component {
   }
 
   setState = nextState => {
-    this.state = nextState;
+    let userType = '';
+    if (loggedUserInfo === undefined) {
+      userType = 'notLoggedUser';
+    } else if (loggedUserInfo._id === nextState._id) {
+      userType = 'author';
+    } else {
+      userType = 'loggedUser';
+    }
+    this.state = { ...nextState, userType };
     this.makeComponent();
     this.render();
     this.addEvent();
   };
 
   makeComponent = () => {
-    // 스토어에 저장된 id 와 게시글 작성자의 id 비교
-    // if (loggedUser === postUser) {
-    // this.EditButtons = new EditButtons();
-    // }
-
     this.stacks = new Stacks({
       stackList: this.state.stacks,
     });
@@ -52,8 +59,28 @@ export default class DetailPage extends Component {
       stackList: this.state.stacks,
     });
 
-    this.comments = new Comments({
-      commentList: this.state.comments,
+    if (this.state.userType === 'author') {
+      this.editButtons = new EditButtons();
+    }
+
+    if (loggedUserInfo) {
+      this.comments = new Comments({
+        commentList: this.state.comments,
+        userType: this.state.userType,
+        userId: loggedUserInfo._id,
+      });
+    } else {
+      this.comments = new Comments({
+        commentList: this.state.comments,
+        userType: this.state.userType,
+        userId: null,
+      });
+    }
+
+    this.commentForm = new CommentForm({
+      userType: this.state.userType,
+      parentType: 'post',
+      targetId: this.postId,
     });
   };
 
@@ -127,10 +154,7 @@ export default class DetailPage extends Component {
       <div class="commentSection">
         <hr />
         <div class="comments"></div>
-        <form action="http://localhost:4000/comments" class="commentForm" method="POST">
-          <textarea placeholder="댓글을 남겨주세요." class="writeComment" type="text" ></textarea>
-          <input class="submitComment" type="submit" value="등록" />
-        </form>
+        <div class="commentForm"></div>
       </div>
     `;
 
@@ -146,23 +170,13 @@ export default class DetailPage extends Component {
       this.$dom.querySelector('.comments'),
       this.comments.$dom,
     );
+    this.replaceElement(
+      this.$dom.querySelector('.commentForm'),
+      this.commentForm.$dom,
+    );
   };
 
   addEvent = () => {
-    document.querySelector('.commentForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const commentContent = document.querySelector('.writeComment').value;
-      document.querySelector('.writeComment').value = '';
-      axiosInstance.post(
-        'comments',
-        {
-          content: commentContent,
-          parentType: 'post',
-          parentId: this.postId,
-        },
-        { withCredentials: true },
-      );
-    });
     document
       .querySelector('.bookmarkWrapper')
       .addEventListener('click', event => {
