@@ -245,8 +245,8 @@ export default class CreatePostPage extends Component {
             <textarea name="content"cols="86" rows="15" placeholder="내용을 입력하세요"></textarea>
         </div>
         <div class="Btns">
-            <a href="/"><input type="button" value="취 소" id="cancelBtn"></a>
-            <a href="/"><input type="submit" value="등 록" id="sendBtn"></a>
+            <input type="button" value="취 소" id="cancelBtn">
+            <input type="button" value="등 록" id="sendBtn">
         </div>
     </form>
     `;
@@ -315,7 +315,7 @@ export default class CreatePostPage extends Component {
         .join('');
     });
 
-    document.querySelector('#sendBtn').addEventListener('click', async () => {
+    document.querySelector('#sendBtn').addEventListener('click', async e => {
       const formData = {
         category: Array.from(
           document.querySelectorAll('input[type="radio"]'),
