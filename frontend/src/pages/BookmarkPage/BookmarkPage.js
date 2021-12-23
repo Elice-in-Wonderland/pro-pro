@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../../utils/api';
 import Component from '../../components/component';
 import Card from '../../components/Card/Card';
 import styles from './bookmarkPage.scss';
@@ -9,11 +9,10 @@ export default class BookmarkPage extends Component {
 
     this.$dom = this.createDom('div', { className: 'bookmark-page-wrapper' });
 
-    axios
-      .get(
-        'http://localhost:4000/users/mark?category=project&page=1&perPage=10',
-        { withCredentials: true },
-      )
+    axiosInstance
+      .get('/users/mark?category=project&page=1&perPage=10', {
+        withCredentials: true,
+      })
       .then(res => {
         return res.data.data;
       })
@@ -21,13 +20,13 @@ export default class BookmarkPage extends Component {
         this.state = cards;
       });
 
+    this.render();
+    this.addEvent();
+
     const $fragment = document.createDocumentFragment();
     $fragment.appendChild(this.$dom);
 
     props.appendChild($fragment);
-
-    this.render();
-    this.addEvent();
   }
 
   render = () => {
@@ -40,7 +39,6 @@ export default class BookmarkPage extends Component {
         <div class="card-elements"></div>
       </section>
     `;
-    this.addEvent();
   };
 
   addEvent = () => {
@@ -49,7 +47,7 @@ export default class BookmarkPage extends Component {
       const $createFrag = document.createDocumentFragment();
 
       this.cardList = this.state.map(item => {
-        const newCard = new Card(item);
+        const newCard = new Card({ post: item, postList: this.state });
         return newCard.$dom;
       });
 
