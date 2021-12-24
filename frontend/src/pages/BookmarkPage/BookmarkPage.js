@@ -9,7 +9,28 @@ export default class BookmarkPage extends Component {
 
     this.$dom = this.createDom('div', { className: 'bookmark-page-wrapper' });
 
-    axiosInstance
+    this.updateCards();
+
+    //최종적으로 부모노드에 붙이기
+    this.appendRoot(props, this.$dom);
+  }
+
+  updateCards = async () => {
+    //데이터 불러오기
+    await this.getData();
+
+    //html요소 생성
+    this.render();
+
+    //포스트 카드들 생성
+    this.createCard();
+
+    //이벤트 처리
+    this.addEvent();
+  };
+
+  getData = async () => {
+    await axiosInstance
       .get('/users/mark?category=project&page=1&perPage=10', {
         withCredentials: true,
       })
@@ -19,20 +40,11 @@ export default class BookmarkPage extends Component {
       .then(cards => {
         this.state = cards;
       });
-
-    this.render();
-    this.addEvent();
-
-    const $fragment = document.createDocumentFragment();
-    $fragment.appendChild(this.$dom);
-
-    this.appendRoot(props, $fragment);
-  }
+  };
 
   render = () => {
     this.$dom.innerHTML = `
       <section class="filter-buttons">
-        <button type="button">내가 참여중인 프로젝트/스터디</button>
         <button type="button" id="bookmark-button">북마크한 프로젝트/스터디</button>
       </section>
       <section class="cards">
@@ -41,26 +53,32 @@ export default class BookmarkPage extends Component {
     `;
   };
 
+  createCard = () => {
+    const cards = this.$dom.querySelector('.card-elements');
+
+    const $createFrag = document.createDocumentFragment();
+
+    this.cardList = this.state.map(item => {
+      const newCard = new Card({
+        post: item,
+        postList: this.state,
+        updateCards: this.updateCards,
+      });
+      return newCard.$dom;
+    });
+
+    this.cardList.forEach(item => {
+      $createFrag.appendChild(item);
+    });
+
+    this.replaceElement(cards, $createFrag);
+  };
+
   addEvent = () => {
-    const createCard = () => {
-      const cards = this.$dom.querySelector('.card-elements');
-      const $createFrag = document.createDocumentFragment();
-
-      this.cardList = this.state.map(item => {
-        const newCard = new Card({ post: item, postList: this.state });
-        return newCard.$dom;
-      });
-
-      this.cardList.forEach(item => {
-        $createFrag.appendChild(item);
-      });
-      this.replaceElement(cards, $createFrag);
-    };
-
     const bookmarkBtn = this.$dom.querySelector('#bookmark-button');
 
     bookmarkBtn.addEventListener('click', () => {
-      createCard();
+      this.updateCards();
     });
   };
 }
