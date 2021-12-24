@@ -13,6 +13,7 @@ export default class Card extends Component {
     this.state = {
       post: props.post,
       postList: props.postList,
+      updateCards: props.updateCards,
     };
 
     // 도시이름에서 앞 2글자만 표시
@@ -65,8 +66,9 @@ export default class Card extends Component {
     const images = this.$dom.querySelector('.image');
     const cardWrap = this.$dom.querySelector('.card-wrap');
 
-    cardWrap.addEventListener('click', () => {
+    cardWrap.addEventListener('click', event => {
       RouterContext.state.push(`/detail/${this.state.post._id}`);
+      event.stopPropagation();
     });
 
     this.replaceElement(
@@ -86,6 +88,7 @@ export default class Card extends Component {
           });
           alert('북마크가 해제되었습니다.');
           flag = false;
+          this.state.updateCards();
           break;
         }
       }
@@ -95,10 +98,11 @@ export default class Card extends Component {
           withCredentials: true,
         });
         alert('북마크 되었습니다.');
+        this.state.updateCards();
       }
     };
 
-    bookmarkBtn.addEventListener('click', () => {
+    bookmarkBtn.addEventListener('click', event => {
       bookmarkPost();
     });
   };
