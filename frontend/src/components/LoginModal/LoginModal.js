@@ -4,6 +4,7 @@ import proproLogo from '../../assets/images/pro-pro.png';
 import googleLogo from '../../assets/images/google-logo.svg';
 import xButton from '../../assets/images/x-button.svg';
 import axiosInstnce from '../../utils/api';
+import RouterContext from '../../router/RouterContext';
 
 export default class LoginModal extends Component {
   constructor(props) {
@@ -51,7 +52,6 @@ export default class LoginModal extends Component {
           document.querySelector('.login-btn'),
           {},
           async googleUser => {
-            console.log(googleUser);
             const user = {
               snsId: googleUser.yu.DW,
               snsType: 'google',
@@ -60,10 +60,10 @@ export default class LoginModal extends Component {
                 'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
             };
             try {
-              const data = await axiosInstnce.post('/users', user);
-              console.log(data);
-              // TODO: 프로필 정보를 받으면 로컬 스토리지에 저장
-              // TODO: 메인 페이지로 이동
+              await axiosInstnce.post('/users', user, {
+                withCredentials: true,
+              });
+              RouterContext.state.replace('/');
             } catch (e) {
               alert('로그인에 실패하였습니다.');
             }

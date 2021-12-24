@@ -51,6 +51,7 @@ export default class NavItem extends Component {
           $a.addEventListener('click', () => {
             auth.removeToken();
             removeState('myInfo');
+            window.location.reload();
           });
         }
         $li.appendChild($a);
