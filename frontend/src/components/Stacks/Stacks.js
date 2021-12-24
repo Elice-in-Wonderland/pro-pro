@@ -4,9 +4,6 @@ import './stacks.scss';
 export default class Stacks extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      stackList: props.stackList,
-    };
     this.$dom = this.createDom('ul', {
       className: 'stackList',
     });
@@ -14,7 +11,7 @@ export default class Stacks extends Component {
   }
 
   detailRender = () => {
-    this.$dom.innerHTML = this.state.stackList
+    this.$dom.innerHTML = this.props.stacks
       .map(item => {
         return `<li>${item}</li>`;
       })
