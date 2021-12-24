@@ -30,8 +30,7 @@ export default class CreatePostPage extends Component {
 
   // 지역 추가
   appendRegion() {
-    const { sido } = document.forms[0];
-    const { sigungu } = document.forms[0];
+    const { sido, sigungu } = document.forms[0];
 
     sido.innerHTML = Object.keys(defaultSigungu)
       .map(sido => {
@@ -48,9 +47,7 @@ export default class CreatePostPage extends Component {
 
   // 시작일 추가
   appendStartDate() {
-    const { startDateYear } = document.forms[0];
-    const { startDateMonth } = document.forms[0];
-    const { startDateDate } = document.forms[0];
+    const { startDateYear, startDateMonth, startDateDate } = document.forms[0];
 
     this.defaultDate(startDateYear, startDateMonth, startDateDate);
     this.transferData([
@@ -63,9 +60,7 @@ export default class CreatePostPage extends Component {
 
   // 종료일 추가
   appendEndDate() {
-    const { endDateYear } = document.forms[0];
-    const { endDateMonth } = document.forms[0];
-    const { endDateDate } = document.forms[0];
+    const { endDateYear, endDateMonth, endDateDate } = document.forms[0];
 
     this.defaultDate(endDateYear, endDateMonth, endDateDate);
     this.transferData([
@@ -78,9 +73,11 @@ export default class CreatePostPage extends Component {
 
   // 마감일 추가
   appendRegisterDeadline() {
-    const { registerDeadlineYear } = document.forms[0];
-    const { registerDeadlineMonth } = document.forms[0];
-    const { registerDeadlineDate } = document.forms[0];
+    const {
+      registerDeadlineYear,
+      registerDeadlineMonth,
+      registerDeadlineDate,
+    } = document.forms[0];
 
     this.defaultDate(
       registerDeadlineYear,
@@ -177,7 +174,6 @@ export default class CreatePostPage extends Component {
 
   render = () => {
     this.$dom.innerHTML = `
-    <!-- 네비게이션 바 -->
     <form>
         <div class='Category'>
             <h3>유형 선택</h3>
@@ -193,7 +189,7 @@ export default class CreatePostPage extends Component {
         <div class='Title'>
             <h3>제목</h3>
             <p>
-                <input type="text" name="title">
+                <input type="text" name="title" maxlength='50'>
             </p>
         </div>
         <div class='Region'>
@@ -206,13 +202,13 @@ export default class CreatePostPage extends Component {
         <div class='Period'>
             <h3>수행 기간</h3>
             <p>
-                <label>FROM&nbsp&nbsp
+                <label id="periodFrom">FROM&nbsp&nbsp
                   <select name="startDateYear"></select>
                   <select name="startDateMonth"></select>
                   <select name="startDateDate"></select>
                   <input type="date" name="startDate">
                 </label>
-                <label>TO&nbsp&nbsp
+                <label id="periodTo">TO&nbsp&nbsp
                   <select name="endDateYear"></select>
                   <select name="endDateMonth"></select>
                   <select name="endDateDate"></select>
@@ -224,13 +220,13 @@ export default class CreatePostPage extends Component {
             <h3>수행 인원</h3>
             <p>
                 <input id="minus" type="button" value="-">
-                <input id="count" type="text" name="capacity" value=1></input>
+                <input id="count" type="text" name="capacity" value=1 maxlength='2'></input>
                 <input id="plus" type="button" value="+">
             </p>
         </div>
         <div class='RegisterDeadline'>
             <h3>모집 마감일</h3>
-            <p>
+            <p id="registerDeadline">
                 <select name="registerDeadlineYear"></select>
                 <select name="registerDeadlineMonth"></select>
                 <select name="registerDeadlineDate"></select>
@@ -270,40 +266,32 @@ export default class CreatePostPage extends Component {
       }
     });
     plusBtn.addEventListener('click', () => {
-      count.value = Number(count.value) + 1;
+      if (count.value !== '99') {
+        count.value = Number(count.value) + 1;
+      }
     });
 
     // 년월에 따른 일 변경, 서버 전송을 위한 date폼 data변경
-    const periodSelects = document.querySelectorAll('.Period select');
-    const startSelects = Array.from(periodSelects).slice(0, 3);
-    const endSelects = Array.from(periodSelects).slice(3);
-    const registerDeadlineSelects = Array.from(
-      document.querySelectorAll('.RegisterDeadline select'),
-    );
+    const periodFrom = document.querySelector('#periodFrom');
+    const periodTo = document.querySelector('#periodTo');
+    const registerDeadline = document.querySelector('#registerDeadline');
 
     // 사작일
-    startSelects.forEach(startSelect => {
-      startSelect.addEventListener('change', () => {
-        this.dateAppendRemove(startSelects);
-        this.transferData([...startSelects, document.forms[0].startDate]);
-      });
+    periodFrom.addEventListener('change', () => {
+      this.dateAppendRemove(periodFrom.querySelectorAll('select'));
+      this.transferData(periodFrom.children);
     });
+
     // 종료일
-    endSelects.forEach(endSelect => {
-      endSelect.addEventListener('change', () => {
-        this.dateAppendRemove(endSelects);
-        this.transferData([...endSelects, document.forms[0].endDate]);
-      });
+    periodTo.addEventListener('change', () => {
+      this.dateAppendRemove(periodTo.querySelectorAll('select'));
+      this.transferData(periodTo.children);
     });
+
     // 마감일
-    registerDeadlineSelects.forEach(registerDeadlineSelect => {
-      registerDeadlineSelect.addEventListener('change', () => {
-        this.dateAppendRemove(registerDeadlineSelects);
-        this.transferData([
-          ...registerDeadlineSelects,
-          document.forms[0].registerDeadline,
-        ]);
-      });
+    registerDeadline.addEventListener('change', () => {
+      this.dateAppendRemove(registerDeadline.querySelectorAll('select'));
+      this.transferData(registerDeadline.children);
     });
 
     // 시도 선택에 따른 시군구 변경
@@ -316,7 +304,7 @@ export default class CreatePostPage extends Component {
         .join('');
     });
 
-    document.querySelector('#sendBtn').addEventListener('click', async e => {
+    document.querySelector('#sendBtn').addEventListener('click', async () => {
       const formData = {
         category: Array.from(
           document.querySelectorAll('input[type="radio"]'),
@@ -340,14 +328,11 @@ export default class CreatePostPage extends Component {
         ],
         registerDeadline: document.forms[0].registerDeadline.value,
       };
-      console.log(formData);
-
       if (this.checkform(formData) !== false) {
         try {
           const posts = await axiosInstance.post('/posts', formData, {
             withCredentials: true,
           });
-          console.log(posts);
         } catch (error) {
           console.log(error);
           alert('정상적으로 등록되지 않았습니다. 다시 시도해주세요.');

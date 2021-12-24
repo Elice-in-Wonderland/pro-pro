@@ -11,7 +11,40 @@ $dark: #24274a;
   border: 1px solid #c4c4c4;
   border-radius: 5px;
 }
-
+// @font-face {
+//   font-family: 'OTWelcomeBA';
+//   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/OTWelcomeBA.woff2')
+//     format('woff2');
+//   font-weight: normal;
+//   font-style: normal;
+// }
+// @font-face {
+//   font-family: 'EliceDigitalBaeum_Bold';
+//   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/EliceDigitalBaeum_Bold.woff')
+//     format('woff');
+//   font-weight: normal;
+//   font-style: normal;
+// }
+// @font-face {
+//   font-family: 'GongGothicMedium';
+//   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff')
+//     format('woff');
+//   font-weight: normal;
+//   font-style: normal;
+// }
+// @font-face {
+//   font-family: 'Cafe24Ssurround';
+//   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff')
+//     format('woff');
+//   font-weight: normal;
+//   font-style: normal;
+// }
+// @font-face {
+//   font-family: 'twayair';
+//   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayair.woff') format('woff');
+//   font-weight: normal;
+//   font-style: normal;
+// }
 body {
   background-color: $gray;
   box-sizing: border-box;
@@ -48,7 +81,7 @@ body {
           border: 1px solid black;
           border-radius: 50%;
           text-align: center;
-          line-height: 16px;
+          line-height: 15px;
           margin-right: 10px;
           font-size: 12px;
         }
