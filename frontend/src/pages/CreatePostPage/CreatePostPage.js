@@ -145,7 +145,11 @@ export default class CreatePostPage extends Component {
       return false;
     }
     if (formData.executionPeriod[0] > formData.executionPeriod[1]) {
-      alert('수행 기간을 확인하세요');
+      alert('수행 기간 종료일이 시작일보다 빠릅니다.');
+      return false;
+    }
+    if (formData.registerDeadline > formData.executionPeriod[0]) {
+      alert('모집 마감일이 시작일 이후입니다.');
       return false;
     }
     if (formData.stacks.length === 0) {
@@ -316,7 +320,6 @@ export default class CreatePostPage extends Component {
           const posts = await axiosInstance.post('/posts', formData, {
             withCredentials: true,
           });
-
           RouterContext.state.replace('/');
         } catch (error) {
           console.log(error);
