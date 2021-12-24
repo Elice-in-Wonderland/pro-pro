@@ -258,6 +258,14 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
   const user = await userService.checkUser(userId);
 
+  // 유저의 북마크 목록 가져오기
+  const bookmarks = await userService.getBookmarkList(
+    userId,
+    'category',
+    'skipSize',
+    'perPage',
+  );
+
   const region = {
     sido: user.sido,
     sigungu: user.sigungu,
@@ -272,6 +280,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
       stacks,
       imageURL,
       region,
+      bookmarks,
     }),
   );
 });
