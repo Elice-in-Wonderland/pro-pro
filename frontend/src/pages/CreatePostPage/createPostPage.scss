@@ -259,7 +259,37 @@ body {
       .Category {
         P {
           label {
-            margin-right: 150px;
+            margin-right: 25%;
+          }
+        }
+      }
+      .Region {
+        p {
+          .addressResult {
+            width: 50%;
+            height: 25px;
+            @include inputBox();
+            margin-right: 20px;
+            padding-left: 10px;
+          }
+        }
+      }
+      .Period {
+        p {
+          label {
+            margin-right: 0;
+            select {
+              width: 23%;
+              margin-right: 0;
+            }
+          }
+        }
+      }
+      .RegisterDeadline {
+        p {
+          select {
+            width: 23%;
+            margin-right: 0;
           }
         }
       }
@@ -267,7 +297,10 @@ body {
         text-align: center;
         padding-right: 0;
         margin-left: 0;
-        transform: translateX(-20px);
+        transform: translateX(-10px);
+        input {
+          margin-left: 10px;
+        }
       }
     }
   }
