@@ -35,8 +35,6 @@ class Toast {
     });
 
     newContainer.insertAdjacentElement('beforeend', this.toast);
-
-    newContainer.classList.add('top-right');
     this.toast.classList.add(this.type);
 
     // setting content
