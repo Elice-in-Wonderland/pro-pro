@@ -1,7 +1,8 @@
 import Component from '../../components/component';
 import scss from './createPostPage.scss';
-import { defaultSigungu, defaultStacks } from '../../library/Profile/index';
+import { defaultStacks } from '../../library/Profile/index';
 import axiosInstance from '../../utils/api';
+import { createPostCode } from '../../utils/common';
 
 export default class CreatePostPage extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ export default class CreatePostPage extends Component {
       className: 'CreatePostPage',
     });
     // props.appendChild(this.$dom);
+    this.region = {};
     this.appendRoot(props, this.$dom);
     this.render();
     this.addEvent();
@@ -24,23 +26,6 @@ export default class CreatePostPage extends Component {
         return `<input type='checkbox' name='stacks' value=${stack} id=${stack}><span>✔︎</span><label for=${stack}>${
           stack === 'cpp' ? 'c++' : stack
         }</label>`;
-      })
-      .join('');
-  }
-
-  // 지역 추가
-  appendRegion() {
-    const { sido, sigungu } = document.forms[0];
-
-    sido.innerHTML = Object.keys(defaultSigungu)
-      .map(sido => {
-        return `<option value=${sido}>${sido}</option>`;
-      })
-      .join('');
-
-    sigungu.innerHTML = defaultSigungu.강원도
-      .map(sigungu => {
-        return `<option value=${sigungu}>${sigungu}</option>`;
       })
       .join('');
   }
@@ -195,8 +180,8 @@ export default class CreatePostPage extends Component {
         <div class='Region'>
             <h3>지역</h3>
             <p>
-                <select name="sido"></select>
-                <select name="sigungu"></select>
+              <input type="text" class='addressResult' readonly>
+              <input type="button" class='addressSearch' value="주소검색"><br>
             </p>
         </div>
         <div class='Period'>
@@ -248,7 +233,6 @@ export default class CreatePostPage extends Component {
     </form>
     `;
     this.appendStack();
-    this.appendRegion();
     this.appendStartDate();
     this.appendEndDate();
     this.appendRegisterDeadline();
@@ -259,6 +243,8 @@ export default class CreatePostPage extends Component {
     const minusBtn = document.querySelector('#minus');
     const plusBtn = document.querySelector('#plus');
     const count = document.querySelector('#count');
+    const addressSearch = document.querySelector('.addressSearch');
+    const addressResult = document.querySelector('.addressResult');
 
     minusBtn.addEventListener('click', () => {
       if (count.value !== '1') {
@@ -268,6 +254,17 @@ export default class CreatePostPage extends Component {
     plusBtn.addEventListener('click', () => {
       if (count.value !== '99') {
         count.value = Number(count.value) + 1;
+      }
+    });
+
+    // 지역
+    addressSearch.addEventListener('click', async () => {
+      try {
+        const region = await createPostCode();
+        this.region = region;
+        addressResult.value = region.address;
+      } catch (e) {
+        console.log(e);
       }
     });
 
@@ -294,16 +291,6 @@ export default class CreatePostPage extends Component {
       this.transferData(registerDeadline.children);
     });
 
-    // 시도 선택에 따른 시군구 변경
-    document.forms[0].sido.addEventListener('change', e => {
-      const selectedSido = e.target.value;
-      document.forms[0].sigungu.innerHTML = defaultSigungu[selectedSido]
-        .map(sigungu => {
-          return `<option value=${sigungu}>${sigungu}</option>`;
-        })
-        .join('');
-    });
-
     document.querySelector('#sendBtn').addEventListener('click', async () => {
       const formData = {
         category: Array.from(
@@ -315,19 +302,14 @@ export default class CreatePostPage extends Component {
           .filter(stack => stack.checked === true)
           .map(stack => stack.value),
         capacity: Number(document.forms[0].capacity.value),
-        region: {
-          lat: null,
-          lng: null,
-          address: null,
-          sido: document.forms[0].sido.value,
-          sigungu: document.forms[0].sigungu.value,
-        },
+        region: this.region,
         executionPeriod: [
           document.forms[0].startDate.value,
           document.forms[0].endDate.value,
         ],
         registerDeadline: document.forms[0].registerDeadline.value,
       };
+      console.log(formData);
       if (this.checkform(formData) !== false) {
         try {
           const posts = await axiosInstance.post('/posts', formData, {

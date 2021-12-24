@@ -103,14 +103,23 @@ body {
         width: 90%;
         height: 25px;
         @include inputBox();
+        padding-left: 10px;
       }
     }
     .Region {
-      select {
-        width: 100px;
-        height: 25px;
-        @include inputBox();
-        margin-right: 20px;
+      p {
+        .addressResult {
+          width: 310px;
+          height: 25px;
+          @include inputBox();
+          margin-right: 20px;
+          padding-left: 10px;
+        }
+        .addressSearch {
+          width: 80px;
+          height: 25px;
+          @include inputBox();
+        }
       }
     }
     .Period {
