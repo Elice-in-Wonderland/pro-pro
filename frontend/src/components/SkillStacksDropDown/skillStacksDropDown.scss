@@ -1,13 +1,25 @@
+@import '../../styles/utils';
 .skill-icon {
   cursor: pointer;
   z-index: 1;
   right: 10;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   img {
-    width: 40px;
-    margin: 3px;
+    width: 50px;
+    margin: 10px;
     align-items: center;
+    opacity: 0.6;
+    &:hover {
+      transform: rotate(-30deg) scale(1.1);
+      opacity: 1;
+    }
+    @include tablet {
+      width: 40px;
+    }
+    @include mobile {
+      width: 40px;
+    }
   }
 }
