@@ -1,7 +1,6 @@
 import Component from '../../components/component';
 import './detailPage.scss';
 import viewIcon from '../../assets/icons/view.svg';
-import markIcon from '../../assets/icons/mark.svg';
 import javascriptLogo from '../../assets/icons/javascript.svg';
 
 import Stacks from '../../components/Stacks/Stacks';
@@ -12,6 +11,7 @@ import EditButtons from '../../components/EditButtons/EditButtons';
 
 import RouterContext from '../../router/RouterContext';
 import axiosInstance from '../../utils/api';
+import Bookmark from '../../components/Bookmark/Bookmark';
 
 const localData = localStorage.getItem('pro-pro-state');
 const loggedUserInfo = JSON.parse(localData).myInfo;
@@ -36,15 +36,9 @@ export default class DetailPage extends Component {
   }
 
   setState = nextState => {
-    let userType = '';
-    if (loggedUserInfo === undefined) {
-      userType = 'notLoggedUser';
-    } else if (loggedUserInfo._id === nextState._id) {
-      userType = 'author';
-    } else {
-      userType = 'loggedUser';
-    }
-    this.state = { ...nextState, userType };
+    const userId = this.findUserId();
+    const userType = this.findUserType(nextState.author._id);
+    this.state = { ...nextState, userType, userId };
     this.makeComponent();
     this.render();
     this.addEvent();
@@ -63,19 +57,17 @@ export default class DetailPage extends Component {
       this.editButtons = new EditButtons();
     }
 
-    if (loggedUserInfo) {
-      this.comments = new Comments({
-        commentList: this.state.comments,
-        userType: this.state.userType,
-        userId: loggedUserInfo._id,
-      });
-    } else {
-      this.comments = new Comments({
-        commentList: this.state.comments,
-        userType: this.state.userType,
-        userId: null,
-      });
-    }
+    this.bookmark = new Bookmark({
+      marks: this.state.marks,
+      postId: this.postId,
+      userType: this.state.userType,
+    });
+
+    this.comments = new Comments({
+      commentList: this.state.comments,
+      userType: this.state.userType,
+      userId: this.state.userId,
+    });
 
     this.commentForm = new CommentForm({
       userType: this.state.userType,
@@ -131,10 +123,7 @@ export default class DetailPage extends Component {
                 <img class="view" src='${viewIcon}' />
                 <span class="viewCount">${this.state.views}</span>
               </div>
-              <div class="bookmarkWrapper">
-                <img class="bookmark" src='${markIcon}' />
-                <span class="bookmarkCount">${this.state.marks}</span>
-              </div>
+              <div class="bookmarkWrapper"></div>
             </li>
           </ul>
         </div>
@@ -156,6 +145,7 @@ export default class DetailPage extends Component {
         <div class="comments"></div>
         <div class="commentForm"></div>
       </div>
+      <div class="editSection"></div>
     `;
 
     this.replaceElement(
@@ -174,17 +164,34 @@ export default class DetailPage extends Component {
       this.$dom.querySelector('.commentForm'),
       this.commentForm.$dom,
     );
+    this.replaceElement(
+      this.$dom.querySelector('.bookmarkWrapper'),
+      this.bookmark.$dom,
+    );
+    if (this.editButtons) {
+      this.replaceElement(
+        this.$dom.querySelector('.editSection'),
+        this.editButtons.$dom,
+      );
+    }
   };
 
-  addEvent = () => {
-    document
-      .querySelector('.bookmarkWrapper')
-      .addEventListener('click', event => {
-        axiosInstance.post(
-          `users/mark/${this.postId}`,
-          {},
-          { withCredentials: true },
-        );
-      });
+  addEvent = () => {};
+
+  findUserId = () => {
+    if (loggedUserInfo) {
+      return loggedUserInfo._id;
+    }
+    return null;
+  };
+
+  findUserType = postUserId => {
+    if (loggedUserInfo === undefined) {
+      return 'notLoggedUser';
+    }
+    if (loggedUserInfo._id === postUserId) {
+      return 'author';
+    }
+    return 'loggedUser';
   };
 }
