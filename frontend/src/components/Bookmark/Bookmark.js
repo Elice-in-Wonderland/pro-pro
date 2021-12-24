@@ -4,6 +4,7 @@ import axiosInstance from '../../utils/api';
 
 import markIcon from '../../assets/icons/mark.svg';
 import filledMarkIcon from '../../assets/icons/bookmark_filled.svg';
+import { setState, removeState } from '../../utils/store';
 
 export default class Bookmark extends Component {
   constructor(props) {
@@ -11,23 +12,35 @@ export default class Bookmark extends Component {
     this.$dom = this.createDom('div', {
       className: 'bookmarkWrapper',
     });
+
     this.state = {
+      userType: props.userType,
       marks: props.marks,
       postId: props.postId,
-      userType: props.userType,
+      markedPosts: props.markedPosts,
     };
-    this.render();
+    // console.log(this.state);
     if (
       this.state.userType === 'loggedUser' ||
       this.state.userType === 'author'
     ) {
       this.addEvent();
     }
+
+    // for (let markedPost of this.state.markedPosts) {
+    //   // console.log(markedPost._id, this.state.postId);
+    //   if (markedPost._id === this.state.postId) {
+    //     this.flag = true;
+    //     break;
+    //   }
+    // }
+    // console.log(this.flag);
+    this.render();
   }
 
   render = () => {
     this.$dom.innerHTML = `                
-    <img class="bookmark" src='${markIcon}' />
+    <img class="bookmark" src='${this.flag ? filledMarkIcon : markIcon}' />
     <span class="bookmarkCount">${this.state.marks}</span>`;
   };
 
