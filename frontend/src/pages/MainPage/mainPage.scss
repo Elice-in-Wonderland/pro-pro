@@ -1,101 +1,76 @@
 @import '../../styles/index.css';
-@import './utils.scss';
+@import '../../styles/utils';
 
 .main-page-wraper {
   #serchBar {
-    img {
-      fill: none;
-      width: 20px;
-    }
     display: flex;
-    justify-content: space-between;
-    .filterBtnLeftContainer {
-      margin-left: 30px;
-      text-align: center;
-      display: flex;
-      .recomand {
-        pointer-events: none;
-        margin: 10px;
-        .recomandTitle {
-          font-size: 5px;
-        }
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    .btns {
+      cursor: pointer;
+      // border: 1px solid gray;
+      // background-color: var(--bright);
+      color: #495057;
+      box-shadow: inset 0 0 0 1px #ced4da;
+      border-radius: 30px;
+      padding: 12px 20px 8px;
+      margin: 10px;
+      opacity: 0.6;
+      border: 0;
+      transition: opacity 0.3s, background-color 0.3s;
+      &:hover {
+        color: var(--medium2);
+        border-color: var(--medium2);
       }
-      .recent {
-        cursor: pointer;
-        margin: 10px;
-        .recentTitle {
-          font-size: 5px;
-        }
-      }
-      .populate {
-        cursor: pointer;
-        margin: 10px;
-        .populateTitle {
-          font-size: 5px;
-        }
+      .btn-title {
+        font-size: 1rem;
       }
     }
-    .filterBtnRightContainer {
-      margin-right: 30px;
-      text-align: center;
-      display: flex;
+    .recent {
+    }
+    .populate {
+    }
+    .wrapper {
+      width: 40%;
+      max-width: 500px;
       .searchDiv {
         display: flex;
-        // height: 100%;
         height: 40px;
         background-color: #ffffff;
-        border: 1px solid gray;
+        opacity: 0.6;
+        border: 1px solid #495057;
         border-radius: 50px;
-        max-width: 300px;
+        // max-width: 800px;
         #searchInput {
-          outline-style: none;
-          height: 80%;
+          outline: none;
+          width: 100%;
           border-radius: 80px;
-
           border: none;
+          &:focus {
+            outline: none;
+          }
         }
         .searchIconImg {
           cursor: pointer;
-          transform: translate(0%, 40%);
-        }
-      }
-      .skills {
-        cursor: pointer;
-        margin: 10px;
-        .skillsTitle {
-          font-size: 12px;
-        }
-      }
-      .avail {
-        cursor: pointer;
-        margin: 10px;
-        .availTitle {
-          font-size: 12px;
+          // transform: translate(0%, 40%);
         }
       }
     }
+    .avail {
+    }
   }
-  .skills-bar {
+}
+
+.mainPostCards {
+  // position: absolute;
+  .cardContainer {
+    // position: relative;
+    // left: 9%;
     display: flex;
-    .drop-content {
-      display: flex;
-      .skills-drop-down {
-        display: flex;
-        .skill-icon {
-        }
-      }
-    }
-  }
-  .mainPostCards {
-    // position: absolute;
-    .cardContainer {
-      // position: relative;
-      // left: 9%;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 0 auto;
-      align-items: center;
-    }
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    align-items: center;
   }
 }
