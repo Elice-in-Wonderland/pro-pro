@@ -2,7 +2,6 @@ import Component from '../component';
 import './comments.scss';
 import CommentForm from '../CommentForm/CommentForm';
 import axiosInstance from '../../utils/api';
-import axios from 'axios';
 
 export default class Comments extends Component {
   constructor(props) {
