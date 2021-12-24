@@ -4,6 +4,7 @@ import proproLogo from '../../assets/images/pro-pro.png';
 import kakaoLogo from '../../assets/images/kakao-logo.svg';
 import googleLogo from '../../assets/images/google-logo.svg';
 import xButton from '../../assets/images/x-button.svg';
+import { url } from '../../utils/api';
 
 export default class LoginModal extends Component {
   constructor(props) {
@@ -53,15 +54,12 @@ export default class LoginModal extends Component {
 
   addEvent = () => {
     const $modalContainer = this.$dom.querySelector('.login-modal-wrapper');
-    const BASE_URL = 'http://localhost:4000';
 
     this.$dom.querySelector('.google').addEventListener('click', () => {
-      location.href = `${BASE_URL}/users/auth/google`;
-      // alert('잠시 꺼둠');
+      location.href = `${url}users/auth/google`;
     });
     this.$dom.querySelector('.kakao').addEventListener('click', () => {
-      location.href = `${BASE_URL}/users/auth/kakao`;
-      // alert('잠시 꺼둠');
+      location.href = `${url}users/auth/kakao`;
     });
 
     this.$dom.addEventListener('click', e => {
