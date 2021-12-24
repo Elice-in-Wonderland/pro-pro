@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import Component from '../component';
 import './loginModal.scss';
 import proproLogo from '../../assets/images/pro-pro.png';
@@ -60,10 +61,11 @@ export default class LoginModal extends Component {
                 'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
             };
             try {
-              await axiosInstance.post('/users', user, {
+              const res = await axiosInstance.post('/users', user, {
                 withCredentials: true,
               });
-              RouterContext.state.replace('/');
+              Cookies.set('AG3_JWT', res.data.data.AG3_JWT);
+              window.location.reload();
             } catch (e) {
               alert('로그인에 실패하였습니다.');
             }

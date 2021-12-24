@@ -20,8 +20,8 @@ const COOKIE_TOKEN_FIELD = 'AG3_JWT';
 //토큰 확인
 exports.checkToken = async (req, res, next) => {
   try {
-    //const authorization = req.headers.authorization;
-    const authorization = req.cookies[COOKIE_TOKEN_FIELD];
+    const authorization = req.headers.authorization.split(' ')[1];
+    // const authorization = req.cookies[COOKIE_TOKEN_FIELD];
 
     //토큰이 없는경우
     if (!authorization) {
