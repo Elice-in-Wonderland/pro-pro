@@ -80,6 +80,7 @@ module.exports = {
       templateParameters: {
         env: process.env.NODE_ENV === 'development' ? '(개발용)' : '',
         kakaoURL: process.env.KAKAO_API_KEY,
+        googleURL: process.env.GOOGLE_API_KEY,
       },
       minify:
         process.env.NODE_ENV === 'production'
