@@ -116,6 +116,7 @@ li {
 blockquote,
 q {
   quotes: none;
+  word-break: keep-all;
 }
 blockquote:before,
 blockquote:after,
@@ -134,4 +135,12 @@ table {
 ::after,
 ::before {
   box-sizing: border-box;
+}
+/*스크롤 안보이게*/
+html {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
 }

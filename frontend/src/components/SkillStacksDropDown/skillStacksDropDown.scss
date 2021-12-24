@@ -1,18 +1,13 @@
-.skills-drop-down {
-  position: relative;
-  display: inline-block;
-  width: 200px;
-  .skill-icon {
-    cursor: pointer;
-    position: absolute;
-    z-index: 1;
-    right: 10;
-    width: 200px;
-    display: flex;
-    flex-wrap: wrap;
-    img {
-      width: 40px;
-      display: inline-block;
-    }
+.skill-icon {
+  cursor: pointer;
+  z-index: 1;
+  right: 10;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  img {
+    width: 40px;
+    margin: 3px;
+    align-items: center;
   }
 }
