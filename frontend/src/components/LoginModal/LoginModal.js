@@ -1,10 +1,9 @@
 import Component from '../component';
 import './loginModal.scss';
 import proproLogo from '../../assets/images/pro-pro.png';
-import kakaoLogo from '../../assets/images/kakao-logo.svg';
 import googleLogo from '../../assets/images/google-logo.svg';
 import xButton from '../../assets/images/x-button.svg';
-import { url } from '../../utils/api';
+import axiosInstnce from '../../utils/api';
 
 export default class LoginModal extends Component {
   constructor(props) {
@@ -33,17 +32,52 @@ export default class LoginModal extends Component {
               <div class="login-btn-wrapper">
                 <div class="login-sns google">
                   <img class="login-btn" src="${googleLogo}" />
-                  <div class="login-text">Google로 로그인</div>
-                </div>
-                <div class="login-sns kakao">
-                  <img class="login-btn" src="${kakaoLogo}" />
-                  <div class="login-text">Kakao로 로그인</div>
+                  <div class="login-btn-text">Google로 로그인</div>
                 </div>
               </div>
             </div>
         </div>
       `,
     );
+
+    const initGoogle = () => {
+      window.gapi.load('auth2', () => {
+        const auth2 = window.gapi.auth2.init({
+          client_id: `${process.env.GOOGLE_API_KEY}.apps.googleusercontent.com`,
+          cookiepolicy: 'single_host_origin',
+        });
+
+        auth2.attachClickHandler(
+          document.querySelector('.login-btn'),
+          {},
+          async googleUser => {
+            console.log(googleUser);
+            const user = {
+              snsId: googleUser.yu.DW,
+              snsType: 'google',
+              imageURL:
+                googleUser.yu.nN ||
+                'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
+            };
+            try {
+              const data = await axiosInstnce.post('/users', user);
+              console.log(data);
+              // TODO: 프로필 정보를 받으면 로컬 스토리지에 저장
+              // TODO: 메인 페이지로 이동
+            } catch (e) {
+              alert('로그인에 실패하였습니다.');
+            }
+          },
+          error => {
+            // console.log('창 닫음', error)
+          },
+        );
+      });
+    };
+
+    window.addEventListener('load', () => {
+      initGoogle();
+    });
 
     this.addEvent();
   };
@@ -54,13 +88,6 @@ export default class LoginModal extends Component {
 
   addEvent = () => {
     const $modalContainer = this.$dom.querySelector('.login-modal-wrapper');
-
-    this.$dom.querySelector('.google').addEventListener('click', () => {
-      location.href = `${url}users/auth/google`;
-    });
-    this.$dom.querySelector('.kakao').addEventListener('click', () => {
-      location.href = `${url}users/auth/kakao`;
-    });
 
     this.$dom.addEventListener('click', e => {
       if (e.target.classList.contains('login-exit-btn')) {

@@ -74,17 +74,10 @@
 .login-btn {
   display: block;
   margin: 54px 15px 20px 15px;
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.1);
-    transition: transform 500ms;
-  }
 }
 
-.login-text {
-  color: var(--black);
-  font-style: normal;
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 21px;
+.login-btn:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  transition: transform 500ms;
 }
