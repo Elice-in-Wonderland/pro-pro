@@ -1,16 +1,20 @@
 import Component from '../../components/component';
 import './detailPage.scss';
 import viewIcon from '../../assets/icons/view.svg';
-import markIcon from '../../assets/icons/mark.svg';
 import javascriptLogo from '../../assets/icons/javascript.svg';
 
 import Stacks from '../../components/Stacks/Stacks';
 import Comments from '../../components/Comments/Comments';
+import CommentForm from '../../components/CommentForm/CommentForm';
 import PostBanner from '../../components/PostBanner/PostBanner';
-// import EditButtons from '../../components/EditButtons/EditButtons';
+import EditButtons from '../../components/EditButtons/EditButtons';
 
 import RouterContext from '../../router/RouterContext';
 import axiosInstance from '../../utils/api';
+import Bookmark from '../../components/Bookmark/Bookmark';
+
+const localData = localStorage.getItem('pro-pro-state');
+const loggedUserInfo = JSON.parse(localData).myInfo;
 
 export default class DetailPage extends Component {
   constructor(props) {
@@ -32,18 +36,15 @@ export default class DetailPage extends Component {
   }
 
   setState = nextState => {
-    this.state = nextState;
+    const userId = this.findUserId();
+    const userType = this.findUserType(nextState.author._id);
+    this.state = { ...nextState, userType, userId };
     this.makeComponent();
     this.render();
     this.addEvent();
   };
 
   makeComponent = () => {
-    // 스토어에 저장된 id 와 게시글 작성자의 id 비교
-    // if (loggedUser === postUser) {
-    // this.EditButtons = new EditButtons();
-    // }
-
     this.stacks = new Stacks({
       stackList: this.state.stacks,
     });
@@ -52,8 +53,26 @@ export default class DetailPage extends Component {
       stackList: this.state.stacks,
     });
 
+    if (this.state.userType === 'author') {
+      this.editButtons = new EditButtons();
+    }
+
+    this.bookmark = new Bookmark({
+      marks: this.state.marks,
+      postId: this.postId,
+      userType: this.state.userType,
+    });
+
     this.comments = new Comments({
       commentList: this.state.comments,
+      userType: this.state.userType,
+      userId: this.state.userId,
+    });
+
+    this.commentForm = new CommentForm({
+      userType: this.state.userType,
+      parentType: 'post',
+      targetId: this.postId,
     });
   };
 
@@ -64,7 +83,8 @@ export default class DetailPage extends Component {
         <img src=${this.state.author.imageURL} width="30px" height="30px" />
         <h4 class="userName">${this.state.author.nickname}</h4>
       </div>
-      <div class="stacks">기술스택
+      <div class="stacks">
+        <h4 class="stacksTitle">기술스택<h4>
         <ul class="stacksReplace">
         </ul>
       </div>
@@ -103,10 +123,7 @@ export default class DetailPage extends Component {
                 <img class="view" src='${viewIcon}' />
                 <span class="viewCount">${this.state.views}</span>
               </div>
-              <div class="bookmarkWrapper">
-                <img class="bookmark" src='${markIcon}' />
-                <span class="bookmarkCount">${this.state.marks}</span>
-              </div>
+              <div class="bookmarkWrapper"></div>
             </li>
           </ul>
         </div>
@@ -126,11 +143,9 @@ export default class DetailPage extends Component {
       <div class="commentSection">
         <hr />
         <div class="comments"></div>
-        <form action="http://localhost:4000/comments" class="commentForm" method="POST">
-          <textarea placeholder="댓글을 남겨주세요." class="writeComment" type="text" ></textarea>
-          <input class="submitComment" type="submit" value="등록" />
-        </form>
+        <div class="commentForm"></div>
       </div>
+      <div class="editSection"></div>
     `;
 
     this.replaceElement(
@@ -145,31 +160,38 @@ export default class DetailPage extends Component {
       this.$dom.querySelector('.comments'),
       this.comments.$dom,
     );
+    this.replaceElement(
+      this.$dom.querySelector('.commentForm'),
+      this.commentForm.$dom,
+    );
+    this.replaceElement(
+      this.$dom.querySelector('.bookmarkWrapper'),
+      this.bookmark.$dom,
+    );
+    if (this.editButtons) {
+      this.replaceElement(
+        this.$dom.querySelector('.editSection'),
+        this.editButtons.$dom,
+      );
+    }
   };
 
-  addEvent = () => {
-    document.querySelector('.commentForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const commentContent = document.querySelector('.writeComment').value;
-      document.querySelector('.writeComment').value = '';
-      axiosInstance.post(
-        'comments',
-        {
-          content: commentContent,
-          parentType: 'post',
-          parentId: this.postId,
-        },
-        { withCredentials: true },
-      );
-    });
-    document
-      .querySelector('.bookmarkWrapper')
-      .addEventListener('click', event => {
-        axiosInstance.post(
-          `users/mark/${this.postId}`,
-          {},
-          { withCredentials: true },
-        );
-      });
+  addEvent = () => {};
+
+  findUserId = () => {
+    if (loggedUserInfo) {
+      return loggedUserInfo._id;
+    }
+    return null;
+  };
+
+  findUserType = postUserId => {
+    if (loggedUserInfo === undefined) {
+      return 'notLoggedUser';
+    }
+    if (loggedUserInfo._id === postUserId) {
+      return 'author';
+    }
+    return 'loggedUser';
   };
 }
