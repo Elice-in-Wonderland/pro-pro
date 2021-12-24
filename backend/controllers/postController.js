@@ -13,15 +13,15 @@ const {
 // 게시글 목록
 exports.getPost = asyncHandler(async (req, res, next) => {
   const category = req.query.category;
-  const page = Number(req.query.page || 1);
-  const perPage = Number(req.query.perPage || 10);
-  const skipSize = (page - 1) * perPage;
+  // const page = Number(req.query.page || 1);
+  // const perPage = Number(req.query.perPage || 10);
+  // const skipSize = (page - 1) * perPage;
 
   // 카테고리 체크
   if (category !== 'project' && category !== 'study')
     throw new CategoryTypeError();
 
-  const posts = await postService.getPost(category, skipSize, perPage);
+  const posts = await postService.getPost(category, 'skipSize', 'perPage');
 
   return res
     .status(statusCode.OK)

@@ -27,8 +27,8 @@ exports.getPost = async (category, skipSize, perPage) => {
   let posts = await postModel
     .find({ category })
     .sort({ createdAt: -1 })
-    .skip(skipSize)
-    .limit(perPage)
+    // .skip(skipSize)
+    // .limit(perPage)
     .select(
       'category title recruitmentStatus stacks sido capacity marks views createdAt registerDeadline',
     )
