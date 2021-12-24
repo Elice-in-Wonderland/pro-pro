@@ -1,6 +1,6 @@
 const { statusCode, responseMessage } = require('../globals');
 const { resFormatter } = require('../utils');
-const { COOKIE_TOKEN_FEILD } = require('../middlewares/auth');
+const { COOKIE_TOKEN_FIELD } = require('../middlewares/auth');
 const jwt = require('../libs/jwt.js');
 const asyncHandler = require('../utils/asyncHandler');
 const nicknameGenerator = require('../libs/nicknameGenerator');
@@ -95,7 +95,7 @@ exports.callbackKakao = asyncHandler(async (req, res, next) => {
       expires: new Date(alreadyUserJwt.expires * 1000),
     };
     return res
-      .cookie(COOKIE_TOKEN_FEILD, alreadyUserJwt.accessToken, cookieOption)
+      .cookie(COOKIE_TOKEN_FIELD, alreadyUserJwt.accessToken, cookieOption)
       .redirect(CLIENT_URL);
   }
 
@@ -111,7 +111,7 @@ exports.callbackKakao = asyncHandler(async (req, res, next) => {
   };
 
   return res
-    .cookie(COOKIE_TOKEN_FEILD, newUserJwt.accessToken, cookieOption)
+    .cookie(COOKIE_TOKEN_FIELD, newUserJwt.accessToken, cookieOption)
     .redirect(CLIENT_URL);
 });
 
@@ -168,7 +168,7 @@ exports.callbackGoogle = asyncHandler(async (req, res, next) => {
       expires: new Date(alreadyUserJwt.expires * 1000),
     };
     return res
-      .cookie(COOKIE_TOKEN_FEILD, alreadyUserJwt.accessToken, cookieOption)
+      .cookie(COOKIE_TOKEN_FIELD, alreadyUserJwt.accessToken, cookieOption)
       .redirect(CLIENT_URL);
   }
 
@@ -184,7 +184,7 @@ exports.callbackGoogle = asyncHandler(async (req, res, next) => {
   };
 
   return res
-    .cookie(COOKIE_TOKEN_FEILD, newUserJwt.accessToken, cookieOption)
+    .cookie(COOKIE_TOKEN_FIELD, newUserJwt.accessToken, cookieOption)
     .redirect(CLIENT_URL);
 });
 
@@ -213,44 +213,44 @@ exports.checkSnsId = asyncHandler(async (req, res, next) => {
     expires: new Date(jwtResult.expires * 1000),
   };
   return res
-    .cookie(COOKIE_TOKEN_FEILD, jwtResult.accessToken, cookieOption)
+    .cookie(COOKIE_TOKEN_FIELD, jwtResult.accessToken, cookieOption)
     .status(statusCode.OK)
     .send(resFormatter.success(responseMessage.LOGIN_SUCCESS, {}));
 });
 
 // 유저 생성 (실제 사용하지 않을 예정)
-exports.postUser = asyncHandler(async (req, res, next) => {
-  // 데이터 전처리
-  const { snsType, snsId, nickname, position, stacks, region, imageURL } =
-    req.body;
-  const { sido, sigungu } = region;
+// exports.postUser = asyncHandler(async (req, res, next) => {
+//   // 데이터 전처리
+//   const { snsType, snsId, nickname, position, stacks, region, imageURL } =
+//     req.body;
+//   const { sido, sigungu } = region;
 
-  // 유저 중복체크는 추후에 결정
+//   // 유저 중복체크는 추후에 결정
 
-  const user = await userService.snsSignUp({
-    snsType,
-    snsId,
-    nickname,
-    position,
-    stacks,
-    sido,
-    sigungu,
-    imageURL,
-  });
+//   const user = await userService.snsSignUp({
+//     snsType,
+//     snsId,
+//     nickname,
+//     position,
+//     stacks,
+//     sido,
+//     sigungu,
+//     imageURL,
+//   });
 
-  const jwtResult = await jwt.sign(user);
+//   const jwtResult = await jwt.sign(user);
 
-  const cookieOption = {
-    domain: req.hostname,
-    // second to milisecond
-    expires: new Date(jwtResult.expires * 1000),
-  };
+//   const cookieOption = {
+//     domain: req.hostname,
+//     // second to milisecond
+//     expires: new Date(jwtResult.expires * 1000),
+//   };
 
-  return res
-    .cookie(COOKIE_TOKEN_FEILD, jwtResult.accessToken, cookieOption)
-    .status(statusCode.CREATED)
-    .send(resFormatter.success(responseMessage.CREATED_USER, {}));
-});
+//   return res
+//     .cookie(COOKIE_TOKEN_FIELD, jwtResult.accessToken, cookieOption)
+//     .status(statusCode.CREATED)
+//     .send(resFormatter.success(responseMessage.CREATED_USER, {}));
+// });
 
 // 프로필 정보 가져오기
 exports.getUser = asyncHandler(async (req, res, next) => {
@@ -390,4 +390,65 @@ exports.getBookmarkList = asyncHandler(async (req, res, next) => {
   return res
     .status(statusCode.OK)
     .send(resFormatter.success(responseMessage.SUCCESS, bookmarkList));
+});
+
+// 회원가입 및 로그인
+exports.postUser = asyncHandler(async (req, res, next) => {
+  // 데이터 전처리
+  const { snsType, snsId, imageURL } = req.body;
+
+  const nickname = await nicknameGenerator.generateNickname();
+
+  const userInformation = {
+    snsId,
+    snsType,
+    imageURL: imageURL || PROFILE_URL,
+    nickname,
+  };
+
+  const alreadyUser = await userService.isExistSnsId(
+    userInformation.snsType,
+    userInformation.snsId,
+  );
+
+  // 이미 존재하는 유저인 경우 토큰 생성
+  if (alreadyUser) {
+    const alreadyUserJwt = await jwt.sign(alreadyUser);
+
+    const cookieOption = {
+      domain: req.hostname,
+      // second to milisecond
+      expires: new Date(alreadyUserJwt.expires * 1000),
+    };
+    return res
+      .cookie(COOKIE_TOKEN_FIELD, alreadyUserJwt.accessToken, cookieOption)
+      .status(statusCode.OK)
+      .send(
+        resFormatter.success(responseMessage.SUCCESS, {
+          ...alreadyUser._doc,
+          COOKIE_TOKEN_FIELD: alreadyUserJwt.accessToken,
+        }),
+      );
+  }
+
+  // 존재하지 않는 유저인 경우 정보 저장 후 토큰 생성
+  const newUser = await userService.snsSignUp(userInformation);
+
+  const newUserJwt = await jwt.sign(newUser);
+
+  const cookieOption = {
+    domain: req.hostname,
+    // second to milisecond
+    expires: new Date(newUserJwt.expires * 1000),
+  };
+
+  return res
+    .cookie(COOKIE_TOKEN_FIELD, newUserJwt.accessToken, cookieOption)
+    .status(statusCode.CREATED)
+    .send(
+      resFormatter.success(responseMessage.SUCCESS, {
+        ...newUser._doc,
+        COOKIE_TOKEN_FIELD: newUserJwt.accessToken,
+      }),
+    );
 });

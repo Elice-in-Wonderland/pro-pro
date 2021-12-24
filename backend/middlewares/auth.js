@@ -15,13 +15,13 @@ const TOKEN_EXPIRED = -3;
 //토큰 무효
 const TOKEN_INVALID = -2;
 
-const COOKIE_TOKEN_FEILD = 'AG3_JWT';
+const COOKIE_TOKEN_FIELD = 'AG3_JWT';
 
 //토큰 확인
 exports.checkToken = async (req, res, next) => {
   try {
     //const authorization = req.headers.authorization;
-    const authorization = req.cookies[COOKIE_TOKEN_FEILD];
+    const authorization = req.cookies[COOKIE_TOKEN_FIELD];
 
     //토큰이 없는경우
     if (!authorization) {
@@ -53,4 +53,4 @@ exports.checkToken = async (req, res, next) => {
   }
 };
 
-module.exports.COOKIE_TOKEN_FEILD = COOKIE_TOKEN_FEILD;
+module.exports.COOKIE_TOKEN_FIELD = COOKIE_TOKEN_FIELD;
