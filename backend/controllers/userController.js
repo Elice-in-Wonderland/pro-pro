@@ -426,7 +426,7 @@ exports.postUser = asyncHandler(async (req, res, next) => {
       .send(
         resFormatter.success(responseMessage.SUCCESS, {
           ...alreadyUser._doc,
-          COOKIE_TOKEN_FIELD: alreadyUserJwt.accessToken,
+          AG3_JWT: alreadyUserJwt.accessToken,
         }),
       );
   }
@@ -448,7 +448,7 @@ exports.postUser = asyncHandler(async (req, res, next) => {
     .send(
       resFormatter.success(responseMessage.SUCCESS, {
         ...newUser._doc,
-        COOKIE_TOKEN_FIELD: newUserJwt.accessToken,
+        AG3_JWT: newUserJwt.accessToken,
       }),
     );
 });
