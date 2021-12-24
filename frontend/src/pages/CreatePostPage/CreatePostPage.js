@@ -296,6 +296,10 @@ export default class CreatePostPage extends Component {
       this.transferData(registerDeadline.children);
     });
 
+    document.querySelector('#cancelBtn').addEventListener('click', () => {
+      RouterContext.state.push('/');
+    });
+
     document.querySelector('#sendBtn').addEventListener('click', async () => {
       const formData = {
         category: Array.from(
