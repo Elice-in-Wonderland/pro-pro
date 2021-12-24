@@ -10,6 +10,7 @@ export default class CommentForm extends Component {
       userType: props.userType,
       targetId: props.targetId,
       parentType: props.parentType,
+      userId: props.userId,
     };
     this.$dom = this.createDom('form', {
       className: 'commentForm',
@@ -61,7 +62,17 @@ export default class CommentForm extends Component {
 
   paintComment = content => {
     const comments = this.$dom.previousSibling.previousSibling;
-    const newComment = new Comment({});
-    comments.appendChild(newComment);
+    // const li = document.createElement('li');
+    // li.innerText = 'Hello';
+    // const newComment = new Comment({
+    //   commentList: [
+    //     {
+    //       nestedComments: [],
+    //     },
+    //   ],
+    //   userType: 'loggedUser',
+    //   userId: this.state.userId,
+    // });
+    // comments.appendChild(newComment);
   };
 }

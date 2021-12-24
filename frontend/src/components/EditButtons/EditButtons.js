@@ -1,14 +1,16 @@
 import Component from '../component';
 import './editButtons.scss';
+import axiosInstance from '../../utils/api';
+import RouterContext from '../../router/RouterContext';
 
 export default class EditButtons extends Component {
   constructor(props) {
     super(props);
-    // this.state = {};
     this.$dom = this.createDom('form', {
       className: 'editBtns',
     });
     this.render();
+    this.addEvent();
   }
 
   render = () => {
@@ -16,5 +18,26 @@ export default class EditButtons extends Component {
     <input class="editBtn" type="submit" value="수정" />
     <input class="deleteBtn" type="submit" value="삭제" />
     `;
+  };
+
+  addEvent = () => {
+    const editBtn = this.$dom.querySelector('.editBtn');
+    const deleteBtn = this.$dom.querySelector('.deleteBtn');
+    deleteBtn.addEventListener('click', this.deletePost);
+    editBtn.addEventListener('click', this.editPost);
+  };
+
+  deletePost = event => {
+    event.preventDefault();
+    axiosInstance
+      .delete(`/posts/${this.props.postId}`, {
+        withCredentials: true,
+      })
+      .then(res => RouterContext.state.replace('/'));
+  };
+
+  editPost = event => {
+    // event.preventDefault();
+    // RouterContext.state.push(`/write/${this.props.postId}`);
   };
 }

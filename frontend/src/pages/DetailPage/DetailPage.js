@@ -12,9 +12,8 @@ import EditButtons from '../../components/EditButtons/EditButtons';
 import RouterContext from '../../router/RouterContext';
 import axiosInstance from '../../utils/api';
 import Bookmark from '../../components/Bookmark/Bookmark';
-
-const localData = localStorage.getItem('pro-pro-state');
-const loggedUserInfo = JSON.parse(localData).myInfo;
+import { state as userState } from '../../utils/store';
+import { createMap } from '../../utils/common';
 
 export default class DetailPage extends Component {
   constructor(props) {
@@ -35,10 +34,10 @@ export default class DetailPage extends Component {
       });
   }
 
-  setState = nextState => {
+  setState = postState => {
     const userId = this.findUserId();
-    const userType = this.findUserType(nextState.author._id);
-    this.state = { ...nextState, userType, userId };
+    const userType = this.findUserType(postState.author._id);
+    this.state = { ...postState, ...userState, userType, userId };
     this.makeComponent();
     this.render();
     this.addEvent();
@@ -54,13 +53,16 @@ export default class DetailPage extends Component {
     });
 
     if (this.state.userType === 'author') {
-      this.editButtons = new EditButtons();
+      this.editButtons = new EditButtons({
+        postId: this.postId,
+      });
     }
 
     this.bookmark = new Bookmark({
       marks: this.state.marks,
       postId: this.postId,
       userType: this.state.userType,
+      markedPosts: this.state.myInfo.bookmarks,
     });
 
     this.comments = new Comments({
@@ -73,6 +75,7 @@ export default class DetailPage extends Component {
       userType: this.state.userType,
       parentType: 'post',
       targetId: this.postId,
+      userId: this.state.userId,
     });
   };
 
@@ -138,7 +141,7 @@ export default class DetailPage extends Component {
         <h4 class="mapDescription">${
           this.state.address ? this.state.address : '온라인'
         }</h3>
-        <img class="mapImg" />
+        <div id="map"></div>
       </div>
       <div class="commentSection">
         <hr />
@@ -147,6 +150,14 @@ export default class DetailPage extends Component {
       </div>
       <div class="editSection"></div>
     `;
+
+    if (this.state.location.coordinates[0] === null) {
+      const mapContainer = document.getElementById('map');
+      mapContainer.parentNode.removeChild(mapContainer);
+    } else {
+      const mapContainer = document.getElementById('map');
+      createMap(mapContainer, this.state.location.coordinates);
+    }
 
     this.replaceElement(
       this.$dom.querySelector('.stacksReplace'),
@@ -179,17 +190,17 @@ export default class DetailPage extends Component {
   addEvent = () => {};
 
   findUserId = () => {
-    if (loggedUserInfo) {
-      return loggedUserInfo._id;
+    if (userState.myInfo) {
+      return userState.myInfo._id;
     }
     return null;
   };
 
   findUserType = postUserId => {
-    if (loggedUserInfo === undefined) {
+    if (userState.myInfo === undefined) {
       return 'notLoggedUser';
     }
-    if (loggedUserInfo._id === postUserId) {
+    if (userState.myInfo._id === postUserId) {
       return 'author';
     }
     return 'loggedUser';
