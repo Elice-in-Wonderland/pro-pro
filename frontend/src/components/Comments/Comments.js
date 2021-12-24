@@ -9,14 +9,35 @@ export default class Comments extends Component {
     this.$dom = this.createDom('div', {
       className: 'comments',
     });
-    this.state = {
-      commentList: props.commentList,
-      userType: props.userType,
-      userId: props.userId,
-    };
     this.render();
     this.addEvent();
   }
+
+  render = () => {
+    const { commentList, userType } = this.props;
+    this.$dom.innerHTML = commentList
+      .map(comment => {
+        if (comment.nestedComments) {
+          const nestedComments = this.makeNestedComments(
+            comment.nestedComments,
+            userType,
+          );
+          return (
+            this.makeCommentHTML(comment, 'post', userType) + nestedComments
+          );
+        }
+        return this.makeCommentHTML(comment, 'post', userType);
+      })
+      .join('');
+  };
+
+  makeNestedComments = (nestedComments, userType) => {
+    let result = ``;
+    nestedComments.forEach(nestedComment => {
+      result += this.makeCommentHTML(nestedComment, 'comment', userType);
+    });
+    return result;
+  };
 
   makeCommentHTML = (comment, parent, userType) => {
     return `<div class=${parent === 'post' ? 'comment' : 'nestedComment'}
@@ -33,7 +54,7 @@ export default class Comments extends Component {
               : ``
           }
           ${
-            comment.userId === this.state.userId
+            comment.userId === this.props.userId
               ? `<li class="commentDelete">삭제</li>`
               : ``
           }
@@ -42,28 +63,6 @@ export default class Comments extends Component {
       </div>
       <hr>
       `;
-  };
-
-  render = () => {
-    this.$dom.innerHTML = this.state.commentList
-      .map(comment => {
-        if (comment.nestedComments) {
-          let nestedComments = ``;
-          comment.nestedComments.forEach(nestedComment => {
-            nestedComments += this.makeCommentHTML(
-              nestedComment,
-              'comment',
-              this.state.userType,
-            );
-          });
-          return (
-            this.makeCommentHTML(comment, 'post', this.state.userType) +
-            nestedComments
-          );
-        }
-        return this.makeCommentHTML(comment, 'post', this.state.userType);
-      })
-      .join('');
   };
 
   addEvent = () => {
@@ -81,9 +80,9 @@ export default class Comments extends Component {
     const replyBtn = event.target;
     const targetComment = replyBtn.parentNode.parentNode;
     const commentForm = new CommentForm({
-      userType: this.state.userType,
+      userType: this.props.userType,
       parentType: 'comment',
-      targetId: targetComment.getAttribute('parentid'),
+      postId: targetComment.getAttribute('parentid'),
     });
     targetComment.appendChild(commentForm.$dom);
     replyBtn.removeEventListener('click', this.createCommentForm);

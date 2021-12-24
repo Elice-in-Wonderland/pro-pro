@@ -1,23 +1,26 @@
 import Component from '../component';
 import './commentForm.scss';
 import axiosInstance from '../../utils/api';
-import Comment from '../../components/Comments/Comments';
+// import Comments from '../../components/Comments/Comments';
+import Comment from '../../components/Comments/Comment';
+import { state } from '../../utils/store';
 
 export default class CommentForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userType: props.userType,
-      targetId: props.targetId,
-      parentType: props.parentType,
-      userId: props.userId,
-    };
     this.$dom = this.createDom('form', {
       className: 'commentForm',
     });
     this.render();
     this.addEvent();
   }
+
+  render = () => {
+    this.$dom.innerHTML =
+      this.props.userType === 'loggedUser' || this.props.userType === 'author'
+        ? this.loggedUserForm()
+        : this.notLoggedUserForm();
+  };
 
   loggedUserForm = () => {
     return `          
@@ -32,47 +35,66 @@ export default class CommentForm extends Component {
     `;
   };
 
-  render = () => {
-    this.$dom.innerHTML =
-      this.state.userType === 'loggedUser' || this.state.userType === 'author'
-        ? this.loggedUserForm()
-        : this.notLoggedUserForm();
-  };
-
   addEvent = () => {
     this.$dom.addEventListener('submit', this.postComment);
   };
 
   postComment = event => {
     event.preventDefault();
-    const commentContent = this.$dom.querySelector('.writeComment').value;
+    const content = this.$dom.querySelector('.writeComment').value;
+    const { parentType, postId } = this.props;
+    console.log(content, parentType, postId);
     this.$dom.querySelector('.writeComment').value = '';
     axiosInstance.post(
       'comments',
       {
-        content: commentContent,
-        parentType: this.state.parentType,
-        parentId: this.state.targetId,
+        content,
+        parentType,
+        parentId: postId,
       },
       { withCredentials: true },
     );
-    location.reload();
-    // this.paintComment(commentContent);
+    this.paintComment(content);
   };
 
   paintComment = content => {
-    const comments = this.$dom.previousSibling.previousSibling;
-    // const li = document.createElement('li');
-    // li.innerText = 'Hello';
-    // const newComment = new Comment({
-    //   commentList: [
-    //     {
-    //       nestedComments: [],
-    //     },
-    //   ],
-    //   userType: 'loggedUser',
-    //   userId: this.state.userId,
-    // });
-    // comments.appendChild(newComment);
+    const { parentType, postId, userId } = this.props;
+    const userState = state.myInfo;
+    const hr = document.createElement('hr');
+    const newComment = new Comment({
+      comment: {
+        nestedComments: [],
+        userId,
+        author: {
+          imageURL: userState.imageURL,
+          nickname: userState.nickname,
+        },
+        updatedAt: '지금',
+        _id: userState._id,
+        parentId: postId,
+        content: content,
+      },
+      userId,
+      parentType,
+    });
+
+    if (parentType === 'post') {
+      const commentContainer = this.$dom.previousSibling.previousSibling;
+      commentContainer.appendChild(newComment.$dom);
+      commentContainer.appendChild(hr);
+    }
+    if (parentType === 'comment') {
+      const commentContainer =
+        this.$dom.previousSibling.previousSibling.parentNode;
+      this.$dom.parentNode.removeChild(this.$dom);
+      commentContainer.parentNode.insertBefore(
+        newComment.$dom,
+        commentContainer.nextSibling,
+      );
+      commentContainer.parentNode.insertBefore(
+        hr,
+        commentContainer.nextSibling,
+      );
+    }
   };
 }
