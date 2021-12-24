@@ -3,7 +3,7 @@ import './loginModal.scss';
 import proproLogo from '../../assets/images/pro-pro.png';
 import googleLogo from '../../assets/images/google-logo.svg';
 import xButton from '../../assets/images/x-button.svg';
-import axiosInstnce from '../../utils/api';
+import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
 
 export default class LoginModal extends Component {
@@ -60,7 +60,7 @@ export default class LoginModal extends Component {
                 'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
             };
             try {
-              await axiosInstnce.post('/users', user, {
+              await axiosInstance.post('/users', user, {
                 withCredentials: true,
               });
               RouterContext.state.replace('/');

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const url = 'http://localhost:4000/';
+export const url = process.env.SERVER_URL || 'http://localhost:4000/';
 
 const axiosInstance = axios.create({
   baseURL: url,
