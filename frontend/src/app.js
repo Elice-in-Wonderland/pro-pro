@@ -14,6 +14,7 @@ class App {
 
     this.routes = [
       { path: '/', component: MainPage, loginRequired: false },
+      { path: '/study', component: MainPage, loginRequired: false },
       { path: '/detail/:postId', component: DetailPage, loginRequired: false },
       { path: '/bookmark', component: BookmarkPage, loginRequired: true },
       { path: '/write', component: CreatPostPage, loginRequired: true },
