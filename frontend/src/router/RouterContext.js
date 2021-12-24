@@ -7,6 +7,7 @@ class RouterContext {
       query: getQuery(),
       params: {},
       push: () => {},
+      replace: () => {},
       goBack: () => {},
     };
   }

@@ -34,6 +34,7 @@ class Router {
     });
 
     RouterContext.setState({ push: url => this.push(url) });
+    RouterContext.setState({ replace: url => this.replace(url) });
     RouterContext.setState({ goBack: () => this.goBack() });
   }
 

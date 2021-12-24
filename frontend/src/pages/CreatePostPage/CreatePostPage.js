@@ -3,6 +3,7 @@ import scss from './createPostPage.scss';
 import { defaultStacks } from '../../library/Profile/index';
 import axiosInstance from '../../utils/api';
 import { createPostCode } from '../../utils/common';
+import RouterContext from '../../router/RouterContext';
 
 export default class CreatePostPage extends Component {
   constructor(props) {
@@ -315,6 +316,8 @@ export default class CreatePostPage extends Component {
           const posts = await axiosInstance.post('/posts', formData, {
             withCredentials: true,
           });
+
+          RouterContext.state.replace('/');
         } catch (error) {
           console.log(error);
           alert('정상적으로 등록되지 않았습니다. 다시 시도해주세요.');
