@@ -21,15 +21,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    a,
-    a:link,
-    .login-text {
-      font-size: 15px;
-      font-weight: bold;
-      text-decoration: none;
-      color: var(--medium);
-      cursor: pointer;
-    }
   }
 }
 
@@ -71,14 +62,32 @@
     box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
     visibility: hidden;
     opacity: 0;
-
-    a {
-      color: var(--white);
-    }
   }
 
   .menu.active {
     visibility: visible;
     opacity: 0.9;
+  }
+}
+
+.nav-list li a,
+.nav-list li a:link,
+.nav-list li .login-text {
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--medium);
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.3;
+  }
+}
+
+.nav-list li .drop-box .menu a {
+  color: var(--white);
+
+  &:hover {
+    opacity: 0.3;
   }
 }

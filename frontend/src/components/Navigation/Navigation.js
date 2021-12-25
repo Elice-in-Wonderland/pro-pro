@@ -1,3 +1,4 @@
+import auth from '../../utils/auth';
 import Component from '../component';
 import Logo from '../Logo/Logo';
 import './navigation.scss';
@@ -9,9 +10,22 @@ export default class Navigation extends Component {
     this.$dom = this.createDom('nav', {
       className: 'gnb',
     });
+    this.loginState = false;
     this.$logo = new Logo();
+    this.init();
+  }
 
-    this.$navItems = this.props.loginState
+  init = async () => {
+    const token = auth.getToken();
+    if (token) {
+      await auth.getMyInfo();
+      this.loginState = true;
+    }
+    this.render();
+  };
+
+  render = () => {
+    this.$navItems = this.loginState
       ? [
           {
             type: 'a',
@@ -52,7 +66,7 @@ export default class Navigation extends Component {
                 type: 'a',
                 href: '/',
                 text: '로그아웃',
-                className: 'nav-logout router',
+                className: 'nav-logout',
               },
             ],
           },
@@ -66,17 +80,13 @@ export default class Navigation extends Component {
           },
           {
             type: 'a',
-            href: '/',
+            href: '/study',
             text: '스터디',
             className: 'nav-study router',
           },
           { type: 'modal', text: '로그인', className: 'nav-login' },
         ].map(li => new NavItem(li));
 
-    this.render();
-  }
-
-  render = () => {
     this.$dom.innerHTML = `
         <ul class='nav-list'>
         </ul>
@@ -93,6 +103,6 @@ export default class Navigation extends Component {
     });
     $navList.appendChild(fragment);
 
-    this.appendRoot(this.props.$root, this.$dom, true);
+    this.appendRoot(this.props, this.$dom, true);
   };
 }

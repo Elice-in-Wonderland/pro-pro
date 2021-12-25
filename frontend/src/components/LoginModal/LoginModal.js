@@ -6,6 +6,7 @@ import googleLogo from '../../assets/images/google-logo.svg';
 import xButton from '../../assets/images/x-button.svg';
 import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
+import Toast from '../Toast/Toast';
 
 export default class LoginModal extends Component {
   constructor(props) {
@@ -41,14 +42,12 @@ export default class LoginModal extends Component {
         </div>
       `,
     );
-
     const initGoogle = () => {
-      window.gapi.load('auth2', () => {
+      window.gapi?.load('auth2', () => {
         const auth2 = window.gapi.auth2.init({
           client_id: `${process.env.GOOGLE_API_KEY}.apps.googleusercontent.com`,
           cookiepolicy: 'single_host_origin',
         });
-
         auth2.attachClickHandler(
           document.querySelector('.login-btn'),
           {},
@@ -65,9 +64,9 @@ export default class LoginModal extends Component {
                 withCredentials: true,
               });
               Cookies.set('AG3_JWT', res.data.data.AG3_JWT);
-              window.location.reload();
+              RouterContext.state.reload();
             } catch (e) {
-              alert('로그인에 실패하였습니다.');
+              new Toast({ content: '로그인에 실패하였습니다' });
             }
           },
           error => {

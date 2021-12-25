@@ -11,8 +11,6 @@ import Navigation from './components/Navigation/Navigation';
 class App {
   constructor(target) {
     this.target = target;
-    this.navigation = Navigation;
-
     this.routes = [
       { path: '/', component: MainPage, loginRequired: false },
       { path: '/study', component: MainPage, loginRequired: false },
@@ -27,6 +25,7 @@ class App {
   }
 
   render() {
+    new Navigation(this.target);
     new Router(this.target, this.routes, this.NotFoundPage, this.navigation);
   }
 }

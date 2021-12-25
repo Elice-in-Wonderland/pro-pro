@@ -5,14 +5,12 @@ import {
   pathValidation,
   loginValidation,
 } from './utils';
-import { state } from '../utils/store';
 import auth from '../utils/auth';
 
 class Router {
-  constructor(target, routes, NotFoundPage, Navigation) {
+  constructor(target, routes, NotFoundPage) {
     this.target = target;
     this.routes = routes;
-    this.Navigation = Navigation;
     this.NotFoundPage = NotFoundPage;
     this.RouterContext = RouterContext;
     this.initRouter();
@@ -33,6 +31,7 @@ class Router {
       this.route();
     });
 
+    RouterContext.setState({ reload: () => this.reload() });
     RouterContext.setState({ push: url => this.push(url) });
     RouterContext.setState({ replace: url => this.replace(url) });
     RouterContext.setState({ goBack: () => this.goBack() });
@@ -56,13 +55,6 @@ class Router {
       RouterContext.setState({ params });
       const Page = this.routes[i].component;
 
-      // render Header & Page
-      const token = auth.getToken();
-      const loginState = state.myInfo !== undefined && token !== undefined;
-      new this.Navigation({
-        $root: this.target,
-        loginState,
-      });
       new Page(this.target);
       return;
     }
@@ -86,6 +78,10 @@ class Router {
 
   goBack() {
     window.history.back();
+  }
+
+  reload() {
+    window.location.reload();
   }
 }
 
