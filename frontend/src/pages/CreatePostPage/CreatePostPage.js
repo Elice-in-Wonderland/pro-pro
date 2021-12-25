@@ -152,6 +152,13 @@ export default class CreatePostPage extends Component {
       });
       return false;
     }
+    if (formData.capacity < 0) {
+      new Toast({
+        content: '수행 인원을 확인하세요',
+        type: 'fail',
+      });
+      return false;
+    }
     if (formData.registerDeadline > formData.executionPeriod[0]) {
       new Toast({ content: '모집 마감일이 시작일 이후입니다', type: 'fail' });
       return false;
@@ -262,7 +269,7 @@ export default class CreatePostPage extends Component {
     const addressResult = document.querySelector('.addressResult');
 
     minusBtn.addEventListener('click', () => {
-      if (count.value !== '1') {
+      if (count.value !== '1' && !count.value.includes('-')) {
         count.value = Number(count.value) - 1;
       }
     });
