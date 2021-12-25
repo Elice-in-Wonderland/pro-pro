@@ -105,13 +105,16 @@
 .card-wrapper:hover {
   transform: scale(1.15);
   transition: transform 0.3s, opacity 0.3s, background-color 0.3s;
+  cursor: pointer;
 }
 
 .bookmark-btn:hover {
   transform: scale(1.3);
   transition: transform 0.3s, opacity 0.3s, background-color 0.3s;
+  cursor: pointer;
 }
 
 .bookmark-btn-main:hover {
   transform: scale(1);
+  cursor: pointer;
 }
