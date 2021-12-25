@@ -122,3 +122,33 @@ exports.isExistPost = async postId => {
     throw new EntityNotExistError();
   }
 };
+
+// 추천된 게시글
+exports.recommendPost = async (address, stacks, authorId) => {
+  let posts = await postModel
+    .find({
+      $and: [
+        { address: { $regex: address } },
+        { author: { $ne: { _id: authorId } } },
+      ],
+    })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  posts = posts.filter(post =>
+    post.stacks.some(stack => stacks.includes(stack)),
+  );
+
+  if (posts.length !== 0) {
+    posts = await Promise.all(
+      posts.map(async post => {
+        post.sido = post.sido || '온라인';
+        post.address = post.address || '온라인';
+        post.marks = await userService.getBookmarkCount(post._id);
+        return post;
+      }),
+    );
+  }
+
+  return posts;
+};

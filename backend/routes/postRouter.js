@@ -23,4 +23,11 @@ postRouter.put(routes.postDetail, checkToken, postController.updatePost);
 // 게시글 삭제
 postRouter.delete(routes.postDetail, checkToken, postController.deletePost);
 
+// 게시글 추천
+postRouter.get(
+  routes.recommendation + routes.me,
+  checkToken,
+  postController.recommendPost,
+);
+
 module.exports = postRouter;
