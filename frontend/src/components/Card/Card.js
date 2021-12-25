@@ -7,6 +7,7 @@ import styles from './card.scss';
 import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
 import Toast from '../../components/Toast/Toast';
+import { shortSido } from '../../library/MainPage/index';
 
 export default class Card extends Component {
   constructor(props) {
@@ -36,7 +37,9 @@ export default class Card extends Component {
             <div class="card-info-wrapper">
                 <div class="card-info">
                     <div class="card-info-detail">
-                        <div class="text">${this.state.post.sido}</div>
+                        <div class="text">${this.makeSido(
+                          this.state.post.address,
+                        )}</div>
                     </div>
                     <div class="card-info-detail">
                         <div class="text">${this.state.post.capacity}명</div>
@@ -58,6 +61,19 @@ export default class Card extends Component {
         </div>
     </div>
     `;
+  };
+
+  makeSido = address => {
+    if (address.split(' ')[0] === '온라인') {
+      return '온라인';
+    } else if (address.split(' ')[0] === '세종특별자치시') {
+      return `${shortSido[address.split(' ')[0]]}`;
+    } else if (address.split(' ')[0] === '제주특별자치도') {
+      return `${shortSido[address.split(' ')[0]]} ${
+        this.state.post.address.split(' ')[1]
+      }`;
+    }
+    return `${address.split(' ')[0]} ${this.state.post.address.split(' ')[1]}`;
   };
 
   addEvent = () => {

@@ -135,3 +135,9 @@ export const defaultStacks = [
   'typescript',
   'vue',
 ];
+
+export const shortSido = {
+  세종특별자치시: '세종',
+  제주특별자치도: '제주',
+  온라인: '온라인',
+};
