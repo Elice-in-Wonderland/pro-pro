@@ -8,6 +8,7 @@ import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
 import SkillStacksDropDown from '../../components/SkillStacksDropDown/SkillStacksDropDown';
 import MainBanner from '../../components/MainBanner/MainBanner';
 import axiosInstance from '../../utils/api';
+import Routercontext from '../../router/RouterContext';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -15,8 +16,7 @@ export default class MainPage extends Component {
     this.$dom = this.createDom('div', {
       className: 'main-page-wraper',
     });
-    const urlString = window.location.href;
-    this.projectOrStudy = urlString.substring(urlString.lastIndexOf('/'));
+    this.projectOrStudy = Routercontext.state.pathname;
 
     this.$banner = new MainBanner();
     const $fragment = document.createDocumentFragment();
