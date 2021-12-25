@@ -1,0 +1,57 @@
+.card-skeleton {
+  position: relative;
+  background-color: var(--white);
+  width: 280px;
+  height: 320px;
+  margin: 60px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+
+  .card-body {
+    height: 50%;
+    margin: 5px;
+    border-radius: 12px;
+
+    background: #eee;
+
+    overflow: hidden;
+  }
+
+  .card-info-wrapper {
+    margin-bottom: 8px;
+  }
+
+  .card-info-detail {
+    background: #eee;
+    color: #eee;
+  }
+}
+
+.card-skeleton::before {
+  content: '';
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.9),
+    transparent
+  );
+
+  top: 0;
+  width: 280px;
+  height: 320px;
+
+  animation: loading 0.6s infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: skewX(-10deg) translateX(-100%);
+  }
+  100% {
+    transform: skewX(-10deg) translateX(200%);
+  }
+}
