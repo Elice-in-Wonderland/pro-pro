@@ -63,7 +63,7 @@ function createPostCode() {
 }
 
 function createMap($container, region) {
-  const coords = new window.kakao.maps.LatLng(region.lat, region.lng);
+  const coords = new window.kakao.maps.LatLng(region[0], region[1]);
 
   const mapOption = {
     center: coords,
