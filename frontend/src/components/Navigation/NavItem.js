@@ -69,6 +69,12 @@ export default class NavItem extends Component {
         $menu.classList.toggle('active');
       });
 
+      $menu.addEventListener('click', e => {
+        if (e.target.classList.contains('router')) {
+          $menu.classList.remove('active');
+        }
+      });
+
       document.querySelector('#root').addEventListener('click', e => {
         if (!$dropBox.contains(e.target)) $menu.classList.remove('active');
       });

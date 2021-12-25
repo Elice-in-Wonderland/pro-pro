@@ -222,8 +222,10 @@ export default class ProfilePage extends Component {
       return false;
     }
     if (region.sido === '' || region.sigungu === '') {
-      new Toast({ content: '지역을 입력하세요' });
-      return false;
+      if (region.sido !== '세종특별자치시') {
+        new Toast({ content: '지역을 입력하세요' });
+        return false;
+      }
     }
     if (position === '') {
       new Toast({ content: '직무를 선택하세요' });
