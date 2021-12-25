@@ -52,6 +52,7 @@ export default class BookmarkPage extends Component {
 
     this.cardList = this.state.map(item => {
       const newCard = new Card({
+        type: 'bookmark',
         post: item,
         postList: this.state,
         updateCards: this.updateCards,
