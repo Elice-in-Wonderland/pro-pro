@@ -6,21 +6,18 @@ import PostBanner from '../PostBanner/PostBanner';
 import styles from './card.scss';
 import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
+import Toast from '../../components/Toast/Toast';
 
 export default class Card extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      type: props.type,
       post: props.post,
       postList: props.postList,
       updateCards: props.updateCards,
     };
-
-    // 도시이름에서 앞 2글자만 표시
-    if (this.state.post.sido.length > 3) {
-      this.state.post.sido = this.state.post.sido.substr(0, 2);
-    }
 
     this.$dom = this.createDom('div', {
       className: 'card-wrapper',
@@ -52,7 +49,7 @@ export default class Card extends Component {
                     </div>
                     <div class="card-info-number-detail">
                         <button type="button" class="bookmark-btn">
-                          <img class="bookmark" src="${bookmarkImage}"/>
+                          <img src="${bookmarkImage}"/>
                         </button>
                         <div>${this.state.post.marks}</div>
                     </div>
@@ -66,53 +63,48 @@ export default class Card extends Component {
   addEvent = () => {
     const images = this.$dom.querySelector('.image');
     const cardWrap = this.$dom.querySelector('.card-wrap');
-    const bookmark = this.$dom.querySelector('.bookmark');
-
-    cardWrap.addEventListener('click', event => {
-      if (event.target !== bookmark) {
-        RouterContext.state.push(`/detail/${this.state.post._id}`);
-      }
-    });
+    const bookmarkBtn = this.$dom.querySelector('.bookmark-btn');
+    const bookmark = this.$dom.querySelector('.bookmark-btn').childNodes[1];
 
     this.replaceElement(
       images,
       new PostBanner({ stackList: this.state.post.stacks }).$dom,
     );
 
-    for (let i = 0; i < this.state.postList.length; i++) {
-      if (this.state.post._id === this.state.postList[i]._id) {
-        bookmark.src = bookmarkFilledImage;
+    cardWrap.addEventListener('click', event => {
+      if (event.target !== bookmark) {
+        RouterContext.state.push(`/detail/${this.state.post._id}`);
       }
+      if (this.state.type === 'bookmark') {
+        this.state.updateCards();
+      }
+    });
+
+    if (this.state.type === 'bookmark') {
+      bookmark.src = bookmarkFilledImage;
+      bookmarkBtn.addEventListener('click', () => {
+        bookmarkPost();
+      });
+    } else {
+      bookmarkBtn.className = 'bookmark-btn-main';
     }
 
-    const bookmarkBtn = this.$dom.querySelector('.bookmark-btn');
-
     const bookmarkPost = () => {
-      let flag = true;
       for (let i = 0; i < this.state.postList.length; i++) {
         // 이미 북마크한 포스트의 북마크 버튼을 누른 경우 북마크를 해제한다.
         if (this.state.post._id === this.state.postList[i]._id) {
           axiosInstance.delete(`/users/mark/${this.state.post._id}`, {
             withCredentials: true,
           });
-          alert('북마크가 해제되었습니다.');
-          flag = false;
-          this.state.updateCards();
           break;
         }
       }
-      // 아직 북마크하지 않았는데 포스트의 북마크 버튼을 누른 경우 북마크를 등록한다.
-      if (flag) {
-        axiosInstance.post(`/users/mark/${this.state.post._id}`, {
-          withCredentials: true,
-        });
-        alert('북마크 되었습니다.');
-        this.state.updateCards();
-      }
+      this.state.updateCards();
+      new Toast({
+        timeout: 2100,
+        content: '북마크가 해제되었습니다',
+        type: 'success',
+      });
     };
-
-    bookmarkBtn.addEventListener('click', event => {
-      bookmarkPost();
-    });
   };
 }
