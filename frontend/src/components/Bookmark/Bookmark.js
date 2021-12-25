@@ -2,9 +2,10 @@ import Component from '../component';
 import './bookmark.scss';
 import axiosInstance from '../../utils/api';
 
-import markIcon from '../../assets/icons/mark.svg';
+import markIcon from '../../assets/icons/bookmark.svg';
 import filledMarkIcon from '../../assets/icons/bookmark_filled.svg';
-import { setState, removeState } from '../../utils/store';
+
+import Toast from '../../components/Toast/Toast';
 
 export default class Bookmark extends Component {
   constructor(props) {
@@ -12,64 +13,66 @@ export default class Bookmark extends Component {
     this.$dom = this.createDom('div', {
       className: 'bookmarkWrapper',
     });
-
-    this.state = {
-      userType: props.userType,
-      marks: props.marks,
-      postId: props.postId,
-      markedPosts: props.markedPosts,
-    };
-    // console.log(this.state);
+    this.render();
     if (
-      this.state.userType === 'loggedUser' ||
-      this.state.userType === 'author'
+      this.props.userType === 'loggedUser' ||
+      this.props.userType === 'author'
     ) {
       this.addEvent();
+    } else {
+      this.$dom.addEventListener('click', this.notLoggedUserHandler);
     }
-
-    // for (let markedPost of this.state.markedPosts) {
-    //   // console.log(markedPost._id, this.state.postId);
-    //   if (markedPost._id === this.state.postId) {
-    //     this.flag = true;
-    //     break;
-    //   }
-    // }
-    // console.log(this.flag);
-    this.render();
   }
 
   render = () => {
     this.$dom.innerHTML = `                
-    <img class="bookmark" src='${this.flag ? filledMarkIcon : markIcon}' />
-    <span class="bookmarkCount">${this.state.marks}</span>`;
+    <img class="bookmark" src='${
+      this.props.isMyBookmark ? filledMarkIcon : markIcon
+    }' />
+    <span class="bookmarkCount">${this.props.marks}</span>`;
   };
 
   addEvent = () => {
-    this.$dom.addEventListener('click', this.postBookmarkHandler);
+    if (this.props.isMyBookmark) {
+      this.$dom.addEventListener('click', this.deleteBookmarkHandler);
+    } else {
+      this.$dom.addEventListener('click', this.postBookmarkHandler);
+    }
   };
 
-  postBookmarkHandler = () => {
-    axiosInstance
-      .post(`users/mark/${this.state.postId}`, {}, { withCredentials: true })
+  postBookmarkHandler = async event => {
+    this.$dom.removeEventListener('click', this.postBookmarkHandler);
+    const currentCount = this.$dom.querySelector('.bookmarkCount').innerHTML;
+    this.$dom.querySelector('.bookmarkCount').innerHTML =
+      Number(currentCount) + 1;
+    const bookmarkIcon = this.$dom.querySelector('.bookmark');
+    bookmarkIcon.setAttribute('src', filledMarkIcon);
+    await axiosInstance
+      .post(`users/mark/${this.props.postId}`, {}, { withCredentials: true })
       .then(res => {
-        const currentCount =
-          this.$dom.querySelector('.bookmarkCount').innerHTML;
-        this.$dom.querySelector('.bookmarkCount').innerHTML =
-          Number(currentCount) + 1;
-      })
-      .catch(err => this.deleteBookmarkHandler());
+        this.$dom.addEventListener('click', this.deleteBookmarkHandler);
+        new Toast({ content: '북마크 되었습니다.', type: 'success' });
+      });
   };
 
-  deleteBookmarkHandler = () => {
-    axiosInstance
-      .delete(`users/mark/${this.state.postId}`, {
+  deleteBookmarkHandler = async event => {
+    this.$dom.removeEventListener('click', this.deleteBookmarkHandler);
+    const currentCount = this.$dom.querySelector('.bookmarkCount').innerHTML;
+    this.$dom.querySelector('.bookmarkCount').innerHTML =
+      Number(currentCount) - 1;
+    const bookmarkIcon = this.$dom.querySelector('.bookmark');
+    bookmarkIcon.setAttribute('src', markIcon);
+    await axiosInstance
+      .delete(`users/mark/${this.props.postId}`, {
         withCredentials: true,
       })
       .then(res => {
-        const currentCount =
-          this.$dom.querySelector('.bookmarkCount').innerHTML;
-        this.$dom.querySelector('.bookmarkCount').innerHTML =
-          Number(currentCount) - 1;
+        this.$dom.addEventListener('click', this.postBookmarkHandler);
+        new Toast({ content: '북마크 해제 되었습니다.', type: 'success' });
       });
+  };
+
+  notLoggedUserHandler = () => {
+    new Toast({ content: '로그인 먼저 해주세요.', type: 'fail' });
   };
 }
