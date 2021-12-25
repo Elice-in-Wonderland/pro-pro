@@ -3,7 +3,7 @@ import MainPage from './pages/MainPage/MainPage';
 import BookmarkPage from './pages/BookmarkPage/BookmarkPage';
 import DetailPage from './pages/DetailPage/DetailPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
-import NotFoundPage from './pages/NotFoundPage';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Router from './router/Router';
 import Navigation from './components/Navigation/Navigation';
 
@@ -14,6 +14,7 @@ class App {
 
     this.routes = [
       { path: '/', component: MainPage, loginRequired: false },
+      { path: '/study', component: MainPage, loginRequired: false },
       { path: '/detail/:postId', component: DetailPage, loginRequired: false },
       { path: '/bookmark', component: BookmarkPage, loginRequired: true },
       { path: '/write', component: CreatPostPage, loginRequired: true },

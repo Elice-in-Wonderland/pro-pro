@@ -1,0 +1,35 @@
+@import '../../styles/index.css';
+@import '../../styles/utils';
+body {
+  background-color: var(--gray);
+  .wrapper-notfound {
+    position: relative;
+    // text-align: center;
+    .notfound {
+      width: 30%;
+      flex-direction: column;
+      height: 100vh;
+
+      background-color: var(--gray);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+
+      transform: translate(-50%, 0%);
+      text-align: center;
+      .img404 {
+        margin-top: 20vh;
+        width: 100%;
+        display: flex;
+      }
+      p {
+        margin-top: 40px;
+        font-size: 2rem;
+        color: gray;
+        @include mobile {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+}

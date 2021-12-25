@@ -1,5 +1,6 @@
 import Component from '../component';
 import './searchNoResult.scss';
+import noResult from '../../assets/images/no-result-img.svg';
 
 export default class Navigation extends Component {
   constructor(props) {
@@ -13,7 +14,15 @@ export default class Navigation extends Component {
 
   render = () => {
     this.$dom.innerHTML = `
-        <p>검색 결과가 없습니다.</p>
+        <div class="no-result">
+        <img
+        src="${noResult}"
+        alt="no result image"
+        class="no-result-img"/>
+        <p>
+          검색 결과가 없습니다.<br>
+        </p>
+      </div>
       `;
   };
 }

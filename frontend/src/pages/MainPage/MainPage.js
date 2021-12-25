@@ -1,17 +1,14 @@
 /* eslint-disable implicit-arrow-linebreak */
 import Component from '../../components/component';
 import './mainPage.scss';
-import recomandIcon from '../../assets/icons/recomand-icon.svg';
-import recentIcon from '../../assets/icons/recent-icon.svg';
-import populateIcon from '../../assets/icons/populate-icon.svg';
 import searchIcon from '../../assets/icons/search-icon.svg';
-import skillstackIcon from '../../assets/icons/skillstack-icon.svg';
-import availIcon from '../../assets/icons/avail-icon.svg';
-import { posts, defaultStacks } from '../../library/MainPage';
+import { defaultStacks } from '../../library/MainPage';
 import Card from '../../components/Card/Card';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
 import SkillStacksDropDown from '../../components/SkillStacksDropDown/SkillStacksDropDown';
 import MainBanner from '../../components/MainBanner/MainBanner';
+import axiosInstance from '../../utils/api';
+import Routercontext from '../../router/RouterContext';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -19,21 +16,48 @@ export default class MainPage extends Component {
     this.$dom = this.createDom('div', {
       className: 'main-page-wraper',
     });
+    this.projectOrStudy = Routercontext.state.pathname;
+
     this.$banner = new MainBanner();
     const $fragment = document.createDocumentFragment();
     $fragment.appendChild(this.$dom);
-    this.state = posts;
+    this.state = [];
+    this.data = [];
     this.appendRoot(props, $fragment);
     this.render();
-    this.createCard();
+    this.getInitState();
     this.addEvent();
   }
 
+  getInitState = async () => {
+    if (this.projectOrStudy === '/study') {
+      const {
+        data: { data },
+      } = await axiosInstance.get('/posts?category=study&page=1&perPage=30', {
+        withCredentials: true,
+      });
+      this.data = data;
+      console.log(this.data);
+    }
+    console.log(this.projectOrStudy);
+    if (this.projectOrStudy === '/') {
+      const {
+        data: { data },
+      } = await axiosInstance.get('/posts?category=project&page=1&perPage=30', {
+        withCredentials: true,
+      });
+      this.data = data;
+    }
+    this.setState(this.data);
+    this.createCard();
+  };
+
   createCard = () => {
+    console.log(this.state);
     const $createFrag = document.createDocumentFragment();
     this.cardList = this.state.map(el => {
       // TODO: 바꿔야 할 부분
-      const newCard = new Card({ post: el, postList: posts });
+      const newCard = new Card({ post: el, postList: this.state });
       return newCard.$dom;
     });
     this.cardList.forEach(el => {
@@ -49,31 +73,19 @@ export default class MainPage extends Component {
 
   render = () => {
     this.$dom.innerHTML = `
+    <section class="skills-bar">
+    <div class="drop-content"></div>
+  </section>
     <section id="serchBar">
-    <div class="filterBtnLeftContainer">
-      <div class="recomand">
-      <img
-      src="${recomandIcon}"
-      alt="search image"
-      class="searchIconImg"/> 
-        <div class="recomandTitle">추천수</div>
+      <div class="avail btns">
+        <div class="availTitle btn-title">모집중인 글</div>
       </div>
-      <div class="recent">
-      <img
-      src="${recentIcon}"
-      alt="search image"
-      class="searchIconImg"/> 
-        <div class="recentTitle">최신순</div>
+      <div class="recent btns">
+        <div class="recentTitle btn-title">최신순</div>
       </div>
-      <div class="populate">
-      <img
-      src="${populateIcon}"
-      alt="search image"
-      class="searchIconImg"/> 
-        <div class="populateTitle">인기순</div>
+      <div class="populate btns">
+        <div class="populateTitle btn-title">인기순</div>
       </div>
-    </div>
-    <div class="filterBtnRightContainer">
       <div class="wrapper">
         <div class="searchDiv">
           <input type="text" id="searchInput"/>
@@ -83,24 +95,6 @@ export default class MainPage extends Component {
             class="searchIconImg"/> 
         </div>
       </div>
-      <div class="skills">
-      <img
-      src="${skillstackIcon}"
-      alt="search image"
-      class="searchIconImg"/>     
-        <div class="skillsTitle">기술스택 필터링</div>
-      </div>
-      <div class="avail">
-      <img
-      src="${availIcon}"
-      alt="search image"
-      class="searchIconImg"/> 
-        <div class="availTitle">모집중인 글만 보기</div>
-      </div>
-    </div>
-    </section>
-    <section class="skills-bar">
-      <div class="drop-content"></div>
     </section>
     <section class="mainPostCards">
       <div class="replaceDiv">
@@ -120,7 +114,7 @@ export default class MainPage extends Component {
   addEvent = () => {
     const populate = this.$dom.querySelector('.populate');
     populate.addEventListener('click', () => {
-      const statelist = posts.sort(
+      const statelist = this.data.sort(
         (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
       );
       this.setState(statelist);
@@ -128,7 +122,7 @@ export default class MainPage extends Component {
     });
     const recent = this.$dom.querySelector('.recent');
     recent.addEventListener('click', () => {
-      const statelist = posts.sort((a, b) => {
+      const statelist = this.data.sort((a, b) => {
         if (a.createdAt < b.createdAt) return 1;
         if (a.createdAt > b.createdAt) return -1;
         return 0;
@@ -138,8 +132,9 @@ export default class MainPage extends Component {
     });
     const avail = this.$dom.querySelector('.avail');
     avail.addEventListener('click', () => {
-      const statelist = posts.filter(
-        post => post.recruitmentStatus === '모집중',
+      const today = new Date();
+      const statelist = this.state.filter(
+        post => post.registerDeadline >= today.toISOString(),
       );
       this.setState(statelist);
       this.createCard();
@@ -158,7 +153,7 @@ export default class MainPage extends Component {
       if (!searchInput.value) {
         return;
       }
-      const searchList = posts.filter(character => {
+      const searchList = this.data.filter(character => {
         return character.title.includes(searchInput.value);
       });
       if (searchList.length === 0) {
@@ -182,7 +177,9 @@ export default class MainPage extends Component {
 
     skillIcon.addEventListener('click', e => {
       if (e.target && e.target.nodeName === 'IMG') {
-        const statelist = posts.filter(el => el.stacks.includes(e.target.id));
+        const statelist = this.data.filter(el =>
+          el.stacks.includes(e.target.id),
+        );
         this.setState(statelist);
         this.createCard();
       }

@@ -21,7 +21,7 @@ export default class Navigation extends Component {
           },
           {
             type: 'a',
-            href: '/',
+            href: '/study',
             text: '스터디',
             className: 'nav-study router',
           },
