@@ -53,4 +53,49 @@ exports.checkToken = async (req, res, next) => {
   }
 };
 
+exports.isExistToken = async (req, res, next) => {
+  try {
+    let authorization = undefined;
+    if (req.headers.authorization) {
+      authorization = req.headers.authorization.split(' ')[1];
+    }
+
+    //토큰이 없는경우
+    if (!authorization) {
+      req.decoded = undefined;
+      next();
+      return;
+    }
+
+    //토큰 인증(확인)
+    const user = await jwt.verify(authorization);
+
+    //토큰 만료되는 경우
+    if (user === TOKEN_EXPIRED) {
+      req.decoded = undefined;
+      next();
+      return;
+    }
+
+    //토큰 무효되는 경우
+    if (user === TOKEN_INVALID || user.userId === undefined) {
+      req.decoded = undefined;
+      next();
+      return;
+    }
+
+    const userDB = await checkUser(user.userId);
+    if (userDB == undefined) {
+      req.decoded = undefined;
+      next();
+      return;
+    }
+
+    req.decoded = user;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.COOKIE_TOKEN_FIELD = COOKIE_TOKEN_FIELD;

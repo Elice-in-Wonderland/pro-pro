@@ -1,7 +1,7 @@
 const express = require('express');
 const routes = require('../globals/routes.js');
 
-const { checkToken } = require('../middlewares/auth.js');
+const { checkToken, isExistToken } = require('../middlewares/auth.js');
 const postController = require('../controllers/postController');
 
 const postRouter = express.Router();
@@ -12,7 +12,7 @@ const postRouter = express.Router();
 postRouter.get(routes.root, postController.getPost);
 
 // 게시글 상세페이지
-postRouter.get(routes.postDetail, postController.getPostDetail);
+postRouter.get(routes.postDetail, isExistToken, postController.getPostDetail);
 
 // 게시글 생성
 postRouter.post(routes.root, checkToken, postController.createPost);

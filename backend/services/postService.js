@@ -12,11 +12,12 @@ exports.getMarkedPost = async postId => {
   let post = await postModel
     .findById(postId)
     .select(
-      'category title recruitmentStatus stacks sido capacity marks views createdAt registerDeadline',
+      'category title recruitmentStatus stacks address sido capacity marks views createdAt registerDeadline',
     )
     .lean();
 
   post.sido = post.sido || '온라인';
+  post.address = post.address || '온라인';
   post.marks = await userService.getBookmarkCount(post._id);
 
   return post;
@@ -30,7 +31,7 @@ exports.getPost = async (category, skipSize, perPage) => {
     // .skip(skipSize)
     // .limit(perPage)
     .select(
-      'category title recruitmentStatus stacks sido capacity marks views createdAt registerDeadline',
+      'category title recruitmentStatus stacks address sido capacity marks views createdAt registerDeadline',
     )
     .lean();
 
@@ -38,6 +39,7 @@ exports.getPost = async (category, skipSize, perPage) => {
     posts = await Promise.all(
       posts.map(async post => {
         post.sido = post.sido || '온라인';
+        post.address = post.address || '온라인';
         post.marks = await userService.getBookmarkCount(post._id);
         return post;
       }),
@@ -48,13 +50,21 @@ exports.getPost = async (category, skipSize, perPage) => {
 };
 
 // 게시글 상세 페이지
-exports.getPostDetail = async postId => {
+exports.getPostDetail = async (postId, userId) => {
   const post = await postModel.findById(postId).populate('author').lean();
   const marks = await userService.getBookmarkCount(postId);
   const comments = await commentService.getComments(postId);
 
+  // 북마크 했는지 여부
+  let isMyBookmark = false;
+  if (userId) {
+    const myBookmark = await userService.isExistBookmark(userId, postId);
+    if (myBookmark) isMyBookmark = true;
+  }
+
   post.comments = comments;
   post.marks = marks;
+  post.isMyBookmark = isMyBookmark;
 
   return post;
 };

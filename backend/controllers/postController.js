@@ -31,6 +31,8 @@ exports.getPost = asyncHandler(async (req, res, next) => {
 // 게시글 상세페이지
 exports.getPostDetail = asyncHandler(async (req, res, next) => {
   const { postId } = req.params;
+  let userId = undefined;
+  if (req.decoded) userId = req.decoded.userId;
 
   // 게시글이 존재하지 않을 때
   await postService.isExistPost(postId);
@@ -39,11 +41,11 @@ exports.getPostDetail = asyncHandler(async (req, res, next) => {
   await postService.increaseView(postId);
 
   // 상세페이지 정보 가져오기
-  const posts = await postService.getPostDetail(postId);
+  const post = await postService.getPostDetail(postId, userId);
 
   return res
     .status(statusCode.OK)
-    .send(resFormatter.success(responseMessage.SUCCESS, posts));
+    .send(resFormatter.success(responseMessage.SUCCESS, post));
 });
 
 // 게시글 생성
