@@ -11,21 +11,13 @@ export default class BookmarkPage extends Component {
 
     this.updateCards();
 
-    //최종적으로 부모노드에 붙이기
     this.appendRoot(props, this.$dom);
   }
 
   updateCards = async () => {
-    //데이터 불러오기
     await this.getData();
-
-    //html요소 생성
     this.render();
-
-    //포스트 카드들 생성
     this.createCard();
-
-    //이벤트 처리
     this.addEvent();
   };
 

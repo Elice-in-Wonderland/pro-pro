@@ -1,6 +1,7 @@
 import Component from '../component';
 import viewImage from '../../assets/icons/view.svg';
 import bookmarkImage from '../../assets/icons/bookmark.svg';
+import bookmarkFilledImage from '../../assets/icons/bookmark_filled.svg';
 import PostBanner from '../PostBanner/PostBanner';
 import styles from './card.scss';
 import axiosInstance from '../../utils/api';
@@ -51,9 +52,9 @@ export default class Card extends Component {
                     </div>
                     <div class="card-info-number-detail">
                         <button type="button" class="bookmark-btn">
-                          <img src="${bookmarkImage}"/>
+                          <img class="bookmark" src="${bookmarkImage}"/>
                         </button>
-                        <div>${this.state.post.capacity}</div>
+                        <div>${this.state.post.marks}</div>
                     </div>
                 </div>
             </div>
@@ -65,16 +66,24 @@ export default class Card extends Component {
   addEvent = () => {
     const images = this.$dom.querySelector('.image');
     const cardWrap = this.$dom.querySelector('.card-wrap');
+    const bookmark = this.$dom.querySelector('.bookmark');
 
     cardWrap.addEventListener('click', event => {
-      RouterContext.state.push(`/detail/${this.state.post._id}`);
-      event.stopPropagation();
+      if (event.target !== bookmark) {
+        RouterContext.state.push(`/detail/${this.state.post._id}`);
+      }
     });
 
     this.replaceElement(
       images,
       new PostBanner({ stackList: this.state.post.stacks }).$dom,
     );
+
+    for (let i = 0; i < this.state.postList.length; i++) {
+      if (this.state.post._id === this.state.postList[i]._id) {
+        bookmark.src = bookmarkFilledImage;
+      }
+    }
 
     const bookmarkBtn = this.$dom.querySelector('.bookmark-btn');
 

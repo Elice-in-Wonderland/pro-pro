@@ -88,6 +88,16 @@
   height: 30px;
 }
 
+// .bookmarkWrapper {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   img {
+//     width: 24px;
+//     height: 24px;
+//   }
+// }
+
 .bookmark-btn {
   width: 30px;
   height: 30px;
@@ -104,3 +114,8 @@
   transform: scale(1.3);
   transition: transform 0.3s, opacity 0.3s, background-color 0.3s;
 }
+
+// .bookmarkWrapper img:hover {
+//   transform: scale(1.3);
+//   transition: transform 0.3s, opacity 0.3s, background-color 0.3s;
+// }
