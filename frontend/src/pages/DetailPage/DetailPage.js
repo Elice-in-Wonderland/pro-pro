@@ -49,15 +49,7 @@ export default class DetailPage extends Component {
 
   makeComponent = () => {
     const {
-      state: {
-        stacks,
-        marks,
-        userType,
-        comments,
-        userId,
-        postId,
-        myInfo: { bookmarks },
-      },
+      state: { stacks, marks, userType, comments, userId, postId },
     } = this;
 
     this.stacks = new Stacks({
@@ -73,12 +65,10 @@ export default class DetailPage extends Component {
         postId,
       });
     }
-
     this.bookmark = new Bookmark({
       marks,
       postId,
       userType,
-      markedPosts: bookmarks,
     });
 
     this.comments = new Comments({
