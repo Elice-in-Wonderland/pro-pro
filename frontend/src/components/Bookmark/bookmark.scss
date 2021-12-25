@@ -1,0 +1,13 @@
+.bookmarkWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .bookmark {
+    width: 45px;
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+  .bookmarkCount {
+    font-size: 22px;
+  }
+}

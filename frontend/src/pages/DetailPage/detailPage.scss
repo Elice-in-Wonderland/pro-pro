@@ -69,20 +69,9 @@
         align-items: center;
         gap: 10px;
         .view {
-          height: 25px;
+          height: 45px;
         }
         .viewCount {
-          font-size: 22px;
-        }
-      }
-      .bookmarkWrapper {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        .bookmark {
-          height: 30px;
-        }
-        .bookmarkCount {
           font-size: 22px;
         }
       }
