@@ -9,6 +9,7 @@ class RouterContext {
       push: () => {},
       replace: () => {},
       goBack: () => {},
+      reload: () => {},
     };
   }
 

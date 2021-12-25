@@ -9,6 +9,8 @@ import {
 } from '../../library/Profile';
 import Button from '../../components/Profile/Button';
 import Stack from '../../components/Profile/Stack';
+import Toast from '../../components/Toast/Toast';
+import RouterContext from '../../router/RouterContext';
 
 // TODO: 리팩토링 및 개선점 찾아보기
 export default class ProfilePage extends Component {
@@ -205,11 +207,10 @@ export default class ProfilePage extends Component {
             withCredentials: true,
           },
         );
-
-        alert('임시 메시지: 프로필 수정 성공');
-        this.getInitState();
+        new Toast({ content: '프로필 수정 성공' });
+        RouterContext.state.replace('/');
       } catch (e) {
-        alert('프로필 수정 실패');
+        new Toast({ content: '프로필 수정 실패', type: 'fail' });
       }
     }
   };
@@ -217,19 +218,19 @@ export default class ProfilePage extends Component {
   checkEmptyField = () => {
     const { nickname, position, region, stacks } = this.data;
     if (nickname === '') {
-      alert('닉네임을 입력하세요.');
+      new Toast({ content: '닉네임을 입력하세요' });
       return false;
     }
     if (region.sido === '' || region.sigungu === '') {
-      alert('지역을 입력하세요');
+      new Toast({ content: '지역을 입력하세요' });
       return false;
     }
     if (position === '') {
-      alert('직무를 선택하세요.');
+      new Toast({ content: '직무를 선택하세요' });
       return false;
     }
     if (stacks.length === 0) {
-      alert('하나 이상의 기술 스택을 선택하세요');
+      new Toast({ content: '하나 이상의 기술 스택을 선택하세요' });
       return false;
     }
 

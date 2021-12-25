@@ -2,12 +2,12 @@ import Component from '../component';
 import LoginModal from '../LoginModal/LoginModal';
 import auth from '../../utils/auth';
 import { state, removeState } from '../../utils/store';
+import RouterContext from '../../router/RouterContext';
 
 export default class NavItem extends Component {
   constructor(props) {
     super(props);
     this.$dom = this.createDom('li', {});
-
     this.render();
   }
 
@@ -18,6 +18,7 @@ export default class NavItem extends Component {
         className: this.props.className,
         innerText: this.props.text,
       });
+
       this.$dom.appendChild($a);
       return;
     }
@@ -48,10 +49,11 @@ export default class NavItem extends Component {
           innerText: li.text,
         });
         if (li.text === '로그아웃') {
-          $a.addEventListener('click', () => {
+          $a.addEventListener('click', e => {
+            e.preventDefault();
             auth.removeToken();
             removeState('myInfo');
-            window.location.reload();
+            RouterContext.state.reload();
           });
         }
         $li.appendChild($a);
@@ -79,6 +81,7 @@ export default class NavItem extends Component {
       innerText: '로그인',
       className: 'login-text',
     });
+
     this.$dom.appendChild($p);
     this.$loginModal = new LoginModal(this.$dom);
     this.$dom.append(this.$loginModal.$dom);
