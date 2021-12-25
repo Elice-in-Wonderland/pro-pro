@@ -367,45 +367,59 @@ export default class CreatePostPage extends Component {
       this.transferData(registerDeadline.children);
     });
 
-    document.querySelector('#sendBtn').addEventListener('click', async () => {
-      const formData = {
-        category: Array.from(
-          document.querySelectorAll('input[type="radio"]'),
-        ).filter(category => category.checked === true)[0].value,
-        title: document.forms[0].title.value,
-        content: document.forms[0].content.value,
-        stacks: Array.from(document.forms[0].stacks)
-          .filter(stack => stack.checked === true)
-          .map(stack => stack.value),
-        capacity: Number(document.forms[0].capacity.value),
-        region: this.region,
-        executionPeriod: [
-          document.forms[0].startDate.value,
-          document.forms[0].endDate.value,
-        ],
-        registerDeadline: document.forms[0].registerDeadline.value,
-      };
-      if (this.checkform(formData) !== false) {
-        try {
-          await axiosInstance
-            .put(`/posts/${this.state.postId}`, formData, {
-              withCredentials: true,
-            })
-            .then(
-              res =>
-                RouterContext.state.replace(`/detail/${this.state.postId}`),
-              new Toast({
-                content: '게시글이 수정 되었습니다.',
-                type: 'success',
-              }),
-            );
-        } catch (error) {
-          new Toast({
-            content: '정상적으로 등록되지 않았습니다. 다시 시도해주세요.',
-            type: 'fail',
-          });
-        }
-      }
+    document
+      .querySelector('#cancelBtn')
+      .addEventListener('click', this.editCancelHandler);
+
+    document
+      .querySelector('#sendBtn')
+      .addEventListener('click', this.editPutHandler);
+  };
+  editCancelHandler = () => {
+    RouterContext.state.replace(`/detail/${this.state.postId}`);
+    new Toast({
+      content: '취소하였습니다.',
+      type: 'success',
     });
+  };
+
+  editPutHandler = () => {
+    const formData = {
+      category: Array.from(
+        document.querySelectorAll('input[type="radio"]'),
+      ).filter(category => category.checked === true)[0].value,
+      title: document.forms[0].title.value,
+      content: document.forms[0].content.value,
+      stacks: Array.from(document.forms[0].stacks)
+        .filter(stack => stack.checked === true)
+        .map(stack => stack.value),
+      capacity: Number(document.forms[0].capacity.value),
+      region: this.region,
+      executionPeriod: [
+        document.forms[0].startDate.value,
+        document.forms[0].endDate.value,
+      ],
+      registerDeadline: document.forms[0].registerDeadline.value,
+    };
+    if (this.checkform(formData) !== false) {
+      try {
+        axiosInstance
+          .put(`/posts/${this.state.postId}`, formData, {
+            withCredentials: true,
+          })
+          .then(
+            res => RouterContext.state.replace(`/detail/${this.state.postId}`),
+            new Toast({
+              content: '게시글이 수정 되었습니다.',
+              type: 'success',
+            }),
+          );
+      } catch (error) {
+        new Toast({
+          content: '정상적으로 등록되지 않았습니다. 다시 시도해주세요.',
+          type: 'fail',
+        });
+      }
+    }
   };
 }
