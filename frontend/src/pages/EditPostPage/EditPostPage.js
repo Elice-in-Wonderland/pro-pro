@@ -4,6 +4,7 @@ import { defaultStacks } from '../../library/Profile/index';
 import axiosInstance from '../../utils/api';
 import { createPostCode } from '../../utils/common';
 
+import Loading from '../../components/Loading/Loading';
 import RouterContext from '../../router/RouterContext';
 import Toast from '../../components/Toast/Toast';
 
@@ -14,6 +15,8 @@ export default class CreatePostPage extends Component {
     this.$dom = this.createDom('div', {
       className: 'CreatePostPage',
     });
+    this.appendRoot(this.props, this.$dom);
+    this.loading();
     axiosInstance
       .get(`/posts/${postId}`)
       .then(res => {
@@ -23,6 +26,10 @@ export default class CreatePostPage extends Component {
         this.setState(postDetailData, postId);
       });
   }
+
+  loading = () => {
+    this.$dom.innerHTML = Loading;
+  };
 
   setState = (postDetailData, postId) => {
     this.state = {
@@ -42,7 +49,7 @@ export default class CreatePostPage extends Component {
       category: postDetailData.category || '',
     };
     this.region = {};
-    this.appendRoot(this.props, this.$dom);
+
     this.render();
     this.addEvent();
   };
