@@ -10,6 +10,8 @@ const {
   StackNotLowerCaseError,
 } = require('../utils/errors/postError');
 
+const { SPECIAL_CITYS } = require('../configs/specialCitys');
+
 // 게시글 목록
 exports.getPost = asyncHandler(async (req, res, next) => {
   const category = req.query.category;
@@ -201,4 +203,35 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
   return res
     .status(statusCode.OK)
     .send(resFormatter.success(responseMessage.POST_DELETED, {}));
+});
+
+// 게시글 추천 (현재 프로필 주소와 기술스택 기준)
+exports.recommendPost = asyncHandler(async (req, res, next) => {
+  const { userId } = req.decoded;
+
+  // 유저 정보 확인
+  const user = await userService.checkUser(userId);
+
+  // sido와 stacks가 비었을 경우, 추천할 수 없음을 돌려줌
+  if (!user.sido || !user.stacks.length) {
+    return res
+      .status(statusCode.OK)
+      .send(resFormatter.success(responseMessage.CANNOT_RECOMMEND, []));
+  }
+
+  // 데이터 전처리
+  let address = `${user.sido} ${user.sigungu}`;
+  if (SPECIAL_CITYS.includes(user.sido)) address = user.sido;
+  const stacks = user.stacks;
+
+  // 추천된 게시글
+  const recommendedPosts = await postService.recommendPost(
+    address,
+    stacks,
+    userId,
+  );
+
+  return res
+    .status(statusCode.OK)
+    .send(resFormatter.success(responseMessage.SUCCESS, recommendedPosts));
 });

@@ -17,6 +17,8 @@ const CALLBACK = '/callback';
 // Post
 const POST = '/posts';
 const POST_DETAIL = '/:postId';
+const RECOMMENDATION = '/recommendation';
+const ME = '/me';
 
 // Comment
 const COMMENT = '/comments';
@@ -35,6 +37,8 @@ const routes = {
   callback: CALLBACK,
   post: POST,
   postDetail: POST_DETAIL,
+  recommendation: RECOMMENDATION,
+  me: ME,
   comment: COMMENT,
   commentDetail: COMMENT_DETAIL,
 };
