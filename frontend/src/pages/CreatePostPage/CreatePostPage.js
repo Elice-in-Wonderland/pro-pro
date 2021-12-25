@@ -4,6 +4,7 @@ import { defaultStacks } from '../../library/Profile/index';
 import axiosInstance from '../../utils/api';
 import { createPostCode } from '../../utils/common';
 import RouterContext from '../../router/RouterContext';
+import Toast from '../../components/Toast/Toast';
 
 export default class CreatePostPage extends Component {
   constructor(props) {
@@ -141,23 +142,32 @@ export default class CreatePostPage extends Component {
   // form validation
   checkform(formData) {
     if (formData.title.trim() === '') {
-      alert('제목을 입력하세요');
+      new Toast({ content: '제목을 입력하세요', type: 'fail' });
       return false;
     }
     if (formData.executionPeriod[0] > formData.executionPeriod[1]) {
-      alert('수행 기간 종료일이 시작일보다 빠릅니다.');
+      new Toast({
+        content: '수행 기간 종료일이 시작일보다 빠릅니다',
+        type: 'fail',
+      });
       return false;
     }
     if (formData.registerDeadline > formData.executionPeriod[0]) {
-      alert('모집 마감일이 시작일 이후입니다.');
+      new Toast({ content: '모집 마감일이 시작일 이후입니다', type: 'fail' });
       return false;
     }
     if (formData.stacks.length === 0) {
-      alert('하나 이상의 기술 스택을 선택하세요');
+      new Toast({
+        content: '하나 이상의 기술 스택을 선택하세요',
+        type: 'fail',
+      });
       return false;
     }
     if (formData.content.trim() === '') {
-      alert('내용을 입력하세요');
+      new Toast({
+        content: '내용을 입력하세요',
+        type: 'fail',
+      });
       return false;
     }
   }
@@ -324,10 +334,18 @@ export default class CreatePostPage extends Component {
           const posts = await axiosInstance.post('/posts', formData, {
             withCredentials: true,
           });
+          new Toast({
+            content: '게시물이 성공적으로 등록되었습니다',
+            type: 'success',
+          });
           RouterContext.state.replace('/');
         } catch (error) {
           console.log(error);
-          alert('정상적으로 등록되지 않았습니다. 다시 시도해주세요.');
+          new Toast({
+            content:
+              '게시물이 정상적으로 등록되지 않았습니다. 관리자에게 문의하세요',
+            type: 'fail',
+          });
         }
       }
     });
