@@ -10,6 +10,7 @@ import PostBanner from '../../components/PostBanner/PostBanner';
 import EditButtons from '../../components/EditButtons/EditButtons';
 
 import RouterContext from '../../router/RouterContext';
+import Loading from '../../components/Loading/Loading';
 import axiosInstance from '../../utils/api';
 import Bookmark from '../../components/Bookmark/Bookmark';
 import { state as userState } from '../../utils/store';
@@ -22,6 +23,7 @@ export default class DetailPage extends Component {
       className: 'detailContainer',
     });
     this.appendRoot(props, this.$dom);
+    this.loading();
     this.getPostInfo();
   }
 
@@ -32,8 +34,12 @@ export default class DetailPage extends Component {
       .then(res => {
         return res.data.data;
       })
-      .then(postDetailData => {
-        this.setState(postDetailData, postId);
+      .then(postInfo => {
+        this.setState(postInfo, postId);
+        this.makeComponent();
+        this.render();
+        this.replaceDOM();
+        this.addEvent();
       });
   };
 
@@ -41,23 +47,11 @@ export default class DetailPage extends Component {
     const userId = this.findUserId();
     const userType = this.findUserType(postState.author._id);
     this.state = { ...postState, ...userState, postId, userType, userId };
-    this.makeComponent();
-    this.renderTemplate();
-    this.replaceDOM();
-    this.addEvent();
   };
 
   makeComponent = () => {
     const {
-      state: {
-        stacks,
-        marks,
-        userType,
-        comments,
-        userId,
-        postId,
-        myInfo: { bookmarks },
-      },
+      state: { stacks, marks, userType, comments, userId, postId },
     } = this;
 
     this.stacks = new Stacks({
@@ -73,12 +67,10 @@ export default class DetailPage extends Component {
         postId,
       });
     }
-
     this.bookmark = new Bookmark({
       marks,
       postId,
       userType,
-      markedPosts: bookmarks,
     });
 
     this.comments = new Comments({
@@ -95,7 +87,11 @@ export default class DetailPage extends Component {
     });
   };
 
-  renderTemplate = () => {
+  loading = () => {
+    this.$dom.innerHTML = Loading;
+  };
+
+  render = () => {
     const {
       author: { imageURL, nickname },
       title,

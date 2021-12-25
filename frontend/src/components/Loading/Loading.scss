@@ -1,0 +1,34 @@
+.LoadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.LoadingCircle {
+  aspect-ratio: 1;
+  height: 25vh;
+  border: 5px solid var(--white);
+  /* box-shadow: inset 0px 0px 10px 10px rgb(129, 129, 129);; */
+  border-radius: 50%;
+  border-top-color: #4b9cce;
+  animation: spin 2.5s infinite linear;
+}
+.LoadingText {
+  animation: noSpin 2.5s infinite linear;
+  text-align: center;
+  position: relative;
+  top: 48%;
+  color: #4b9cce;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes noSpin {
+  to {
+    transform: rotate(-360deg);
+  }
+}

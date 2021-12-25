@@ -1,3 +1,4 @@
+import EditPostPage from './pages/EditPostPage/EditPostPage';
 import CreatPostPage from './pages/CreatePostPage/CreatePostPage';
 import MainPage from './pages/MainPage/MainPage';
 import BookmarkPage from './pages/BookmarkPage/BookmarkPage';
@@ -18,7 +19,7 @@ class App {
       { path: '/detail/:postId', component: DetailPage, loginRequired: false },
       { path: '/bookmark', component: BookmarkPage, loginRequired: true },
       { path: '/write', component: CreatPostPage, loginRequired: true },
-      // { path: '/write/:postId', component: PostPage },
+      { path: '/write/:postId', component: EditPostPage },
       { path: '/profile', component: ProfilePage, loginRequired: true },
     ];
     this.NotFoundPage = NotFoundPage;
