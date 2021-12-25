@@ -54,7 +54,7 @@ class Router {
 
       RouterContext.setState({ params });
       const Page = this.routes[i].component;
-
+      window.scrollTo(0, 0);
       new Page(this.target);
       return;
     }

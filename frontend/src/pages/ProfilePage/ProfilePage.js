@@ -12,7 +12,6 @@ import Stack from '../../components/Profile/Stack';
 import Toast from '../../components/Toast/Toast';
 import RouterContext from '../../router/RouterContext';
 
-// TODO: 리팩토링 및 개선점 찾아보기
 export default class ProfilePage extends Component {
   constructor(props) {
     super(props);
@@ -122,11 +121,19 @@ export default class ProfilePage extends Component {
     const $sidoSelect = this.$dom.querySelector('.sido-select');
     const $positionSelect = this.$dom.querySelector('.position-select');
     const $stackSelect = this.$dom.querySelector('.stack-select');
-    const $img = this.createDom('img', {
-      src: this.data.imageURL,
-      alt: 'profile',
-    });
-    $userImg.appendChild($img);
+
+    if (this.data.imageURL === '') {
+      $userImg.classList.add('profile-skeleton');
+    } else {
+      const $img = this.createDom('img', {
+        src: this.data.imageURL,
+        alt: 'profile',
+        className: 'profile-img',
+      });
+
+      $userImg.appendChild($img);
+    }
+
     const $lab = this.createDom('label', {
       htmlFor: 'nickname',
     });
