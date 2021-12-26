@@ -5,7 +5,6 @@ import {
   pathValidation,
   loginValidation,
 } from './utils';
-import auth from '../utils/auth';
 
 class Router {
   constructor(target, routes, NotFoundPage) {
@@ -37,10 +36,8 @@ class Router {
     RouterContext.setState({ goBack: () => this.goBack() });
   }
 
-  async route() {
+  route() {
     const currentPath = this.RouterContext.state.pathname.slice(1).split('/');
-    // history.pushState(null, null, location.href.replace(/#.*/, ''));
-    await auth.getMyInfo();
 
     for (let i = 0; i < this.routes.length; i += 1) {
       const routePath = this.routes[i].path.slice(1).split('/');

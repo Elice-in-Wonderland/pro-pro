@@ -7,20 +7,18 @@ import NavItem from './NavItem';
 export default class Navigation extends Component {
   constructor(props) {
     super(props);
+    const token = auth.getToken();
+
     this.$dom = this.createDom('nav', {
       className: 'gnb',
     });
-    this.loginState = false;
+    this.loginState = !!token;
     this.$logo = new Logo();
-    this.init();
+    this.render();
   }
 
-  init = async () => {
-    const token = auth.getToken();
-    if (token) {
-      await auth.getMyInfo();
-      this.loginState = true;
-    }
+  replaceNav = () => {
+    this.loginState = true;
     this.render();
   };
 
@@ -90,7 +88,12 @@ export default class Navigation extends Component {
             text: '스터디',
             className: 'nav-study router',
           },
-          { type: 'modal', text: '로그인', className: 'nav-login' },
+          {
+            type: 'modal',
+            text: '로그인',
+            className: 'nav-login',
+            onLogin: this.replaceNav,
+          },
         ].map(li => new NavItem(li));
 
     this.$dom.innerHTML = `

@@ -1,20 +1,32 @@
 import axios from 'axios';
 import RouterContext from '../router/RouterContext';
 import auth from './auth';
+
 import { removeState } from './store';
 
 export const url = process.env.SERVER_URL || 'http://localhost:4000/';
-
 const axiosInstance = axios.create({
   baseURL: url,
   headers: {
     'Content-Type': 'application/json',
     'Acess-Control-Allow-Origin': '*',
-    Authorization: `Bearer ${auth.getToken()}`,
     Accept: 'application/json',
   },
 });
 axiosInstance.defaults.withCredentials = true;
+
+// api 요청시 사전에 토큰을 header에 셋팅
+axiosInstance.interceptors.request.use(
+  config => {
+    config.headers = {
+      Authorization: `Bearer ${auth.getToken()}`,
+    };
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
 
 axiosInstance.interceptors.response.use(
   response => {

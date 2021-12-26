@@ -5,8 +5,8 @@ import proproLogo from '../../assets/images/pro-pro.png';
 import googleLogo from '../../assets/images/google-logo.svg';
 import xButton from '../../assets/images/x-button.svg';
 import axiosInstance from '../../utils/api';
-import RouterContext from '../../router/RouterContext';
 import Toast from '../Toast/Toast';
+import { setState } from '../../utils/store';
 
 export default class LoginModal extends Component {
   constructor(props) {
@@ -63,8 +63,32 @@ export default class LoginModal extends Component {
               const res = await axiosInstance.post('/users', user, {
                 withCredentials: true,
               });
-              Cookies.set('AG3_JWT', res.data.data.AG3_JWT);
-              RouterContext.state.reload();
+              const {
+                _id,
+                nickname,
+                position,
+                stacks,
+                imageURL,
+                sido,
+                sigungu,
+                AG3_JWT,
+              } = res.data.data;
+              const myInfo = {
+                _id,
+                nickname,
+                position,
+                stacks,
+                imageURL,
+                region: {
+                  sido,
+                  sigungu,
+                },
+                bookmarks: [],
+              };
+              setState('myInfo', myInfo);
+              Cookies.set('AG3_JWT', AG3_JWT);
+              this.$dom.classList.add('hidden');
+              this.props.onLogin();
             } catch (e) {
               new Toast({ content: '로그인에 실패하였습니다' });
             }
