@@ -247,7 +247,7 @@ export default class CreatePostPage extends Component {
               <label for="project">PROJECT</label>
               <input ${
                 this.state.category === 'study' ? 'checked' : ''
-              }type="radio" name="category" value="study" id="study">
+              } type="radio" name="category" value="study" id="study">
               <span>●</span>
               <label for="study">STUDY</label>
             </p>
