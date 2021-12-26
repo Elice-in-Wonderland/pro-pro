@@ -9,8 +9,6 @@
     align-items: center;
     .btns {
       cursor: pointer;
-      // border: 1px solid gray;
-      // background-color: var(--bright);
       color: #495057;
       box-shadow: inset 0 0 0 1px #ced4da;
       border-radius: 30px;
@@ -20,8 +18,11 @@
       border: 0;
       transition: opacity 0.3s, background-color 0.3s;
       &:hover {
-        color: var(--medium2);
-        border-color: var(--medium2);
+        opacity: 1;
+        font-weight: 500;
+        border-color: var(--medium);
+        box-shadow: inset 0 0 0 2px var(--medium);
+        color: var(--medium);
       }
       .btn-title {
         margin-top: -3px;
@@ -51,7 +52,6 @@
         }
         .searchIconImg {
           cursor: pointer;
-          // transform: translate(0%, 40%);
         }
       }
     }
@@ -59,11 +59,8 @@
 }
 
 .mainPostCards {
-  // position: absolute;
   height: 700px;
   .cardContainer {
-    // position: relative;
-    // left: 9%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
