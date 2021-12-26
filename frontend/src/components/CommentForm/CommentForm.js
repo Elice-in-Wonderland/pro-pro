@@ -42,42 +42,45 @@ export default class CommentForm extends Component {
   postComment = event => {
     event.preventDefault();
     const content = this.$dom.querySelector('.writeComment').value;
-    const { parentType, postId } = this.props;
-    console.log(content, parentType, postId);
+    const { parentType, parentId } = this.props;
     this.$dom.querySelector('.writeComment').value = '';
     axiosInstance.post(
       'comments',
       {
         content,
         parentType,
-        parentId: postId,
+        parentId: parentId,
       },
       { withCredentials: true },
     );
-    this.paintComment(content);
+    this.createNewComment(content);
   };
 
-  paintComment = content => {
-    const { parentType, postId, userId } = this.props;
-    const userState = state.myInfo;
-    const hr = document.createElement('hr');
+  createNewComment = content => {
+    const { parentType, parentId, userId } = this.props;
+    const { imageURL, nickname, _id } = state.myInfo;
     const newComment = new Comment({
       comment: {
         nestedComments: [],
         userId,
         author: {
-          imageURL: userState.imageURL,
-          nickname: userState.nickname,
+          imageURL,
+          nickname,
         },
         updatedAt: '지금',
-        _id: userState._id,
-        parentId: postId,
+        _id,
+        parentId,
         content,
       },
       userId,
       parentType,
     });
+    this.insertNewComment(newComment);
+  };
 
+  insertNewComment = newComment => {
+    const { parentType } = this.props;
+    const hr = document.createElement('hr');
     if (parentType === 'post') {
       const commentContainer = this.$dom.previousSibling.previousSibling;
       commentContainer.appendChild(newComment.$dom);
