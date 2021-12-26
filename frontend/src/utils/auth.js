@@ -18,8 +18,8 @@ function getMyInfo() {
     if (token && !state.myInfo) {
       axiosInstance('/users', { withCredentials: true })
         .then(res => {
-          const myInfo = res.data.data;
-          setState('myInfo', myInfo);
+          const myInfo = res?.data?.data;
+          if (myInfo) setState('myInfo', myInfo);
           resolve();
         })
         .then(err => reject(err));
