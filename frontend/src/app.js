@@ -4,6 +4,7 @@ import MainPage from './pages/MainPage/MainPage';
 import BookmarkPage from './pages/BookmarkPage/BookmarkPage';
 import DetailPage from './pages/DetailPage/DetailPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
+import RecommendPage from './pages/RecommendPage/RecommendPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Router from './router/Router';
 import Navigation from './components/Navigation/Navigation';
@@ -19,6 +20,7 @@ class App {
       { path: '/write', component: CreatPostPage, loginRequired: true },
       { path: '/write/:postId', component: EditPostPage },
       { path: '/profile', component: ProfilePage, loginRequired: true },
+      { path: '/recommend', component: RecommendPage, loginRequired: true },
     ];
     this.NotFoundPage = NotFoundPage;
     this.render();

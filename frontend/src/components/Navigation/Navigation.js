@@ -41,6 +41,12 @@ export default class Navigation extends Component {
           },
           {
             type: 'a',
+            href: '/recommend',
+            text: '추천',
+            className: 'nav-recommend router',
+          },
+          {
+            type: 'a',
             href: '/write',
             text: '새 글 쓰기',
             className: 'nav-write router',
