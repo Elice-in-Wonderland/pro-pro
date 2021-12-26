@@ -6,6 +6,10 @@
     width: 45px;
     aspect-ratio: 1;
     cursor: pointer;
+    transition: 0.1s all linear;
+    &:hover {
+      transform: scale(1.2);
+    }
   }
   .bookmarkCount {
     font-size: 22px;

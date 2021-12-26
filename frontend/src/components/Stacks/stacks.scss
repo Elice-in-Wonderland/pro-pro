@@ -8,10 +8,12 @@
   }
   .stackList {
     display: flex;
+    flex-wrap: wrap;
     font-size: 16px;
     gap: 15px;
     li {
       padding: 12px 20px 8px;
+      padding-bottom: 14px;
       border-radius: 30px;
       background-color: var(--gray);
     }
