@@ -1,7 +1,7 @@
 import axiosInstance from '../../utils/api';
 import Component from '../../components/component';
 import Card from '../../components/Card/Card';
-import styles from './bookmarkPage.scss';
+import './bookmarkPage.scss';
 
 export default class BookmarkPage extends Component {
   constructor(props) {

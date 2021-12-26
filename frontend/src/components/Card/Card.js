@@ -3,10 +3,10 @@ import viewImage from '../../assets/icons/view.svg';
 import bookmarkImage from '../../assets/icons/bookmark.svg';
 import bookmarkFilledImage from '../../assets/icons/bookmark_filled.svg';
 import PostBanner from '../PostBanner/PostBanner';
-import styles from './card.scss';
+import './card.scss';
 import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
-import Toast from '../../components/Toast/Toast';
+import Toast from '../Toast/Toast';
 import { shortSido } from '../../library/MainPage/index';
 
 export default class Card extends Component {

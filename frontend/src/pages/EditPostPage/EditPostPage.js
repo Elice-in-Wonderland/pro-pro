@@ -128,6 +128,12 @@ export default class CreatePostPage extends Component {
       registerDeadlineMonth,
       registerDeadlineDate,
     );
+    document.forms[0].registerDeadlineYear.value =
+      this.state.registerDeadline[0];
+    document.forms[0].registerDeadlineMonth.value =
+      this.state.registerDeadline[1];
+    document.forms[0].registerDeadlineDate.value =
+      this.state.registerDeadline[2];
     this.transferData([
       registerDeadlineYear,
       registerDeadlineMonth,
@@ -382,6 +388,7 @@ export default class CreatePostPage extends Component {
       .querySelector('#sendBtn')
       .addEventListener('click', this.editPutHandler);
   };
+
   editCancelHandler = () => {
     RouterContext.state.replace(`/detail/${this.state.postId}`);
     new Toast({

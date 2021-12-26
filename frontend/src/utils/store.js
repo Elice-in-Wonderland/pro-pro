@@ -1,26 +1,25 @@
 const GLOBAL_STATE_KEY = 'pro-pro-state';
 
-const initState = {
-  login: null,
-};
-
 const savedStateJson = localStorage.getItem(GLOBAL_STATE_KEY);
 
-const state = savedStateJson ? JSON.parse(savedStateJson) : initState;
+const state = savedStateJson ? JSON.parse(savedStateJson) : {};
 
 function setState(key, value) {
-  state[key] = JSON.parse(JSON.stringify(value));
-  localStorage.setItem(GLOBAL_STATE_KEY, JSON.stringify(state));
+  if (key !== '' || value) {
+    state[key] = JSON.parse(JSON.stringify(value));
+    localStorage.setItem(GLOBAL_STATE_KEY, JSON.stringify(state));
+  }
 }
 
 function removeState(key) {
-  delete state[key];
-  localStorage.setItem(GLOBAL_STATE_KEY, JSON.stringify(state));
+  if (Object.keys(state).length !== 0) {
+    const { [key]: deletedKey, ...newState } = state;
+    localStorage.setItem(GLOBAL_STATE_KEY, JSON.stringify(newState));
+  }
 }
 
 function reset() {
   localStorage.removeItem(GLOBAL_STATE_KEY);
-  location.reload();
 }
 
 export { state, setState, removeState, reset };
