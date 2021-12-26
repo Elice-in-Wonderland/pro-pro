@@ -158,6 +158,22 @@ export default class MainPage extends Component {
     const searchInput = this.$dom.querySelector('#searchInput');
     const searchbtn = this.$dom.querySelector('.searchIconImg');
 
+    function debounce(eventHandlerFunc, leading = true) {
+      let inDebounce;
+      return (...args) => {
+        const context = this;
+        const nowCall = leading && !inDebounce;
+        const later = () => {
+          inDebounce = null;
+          if (!leading) eventHandlerFunc.apply(context, args);
+        };
+
+        clearTimeout(inDebounce);
+        inDebounce = setTimeout(later, 500);
+        if (nowCall) eventHandlerFunc.apply(context, args);
+      };
+    }
+
     const skillStackFiltter = () => {
       if (this.filterStacks) {
         const statelist = this.data.filter(el =>
@@ -247,13 +263,21 @@ export default class MainPage extends Component {
       }
       this.setState(searchList);
     };
-    searchbtn.addEventListener('click', () => {
-      searchEventhandler();
-    });
-    searchInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
+
+    searchbtn.addEventListener(
+      'click',
+      debounce(() => {
         searchEventhandler();
-      }
-    });
+      }),
+    );
+
+    searchInput.addEventListener(
+      'keydown',
+      debounce(e => {
+        if (e.key === 'Enter') {
+          searchEventhandler();
+        }
+      }),
+    );
   };
 }
