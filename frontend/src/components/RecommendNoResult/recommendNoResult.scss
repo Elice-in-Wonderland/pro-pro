@@ -1,0 +1,16 @@
+.recommendNotFound {
+  position: relative;
+  .no-result {
+    text-align: center;
+    .no-result-img {
+      margin-top: 10vh;
+      width: 100%;
+      display: flex;
+    }
+    p {
+      color: gray;
+      font-size: 1.2rem;
+      margin-top: 1vh;
+    }
+  }
+}
