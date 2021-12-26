@@ -81,10 +81,14 @@ body {
           margin-right: 20px;
           padding-left: 10px;
         }
-        .addressSearch {
+        .addressSearch,
+        .online {
           width: 80px;
           height: 25px;
           @include inputBox();
+        }
+        .addressSearch {
+          margin-right: 20px;
         }
       }
     }
@@ -349,4 +353,8 @@ body {
       }
     }
   }
+}
+
+textarea {
+  resize: none;
 }

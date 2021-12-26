@@ -203,7 +203,8 @@ export default class CreatePostPage extends Component {
             <h3>지역</h3>
             <p>
               <input type="text" class='addressResult' readonly>
-              <input type="button" class='addressSearch' value="주소검색"><br>
+              <input type="button" class='addressSearch' value="주소검색">
+              <input type="button" class='online' value="온라인"><br>
             </p>
         </div>
         <div class='Period'>
@@ -266,6 +267,7 @@ export default class CreatePostPage extends Component {
     const plusBtn = document.querySelector('#plus');
     const count = document.querySelector('#count');
     const addressSearch = document.querySelector('.addressSearch');
+    const online = document.querySelector('.online');
     const addressResult = document.querySelector('.addressResult');
 
     minusBtn.addEventListener('click', () => {
@@ -288,6 +290,17 @@ export default class CreatePostPage extends Component {
       } catch (e) {
         console.log(e);
       }
+    });
+
+    // 온라인
+    online.addEventListener('click', async () => {
+      this.region = {
+        lat: '',
+        lng: '',
+        address: '',
+        sido: '',
+      };
+      addressResult.value = '';
     });
 
     // 년월에 따른 일 변경, 서버 전송을 위한 date폼 data변경

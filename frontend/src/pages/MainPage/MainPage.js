@@ -8,6 +8,7 @@ import SkillStacksDropDown from '../../components/SkillStacksDropDown/SkillStack
 import MainBanner from '../../components/MainBanner/MainBanner';
 import axiosInstance from '../../utils/api';
 import Routercontext from '../../router/RouterContext';
+import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ export default class MainPage extends Component {
     this.filterStacks = [];
     this.appendRoot(props, $fragment);
     this.render();
+    this.createSkeletonCard();
     this.getInitState();
     this.addEvent();
   }
@@ -67,7 +69,7 @@ export default class MainPage extends Component {
     this.$dom.innerHTML = `<section class="skills-bar">
     <div class="drop-content"></div>
   </section>
-    <section id="serchBar">
+    <section id="searchBar">
       <div class="avail btns">
         <div class="availTitle btn-title">모집중인 글</div>
       </div>
@@ -112,6 +114,21 @@ export default class MainPage extends Component {
     const oldContainer = this.$dom.querySelector('.mainPostCards');
     this.replaceElement(oldContainer, Cards);
     this.createCard();
+  };
+
+  createSkeletonCard = () => {
+    const $createFrag = new DocumentFragment();
+    Array.from({ length: 6 }).forEach(li => {
+      const newCard = new SkeletonCard();
+      $createFrag.appendChild(newCard.$dom);
+    });
+
+    const cardContainer = this.createDom('div', {
+      className: 'cardContainer',
+    });
+    cardContainer.appendChild($createFrag);
+    const replaceDiv = this.$dom.querySelector('.replaceDiv');
+    this.replaceElement(replaceDiv, cardContainer);
   };
 
   createCard = () => {

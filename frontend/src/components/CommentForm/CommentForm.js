@@ -2,7 +2,7 @@ import Component from '../component';
 import './commentForm.scss';
 import axiosInstance from '../../utils/api';
 // import Comments from '../../components/Comments/Comments';
-import Comment from '../../components/Comments/Comment';
+import Comment from '../Comments/Comment';
 import { state } from '../../utils/store';
 
 export default class CommentForm extends Component {
@@ -31,7 +31,7 @@ export default class CommentForm extends Component {
 
   notLoggedUserForm = () => {
     return `          
-        <textarea placeholder="먼저 로그인 해주세요." class="writeComment" type="text" ></textarea>
+        <textarea readonly placeholder="먼저 로그인 해주세요." class="writeComment" type="text" ></textarea>
     `;
   };
 
@@ -72,7 +72,7 @@ export default class CommentForm extends Component {
         updatedAt: '지금',
         _id: userState._id,
         parentId: postId,
-        content: content,
+        content,
       },
       userId,
       parentType,

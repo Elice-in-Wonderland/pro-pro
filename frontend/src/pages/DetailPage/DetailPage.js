@@ -28,7 +28,7 @@ export default class DetailPage extends Component {
   }
 
   getPostInfo = () => {
-    const postId = RouterContext.state.params.postId;
+    const { postId } = RouterContext.state.params;
     axiosInstance
       .get(`/posts/${postId}`)
       .then(res => {
@@ -134,9 +134,7 @@ export default class DetailPage extends Component {
           <ul>
             <li class="info">
               <div class="region">지역</div>
-              <div class="region__description">${
-                address ? address : '온라인'
-              }</div>
+              <div class="region__description">${address || '온라인'}</div>
             </li>
             <li class="info">
               <div class="capacity">모집 인원</div>
@@ -144,17 +142,17 @@ export default class DetailPage extends Component {
             </li>
             <li class="info">
               <div class="register">모집 기간</div>
-              <div class="registerDescription">${startDate.slice(
-                0,
-                10,
-              )} ~ ${endDate.slice(0, 10)}</div>
-            </li>
-            <li class="info">
-              <div class="period">프로젝트 수행 기간</div>
-              <div class="periodDescription">${updatedAt.slice(
+              <div class="registerDescription">${updatedAt.slice(
                 0,
                 10,
               )} ~ ${registerDeadline.slice(0, 10)}</div>
+            </li>
+            <li class="info">
+              <div class="period">프로젝트 수행 기간</div>
+              <div class="periodDescription">${startDate.slice(
+                0,
+                10,
+              )} ~ ${endDate.slice(0, 10)}</div>
             </li>
             <li class="info">
               <div class="viewWrapper">
@@ -173,7 +171,7 @@ export default class DetailPage extends Component {
       <hr>
       <div class="mapWarpper">
         <h3>팀 미팅 지역</h3>
-        <h4 class="mapDescription">${address ? address : '온라인'}</h3>
+        <h4 class="mapDescription">${address || '온라인'}</h3>
         <div id="map"></div>
       </div>
       <div class="commentSection">

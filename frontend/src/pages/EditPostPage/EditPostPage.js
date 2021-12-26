@@ -8,12 +8,12 @@ import Loading from '../../components/Loading/Loading';
 import RouterContext from '../../router/RouterContext';
 import Toast from '../../components/Toast/Toast';
 
-export default class CreatePostPage extends Component {
+export default class EditPostPage extends Component {
   constructor(props) {
     super(props);
     const { postId } = RouterContext.state.params;
     this.$dom = this.createDom('div', {
-      className: 'CreatePostPage',
+      className: 'EditPostPage',
     });
     this.appendRoot(this.props, this.$dom);
     this.loading();
@@ -48,7 +48,12 @@ export default class CreatePostPage extends Component {
       address: postDetailData.address || '',
       category: postDetailData.category || '',
     };
-    this.region = {};
+    this.region = {
+      lat: postDetailData.location.coordinates[0],
+      lng: postDetailData.location.coordinates[1],
+      address: postDetailData.address,
+      sido: postDetailData.sido,
+    };
 
     this.render();
     this.addEvent();
@@ -128,6 +133,12 @@ export default class CreatePostPage extends Component {
       registerDeadlineMonth,
       registerDeadlineDate,
     );
+    document.forms[0].registerDeadlineYear.value =
+      this.state.registerDeadline[0];
+    document.forms[0].registerDeadlineMonth.value =
+      this.state.registerDeadline[1];
+    document.forms[0].registerDeadlineDate.value =
+      this.state.registerDeadline[2];
     this.transferData([
       registerDeadlineYear,
       registerDeadlineMonth,
@@ -241,7 +252,7 @@ export default class CreatePostPage extends Component {
               <label for="project">PROJECT</label>
               <input ${
                 this.state.category === 'study' ? 'checked' : ''
-              }type="radio" name="category" value="study" id="study">
+              } type="radio" name="category" value="study" id="study">
               <span>●</span>
               <label for="study">STUDY</label>
             </p>
@@ -260,7 +271,8 @@ export default class CreatePostPage extends Component {
               <input type="text" class='addressResult' readonly value='${
                 this.state.address
               }'>
-              <input type="button" class='addressSearch' value="주소검색"><br>
+              <input type="button" class='addressSearch' value="주소검색">
+              <input type="button" class='online' value="온라인"><br>
             </p>
         </div>
         <div class='Period'>
@@ -327,6 +339,7 @@ export default class CreatePostPage extends Component {
     const plusBtn = document.querySelector('#plus');
     const count = document.querySelector('#count');
     const addressSearch = document.querySelector('.addressSearch');
+    const online = document.querySelector('.online');
     const addressResult = document.querySelector('.addressResult');
 
     minusBtn.addEventListener('click', () => {
@@ -349,6 +362,17 @@ export default class CreatePostPage extends Component {
       } catch (e) {
         console.log(e);
       }
+    });
+
+    // 온라인
+    online.addEventListener('click', async () => {
+      this.region = {
+        lat: '',
+        lng: '',
+        address: '',
+        sido: '',
+      };
+      addressResult.value = '';
     });
 
     // 년월에 따른 일 변경, 서버 전송을 위한 date폼 data변경
@@ -382,6 +406,7 @@ export default class CreatePostPage extends Component {
       .querySelector('#sendBtn')
       .addEventListener('click', this.editPutHandler);
   };
+
   editCancelHandler = () => {
     RouterContext.state.replace(`/detail/${this.state.postId}`);
     new Toast({
