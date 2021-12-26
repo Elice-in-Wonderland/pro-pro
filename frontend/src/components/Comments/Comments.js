@@ -42,7 +42,7 @@ export default class Comments extends Component {
   makeCommentHTML = (comment, parent, userType) => {
     return `<div class=${parent === 'post' ? 'comment' : 'nestedComment'}
     parentid=${parent === 'post' ? comment._id : comment.parentId}
-    id=${comment._id}
+    parent=${parent} id=${comment._id}
     >
       <div class="userWrapper">
           <img src=${comment.author.imageURL} width="30px" height="30px" />
@@ -93,15 +93,24 @@ export default class Comments extends Component {
     const replyBtn = event.target;
     const targetComment = replyBtn.parentNode.parentNode;
     const commentForm = targetComment.querySelector('.commentForm');
-    commentForm.parentNode.removeChild(commentForm);
     replyBtn.removeEventListener('click', this.deleteCommentForm);
     replyBtn.addEventListener('click', this.createCommentForm);
+    if (commentForm) {
+      commentForm.parentNode.removeChild(commentForm);
+    } else {
+      replyBtn.click();
+    }
   };
 
   deleteComment = event => {
     const replyBtn = event.target;
     const targetComment = replyBtn.parentNode.parentNode;
-    const hr = targetComment.nextSibling.nextSibling;
+    let hr;
+    if (targetComment.parent === 'comment') {
+      hr = targetComment.nextSibling;
+    } else {
+      hr = targetComment.nextSibling.nextSibling;
+    }
     axiosInstance.delete(`comments/${targetComment.id}`, {
       withCredentials: true,
     });
