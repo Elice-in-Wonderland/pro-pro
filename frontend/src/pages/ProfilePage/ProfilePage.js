@@ -59,6 +59,7 @@ export default class ProfilePage extends Component {
 
   setData = nextData => {
     this.data = { ...this.data, ...nextData };
+    console.log(this.data);
   };
 
   makeNodes = () => {
@@ -132,6 +133,9 @@ export default class ProfilePage extends Component {
       $userImg.classList.add('profile-skeleton');
     } else {
       $userImg.appendChild(this.$img);
+    }
+    if (this.data.region.sido) {
+      this.sigunguChange(this.data.region.sido);
     }
   };
 
@@ -262,7 +266,6 @@ export default class ProfilePage extends Component {
     });
 
     $sidoSelect.addEventListener('change', e => {
-      this.sigunguChange(e.target.value);
       this.setData({
         region: {
           sido: $sidoSelect.value,
