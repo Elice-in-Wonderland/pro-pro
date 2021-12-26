@@ -32,6 +32,7 @@ export default class CreatePostPage extends Component {
   };
 
   setState = (postDetailData, postId) => {
+    console.log(postDetailData);
     this.state = {
       postId,
       title: postDetailData.title || '',
@@ -48,7 +49,12 @@ export default class CreatePostPage extends Component {
       address: postDetailData.address || '',
       category: postDetailData.category || '',
     };
-    this.region = {};
+    this.region = {
+      lat: postDetailData.location.coordinates[0],
+      lng: postDetailData.location.coordinates[1],
+      address: postDetailData.address,
+      sido: postDetailData.sido,
+    };
 
     this.render();
     this.addEvent();
