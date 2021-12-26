@@ -1,4 +1,3 @@
-/* eslint-disable implicit-arrow-linebreak */
 import Component from '../../components/component';
 import './mainPage.scss';
 import searchIcon from '../../assets/icons/search-icon.svg';
@@ -23,11 +22,20 @@ export default class MainPage extends Component {
     $fragment.appendChild(this.$dom);
     this.state = [];
     this.data = [];
+    this.filterStacks = [];
     this.appendRoot(props, $fragment);
     this.render();
     this.getInitState();
     this.addEvent();
   }
+
+  availfunc = datalist => {
+    const today = new Date();
+    const statelist = datalist.filter(
+      post => post.registerDeadline >= today.toISOString(),
+    );
+    return statelist;
+  };
 
   getInitState = async () => {
     if (this.projectOrStudy === '/study') {
@@ -37,9 +45,7 @@ export default class MainPage extends Component {
         withCredentials: true,
       });
       this.data = data;
-      console.log(this.data);
     }
-    console.log(this.projectOrStudy);
     if (this.projectOrStudy === '/') {
       const {
         data: { data },
@@ -49,11 +55,66 @@ export default class MainPage extends Component {
       this.data = data;
     }
     this.setState(this.data);
+    this.availToggleData = this.availfunc(this.data);
+  };
+
+  setState = nextState => {
+    this.state = nextState;
+    this.cardRender();
+  };
+
+  render = () => {
+    this.$dom.innerHTML = `<section class="skills-bar">
+    <div class="drop-content"></div>
+  </section>
+    <section id="serchBar">
+      <div class="avail btns">
+        <div class="availTitle btn-title">모집중인 글</div>
+      </div>
+      <div class="entire btns">
+      <div class="entireTitle btn-title">전체 글</div>
+    </div>
+      <div class="recent btns">
+        <div class="recentTitle btn-title">최신순</div>
+      </div>
+      <div class="populate btns">
+        <div class="populateTitle btn-title">인기순</div>
+      </div>
+      <div class="wrapper">
+        <div class="searchDiv">
+          <input type="text" id="searchInput"/>
+          <img
+            src="${searchIcon}"
+            alt="search image"
+            class="searchIconImg"/> 
+        </div>
+      </div>
+    </section>
+    <section class='mainPostCards'>
+    <div class="replaceDiv"></div>
+    </section>
+    `;
+    this.$dom.prepend(this.$banner.$dom);
+    this.renderSkillStack();
+  };
+
+  renderSkillStack = () => {
+    const dropContent = this.$dom.querySelector('.drop-content');
+    const stacks = new SkillStacksDropDown({
+      stackList: defaultStacks,
+    });
+    dropContent.appendChild(stacks.$dom);
+  };
+
+  cardRender = () => {
+    const Cards = this.createDom('section', { className: 'mainPostCards' });
+    Cards.innerHTML = '<div class="replaceDiv"></div>';
+    const oldContainer = this.$dom.querySelector('.mainPostCards');
+    this.replaceElement(oldContainer, Cards);
     this.createCard();
   };
 
   createCard = () => {
-    console.log(this.state);
     const $createFrag = document.createDocumentFragment();
     this.cardList = this.state.map(el => {
       // TODO: 바꿔야 할 부분
@@ -71,73 +132,58 @@ export default class MainPage extends Component {
     this.replaceElement(replaceDiv, cardContainer);
   };
 
-  render = () => {
-    this.$dom.innerHTML = `
-    <section class="skills-bar">
-    <div class="drop-content"></div>
-  </section>
-    <section id="serchBar">
-      <div class="avail btns">
-        <div class="availTitle btn-title">모집중인 글</div>
-      </div>
-      <div class="recent btns">
-        <div class="recentTitle btn-title">최신순</div>
-      </div>
-      <div class="populate btns">
-        <div class="populateTitle btn-title">인기순</div>
-      </div>
-      <div class="wrapper">
-        <div class="searchDiv">
-          <input type="text" id="searchInput"/>
-          <img
-            src="${searchIcon}"
-            alt="search image"
-            class="searchIconImg"/> 
-        </div>
-      </div>
-    </section>
-    <section class="mainPostCards">
-      <div class="replaceDiv">
-      </div>
-    </section>
-    </section>
-    `;
-    this.$dom.prepend(this.$banner.$dom);
-    const dropContent = this.$dom.querySelector('.drop-content');
-    const stacks = new SkillStacksDropDown({
-      stackList: defaultStacks,
-    });
-    dropContent.appendChild(stacks.$dom);
-    this.addEvent();
-  };
-
   addEvent = () => {
     const populate = this.$dom.querySelector('.populate');
-    populate.addEventListener('click', () => {
-      const statelist = this.data.sort(
+    const populatefunc = datalist => {
+      const statelist = datalist.sort(
         (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
       );
-      this.setState(statelist);
-      this.createCard();
+      return statelist;
+    };
+    populate.addEventListener('click', () => {
+      if (this.filterStacks.length === 0) {
+        this.setState(populatefunc(this.data));
+      } else {
+        this.setState(populatefunc(this.state));
+      }
     });
     const recent = this.$dom.querySelector('.recent');
-    recent.addEventListener('click', () => {
-      const statelist = this.data.sort((a, b) => {
+    const recentfunc = datalist => {
+      const statelist = datalist.sort((a, b) => {
         if (a.createdAt < b.createdAt) return 1;
         if (a.createdAt > b.createdAt) return -1;
         return 0;
       });
-      this.setState(statelist);
-      this.createCard();
+      return statelist;
+    };
+    recent.addEventListener('click', () => {
+      if (this.filterStacks.length === 0) {
+        this.setState(recentfunc(this.data));
+      } else {
+        this.setState(recentfunc(this.state));
+      }
     });
     const avail = this.$dom.querySelector('.avail');
+
+    const skillStackFiltter = () => {
+      if (this.filterStacks) {
+        const statelist = this.data.filter(el =>
+          this.filterStacks.every(post => el.stacks.includes(post)),
+        );
+        this.setState(statelist);
+      }
+    };
+    const entirePost = this.$dom.querySelector('.entire');
+    entirePost.addEventListener('click', () => {
+      skillStackFiltter();
+    });
     avail.addEventListener('click', () => {
-      const today = new Date();
-      const statelist = this.state.filter(
-        post => post.registerDeadline >= today.toISOString(),
-      );
-      this.setState(statelist);
-      this.createCard();
+      console.log(this.availToggle);
+      if (this.filterStacks.length !== 0) {
+        this.setState(this.availfunc(this.state));
+      } else {
+        this.setState(this.availfunc(this.data));
+      }
     });
     const searchInput = this.$dom.querySelector('#searchInput');
     const searchbtn = this.$dom.querySelector('.searchIconImg');
@@ -146,7 +192,7 @@ export default class MainPage extends Component {
       const searchNotFoundContainer = document.createElement('div');
       searchNotFoundContainer.className = 'searchNotFoundContainer';
       searchNotFoundContainer.appendChild(searchNotFound.$dom);
-      const replaceDiv = this.$dom.querySelector('.replaceDiv');
+      const replaceDiv = this.$dom.querySelector('.cardContainer');
       this.replaceElement(replaceDiv, searchNotFoundContainer);
     };
     const searchEventhandler = () => {
@@ -162,7 +208,6 @@ export default class MainPage extends Component {
         return;
       }
       this.setState(searchList);
-      this.createCard();
     };
 
     searchbtn.addEventListener('click', () => {
@@ -177,11 +222,14 @@ export default class MainPage extends Component {
 
     skillIcon.addEventListener('click', e => {
       if (e.target && e.target.nodeName === 'IMG') {
-        const statelist = this.data.filter(el =>
-          el.stacks.includes(e.target.id),
-        );
-        this.setState(statelist);
-        this.createCard();
+        if (this.filterStacks.includes(e.target.id)) {
+          this.filterStacks.splice(this.filterStacks.indexOf(e.target.id), 1);
+          e.target.classList.remove('activateBtn');
+        } else {
+          this.filterStacks.push(e.target.id);
+          e.target.classList.add('activateBtn');
+        }
+        skillStackFiltter();
       }
     });
   };

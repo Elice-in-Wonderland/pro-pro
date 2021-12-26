@@ -10,10 +10,14 @@
     width: 50px;
     margin: 10px;
     align-items: center;
-    opacity: 0.6;
+    opacity: 0.33;
+    .activateBtn {
+      opacity: 1;
+      transform: scale(1.5);
+    }
     &:hover {
       transform: rotate(-30deg) scale(1.1);
-      opacity: 1;
+      // opacity: 1;
     }
     @include tablet {
       width: 40px;
@@ -21,5 +25,8 @@
     @include mobile {
       width: 40px;
     }
+  }
+  .activateBtn {
+    opacity: 1;
   }
 }

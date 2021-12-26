@@ -24,12 +24,9 @@
         border-color: var(--medium2);
       }
       .btn-title {
+        margin-top: -3px;
         font-size: 1rem;
       }
-    }
-    .recent {
-    }
-    .populate {
     }
     .wrapper {
       width: 40%;
@@ -49,6 +46,7 @@
           border: none;
           &:focus {
             outline: none;
+            box-shadow: 0 0 0px;
           }
         }
         .searchIconImg {
@@ -57,13 +55,12 @@
         }
       }
     }
-    .avail {
-    }
   }
 }
 
 .mainPostCards {
   // position: absolute;
+  height: 700px;
   .cardContainer {
     // position: relative;
     // left: 9%;
