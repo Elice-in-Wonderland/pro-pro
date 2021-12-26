@@ -31,7 +31,7 @@ export default class MainPage extends Component {
     this.addEvent();
   }
 
-  availfunc = datalist => {
+  availFiltter = datalist => {
     const today = new Date();
     const statelist = datalist.filter(
       post => post.registerDeadline >= today.toISOString(),
@@ -57,7 +57,7 @@ export default class MainPage extends Component {
       this.data = data;
     }
     this.setState(this.data);
-    this.availToggleData = this.availfunc(this.data);
+    this.availToggleData = this.availFiltter(this.data);
   };
 
   setState = nextState => {
@@ -66,16 +66,17 @@ export default class MainPage extends Component {
   };
 
   render = () => {
-    this.$dom.innerHTML = `<section class="skills-bar">
-    <div class="drop-content"></div>
-  </section>
+    this.$dom.innerHTML = `
+    <section class="skills-bar">
+      <div class="drop-content"></div>
+    </section>
     <section id="searchBar">
       <div class="avail btns">
         <div class="availTitle btn-title">모집중인 글</div>
       </div>
       <div class="entire btns">
-      <div class="entireTitle btn-title">전체 글</div>
-    </div>
+        <div class="entireTitle btn-title">전체 글</div>
+      </div>
       <div class="recent btns">
         <div class="recentTitle btn-title">최신순</div>
       </div>
@@ -93,7 +94,7 @@ export default class MainPage extends Component {
       </div>
     </section>
     <section class='mainPostCards'>
-    <div class="replaceDiv"></div>
+      <div class="replaceDiv"></div>
     </section>
     `;
     this.$dom.prepend(this.$banner.$dom);
@@ -134,7 +135,6 @@ export default class MainPage extends Component {
   createCard = () => {
     const $createFrag = document.createDocumentFragment();
     this.cardList = this.state.map(el => {
-      // TODO: 바꿔야 할 부분
       const newCard = new Card({ post: el, postList: this.state });
       return newCard.$dom;
     });
@@ -150,37 +150,13 @@ export default class MainPage extends Component {
   };
 
   addEvent = () => {
-    const populate = this.$dom.querySelector('.populate');
-    const populatefunc = datalist => {
-      const statelist = datalist.sort(
-        (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
-      );
-      return statelist;
-    };
-    populate.addEventListener('click', () => {
-      if (this.filterStacks.length === 0) {
-        this.setState(populatefunc(this.data));
-      } else {
-        this.setState(populatefunc(this.state));
-      }
-    });
-    const recent = this.$dom.querySelector('.recent');
-    const recentfunc = datalist => {
-      const statelist = datalist.sort((a, b) => {
-        if (a.createdAt < b.createdAt) return 1;
-        if (a.createdAt > b.createdAt) return -1;
-        return 0;
-      });
-      return statelist;
-    };
-    recent.addEventListener('click', () => {
-      if (this.filterStacks.length === 0) {
-        this.setState(recentfunc(this.data));
-      } else {
-        this.setState(recentfunc(this.state));
-      }
-    });
+    const skillIcon = this.$dom.getElementsByClassName('skill-icon')[0];
     const avail = this.$dom.querySelector('.avail');
+    const entirePost = this.$dom.querySelector('.entire');
+    const recent = this.$dom.querySelector('.recent');
+    const populate = this.$dom.querySelector('.populate');
+    const searchInput = this.$dom.querySelector('#searchInput');
+    const searchbtn = this.$dom.querySelector('.searchIconImg');
 
     const skillStackFiltter = () => {
       if (this.filterStacks) {
@@ -190,20 +166,64 @@ export default class MainPage extends Component {
         this.setState(statelist);
       }
     };
-    const entirePost = this.$dom.querySelector('.entire');
+
+    skillIcon.addEventListener('click', e => {
+      if (e.target && e.target.nodeName === 'IMG') {
+        if (this.filterStacks.includes(e.target.id)) {
+          this.filterStacks.splice(this.filterStacks.indexOf(e.target.id), 1);
+          e.target.classList.remove('activateBtn');
+        } else {
+          this.filterStacks.push(e.target.id);
+          e.target.classList.add('activateBtn');
+        }
+        skillStackFiltter();
+      }
+    });
+
+    const populatEventHandler = datalist => {
+      const statelist = datalist.sort(
+        (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
+      );
+      return statelist;
+    };
+
+    populate.addEventListener('click', () => {
+      if (this.filterStacks.length === 0) {
+        this.setState(populatEventHandler(this.data));
+      } else {
+        this.setState(populatEventHandler(this.state));
+      }
+    });
+
+    const recentEventHandler = datalist => {
+      const statelist = datalist.sort((a, b) => {
+        if (a.createdAt < b.createdAt) return 1;
+        if (a.createdAt > b.createdAt) return -1;
+        return 0;
+      });
+      return statelist;
+    };
+
+    recent.addEventListener('click', () => {
+      if (this.filterStacks.length === 0) {
+        this.setState(recentEventHandler(this.data));
+      } else {
+        this.setState(recentEventHandler(this.state));
+      }
+    });
+
     entirePost.addEventListener('click', () => {
       skillStackFiltter();
     });
+
     avail.addEventListener('click', () => {
-      console.log(this.availToggle);
       if (this.filterStacks.length !== 0) {
-        this.setState(this.availfunc(this.state));
+        this.setState(this.availFiltter(this.state));
       } else {
-        this.setState(this.availfunc(this.data));
+        this.setState(this.availFiltter(this.data));
       }
     });
-    const searchInput = this.$dom.querySelector('#searchInput');
-    const searchbtn = this.$dom.querySelector('.searchIconImg');
+
     const createNot = () => {
       const searchNotFound = new SearchNotFound();
       const searchNotFoundContainer = document.createElement('div');
@@ -212,6 +232,7 @@ export default class MainPage extends Component {
       const replaceDiv = this.$dom.querySelector('.cardContainer');
       this.replaceElement(replaceDiv, searchNotFoundContainer);
     };
+
     const searchEventhandler = () => {
       if (!searchInput.value) {
         return;
@@ -226,27 +247,12 @@ export default class MainPage extends Component {
       }
       this.setState(searchList);
     };
-
     searchbtn.addEventListener('click', () => {
       searchEventhandler();
     });
     searchInput.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         searchEventhandler();
-      }
-    });
-    const skillIcon = this.$dom.getElementsByClassName('skill-icon')[0];
-
-    skillIcon.addEventListener('click', e => {
-      if (e.target && e.target.nodeName === 'IMG') {
-        if (this.filterStacks.includes(e.target.id)) {
-          this.filterStacks.splice(this.filterStacks.indexOf(e.target.id), 1);
-          e.target.classList.remove('activateBtn');
-        } else {
-          this.filterStacks.push(e.target.id);
-          e.target.classList.add('activateBtn');
-        }
-        skillStackFiltter();
       }
     });
   };
