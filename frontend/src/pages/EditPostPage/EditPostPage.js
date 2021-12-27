@@ -64,10 +64,7 @@ export default class EditPostPage extends Component {
       .slice(0, 10)
       .split('-')
       .map(date => {
-        if (date.length === 2) {
-          return date.slice(1);
-        }
-        return date;
+        return parseInt(date);
       });
     return result;
   };
