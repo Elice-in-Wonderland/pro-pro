@@ -54,13 +54,13 @@
 
 :book: **프로젝트 / 스터디 모집 게시글 CRUD**
 
-- 댓글 기능 포함
+- 댓글, 북마크, 필터, 검색 기능 포함
 
 :world_map: **프로젝트 / 스터디 장소 표시**
 
 - [Daum 우편주소 API](https://postcode.map.daum.net/guide)와 [Kakao 지도 API](https://apis.map.kakao.com/) 활용
 
-:thumbsup: **장소 / 기술스택 기준 추천 서비스**
+:thumbsup: **지역 / 기술스택 기반 추천 서비스**
 
 - 현재 추천 기준 (추후 변경될 수 있습니다.)
   - `backend/configs/specialCitys` 내부의 `시도`의 경우, `시도`만 일치해도 추천
@@ -185,3 +185,14 @@
   ```
   npm start
   ```
+
+<br />
+
+## :books: API 테스트
+
+> 로컬에서 backend 서버를 여신 후, 아래 postman json 파일을 이용하여 테스트해 보실 수 있습니다.
+>
+> postman에서 import 하신 후 테스트 하시면 됩니다.
+
+- [다운로드 링크](https://drive.google.com/drive/folders/14SZ_DkKSO_cd3g7CZO2H9_FMCCaHqK3A?usp=sharing)
+
