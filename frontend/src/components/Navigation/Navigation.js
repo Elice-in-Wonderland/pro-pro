@@ -19,7 +19,8 @@ export default class Navigation extends Component {
 
   replaceNav = () => {
     this.loginState = true;
-    this.render();
+    location.reload();
+    // this.render();
   };
 
   render = () => {
