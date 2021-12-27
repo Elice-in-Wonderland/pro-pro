@@ -14,42 +14,67 @@ export default class Comments extends Component {
   }
 
   render = () => {
-    const { commentList, userType } = this.props;
+    const { commentList } = this.props;
     this.$dom.innerHTML = commentList
       .map(comment => {
         if (comment.nestedComments) {
           const nestedComments = this.makeNestedComments(
             comment.nestedComments,
-            userType,
           );
-          return (
-            this.makeCommentHTML(comment, 'post', userType) + nestedComments
-          );
+          return this.makeCommentHTML(comment) + nestedComments;
         }
-        return this.makeCommentHTML(comment, 'post', userType);
+        return this.makeCommentHTML(comment);
       })
       .join('');
   };
 
-  makeNestedComments = (nestedComments, userType) => {
-    let result = ``;
-    nestedComments.forEach(nestedComment => {
-      result += this.makeCommentHTML(nestedComment, 'comment', userType);
-    });
-    return result;
-  };
-
-  makeCommentHTML = (comment, parent, userType) => {
-    return `<div class=${parent === 'post' ? 'comment' : 'nestedComment'}
-    parentid=${parent === 'post' ? comment._id : comment.parentId}
-    parent=${parent} id=${comment._id}
+  makeCommentHTML = comment => {
+    return `<div class='comment'
+    parentid='${comment._id}'
+    parent='post' id=${comment._id}
     >
       <div class="userWrapper">
           <img src=${comment.author.imageURL} width="30px" height="30px" />
           <h4 class="userName">${comment.author.nickname}</h4>
           <h5 class="commentedTime" >${comment.updatedAt.slice(0, 10)}</h5>
           ${
-            userType === 'loggedUser' || userType === 'author'
+            this.props.userType === 'loggedUser' ||
+            this.props.userType === 'author'
+              ? `<li class="commentReply">답변</li>`
+              : ``
+          }
+          ${
+            comment.userId === this.props.userId
+              ? `<li class="commentDelete">삭제</li>`
+              : ``
+          }
+          </div>
+      <h6 class="commentContent">${comment.content}</h6>
+      </div>
+      <hr>
+      `;
+  };
+
+  makeNestedComments = nestedComments => {
+    let result = ``;
+    nestedComments.forEach(nestedComment => {
+      result += this.makeNestedCommentHTML(nestedComment);
+    });
+    return result;
+  };
+
+  makeNestedCommentHTML = comment => {
+    return `<div class='nestedComment'
+    parentid='${comment.parentId}'
+    parent='comment' id=${comment._id}
+    >
+      <div class="userWrapper">
+          <img src=${comment.author.imageURL} width="30px" height="30px" />
+          <h4 class="userName">${comment.author.nickname}</h4>
+          <h5 class="commentedTime" >${comment.updatedAt.slice(0, 10)}</h5>
+          ${
+            this.props.userType === 'loggedUser' ||
+            this.props.userType === 'author'
               ? `<li class="commentReply">답변</li>`
               : ``
           }
@@ -82,7 +107,7 @@ export default class Comments extends Component {
     const commentForm = new CommentForm({
       userType: this.props.userType,
       parentType: 'comment',
-      postId: targetComment.getAttribute('parentid'),
+      parentId: targetComment.getAttribute('parentid'),
     });
     targetComment.appendChild(commentForm.$dom);
     replyBtn.removeEventListener('click', this.createCommentForm);

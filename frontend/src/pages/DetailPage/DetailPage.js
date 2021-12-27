@@ -92,7 +92,7 @@ export default class DetailPage extends Component {
     this.commentForm = new CommentForm({
       userType,
       parentType: 'post',
-      postId,
+      parentId: postId,
       userId,
     });
   };
