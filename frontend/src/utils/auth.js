@@ -11,13 +11,22 @@ function removeToken() {
   Cookies.remove('AG3_JWT');
 }
 
-async function getMyInfo() {
-  const token = getToken();
-  if (token && !state.myInfo) {
-    const { data } = await axiosInstance('/users', { withCredentials: true });
-    const myInfo = data.data;
-    setState('myInfo', myInfo);
-  }
+function getMyInfo() {
+  return new Promise((resolve, reject) => {
+    const token = getToken();
+
+    if (token && !state.myInfo) {
+      axiosInstance('/users', { withCredentials: true })
+        .then(res => {
+          const myInfo = res?.data?.data;
+          if (myInfo) setState('myInfo', myInfo);
+          resolve();
+        })
+        .then(err => reject(err));
+    } else {
+      resolve();
+    }
+  });
 }
 
 export default { getToken, getMyInfo, removeToken };

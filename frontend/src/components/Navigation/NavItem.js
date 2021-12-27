@@ -32,7 +32,7 @@ export default class NavItem extends Component {
       });
       const $img = this.createDom('img', {
         src:
-          `${state.myInfo?.imageURL}` ||
+          state.myInfo?.imageURL ||
           'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
         alt: 'profile',
       });
@@ -89,7 +89,7 @@ export default class NavItem extends Component {
     });
 
     this.$dom.appendChild($p);
-    this.$loginModal = new LoginModal(this.$dom);
+    this.$loginModal = new LoginModal({ onLogin: this.props.onLogin });
     this.$dom.append(this.$loginModal.$dom);
     this.$dom.addEventListener('click', e => {
       if (e.target === $p) this.$loginModal.$dom.classList.remove('hidden');
