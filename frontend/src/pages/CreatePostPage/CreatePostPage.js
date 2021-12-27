@@ -163,6 +163,10 @@ export default class CreatePostPage extends Component {
       new Toast({ content: '모집 마감일이 시작일 이후입니다', type: 'fail' });
       return false;
     }
+    if (new Date(formData.registerDeadline) < new Date()) {
+      new Toast({ content: '모집 마감일이 현재보다 빠릅니다', type: 'fail' });
+      return false;
+    }
     if (formData.stacks.length === 0) {
       new Toast({
         content: '하나 이상의 기술 스택을 선택하세요',
@@ -348,7 +352,6 @@ export default class CreatePostPage extends Component {
         ],
         registerDeadline: document.forms[0].registerDeadline.value,
       };
-      console.log(formData);
       if (this.checkform(formData) !== false) {
         try {
           const posts = await axiosInstance.post('/posts', formData, {
