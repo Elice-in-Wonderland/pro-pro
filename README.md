@@ -24,7 +24,9 @@
 
 <br />
 
-### :movie_camera: 데모 영상 (미정)
+### :movie_camera: [데모 영상](https://www.youtube.com/watch?v=2mx_b7RhHhk)
+
+> [클릭](https://www.youtube.com/watch?v=2mx_b7RhHhk)하시면 영상을 보실 수 있습니다.
 
 <br />
 
@@ -91,11 +93,11 @@
 
 <br />
 
-|                                    **팀원 이재석**                                    |                                    **팀원 장지원**                                    |                                    **팀원 정진원**                                    |
-| :-----------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: |
-| <img src="https://avatars.githubusercontent.com/u/83897458?v=4" height=200 width=200> | <img src="https://avatars.githubusercontent.com/u/32833404?v=4" height=200 width=200> | <img src="https://avatars.githubusercontent.com/u/76507701?v=4" height=200 width=200> |
-|                     **github**: [LEON](https://github.com/OnLee3)                     |               **github**: [scorpiusj](https://blog.naver.com/scorpiusj)               |                   **github**: [Jin1won](https://github.com/Jin1won)                   |
-|                                  프론트엔드, 디자인                                   |                                  프론트엔드, 디자인                                   |                                  프론트엔드, 백엔드                                   |
+|                       **팀원 이재석**                        |                       **팀원 장지원**                        |                       **팀원 정진원**                        |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| <img src="https://avatars.githubusercontent.com/u/83897458?v=4" height=200 width=200> | <img src="https://avatars.githubusercontent.com/u/86708793?v=4" height=200 width=200> | <img src="https://avatars.githubusercontent.com/u/76507701?v=4" height=200 width=200> |
+|        **github**: [LEON](https://github.com/OnLee3)         |  **github**: [chickenjang](https://github.com/chickenjang)   |      **github**: [Jin1won](https://github.com/Jin1won)       |
+|                      프론트엔드, 디자인                      |                      프론트엔드, 디자인                      |                      프론트엔드, 백엔드                      |
 
 </div>
 
