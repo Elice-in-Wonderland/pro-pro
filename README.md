@@ -105,7 +105,7 @@
 
 ## :notebook: Wiki
 
-> 프로젝트와 관련된 상세한 내용은 [**팀1 아카이브**](https://www.notion.so/elice/1-fc43eaf1e92f4447b2918e58bbece5c2)에 기록되어 있습니다.
+> 프로젝트와 관련된 상세한 내용은 [**pro-pro 아카이브**](https://general-viola-ee5.notion.site/pro-pro-7ea14a1b55f945d495c1323e64905924)에 기록되어 있습니다.
 
 - [와이어프레임](https://kdt-gitlab.elice.io/sw-001-project/team1/project-template/-/blob/develop/archive/wireframe/pro-pro%20wireframe.pdf)
 
