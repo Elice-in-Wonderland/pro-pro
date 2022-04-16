@@ -14,7 +14,7 @@ export default class MainPage extends Component {
   constructor(props) {
     super(props);
     this.$dom = this.createDom('div', {
-      className: 'main-page-wraper',
+      className: 'main-page-wrapper',
     });
     this.projectOrStudy = Routercontext.state.pathname;
 
@@ -71,18 +71,12 @@ export default class MainPage extends Component {
       <div class="drop-content"></div>
     </section>
     <section id="searchBar">
-      <div class="avail btns">
-        <div class="availTitle btn-title">모집중인 글</div>
-      </div>
-      <div class="entire btns">
-        <div class="entireTitle btn-title">전체 글</div>
-      </div>
-      <div class="recent btns">
+      <button type="button" class="recent activated">
         <div class="recentTitle btn-title">최신순</div>
-      </div>
-      <div class="populate btns">
+      </button>
+      <button type="button" class="populate">
         <div class="populateTitle btn-title">인기순</div>
-      </div>
+      </button>
       <div class="wrapper">
         <div class="searchDiv">
           <input type="text" id="searchInput"/>
@@ -92,6 +86,13 @@ export default class MainPage extends Component {
             class="searchIconImg"/> 
         </div>
       </div>
+      <button type="button" class="entire activated">
+      <div class="entireTitle btn-title">전체 글</div>
+    </button>
+      <button type="button" class="avail">
+      <div class="availTitle btn-title">모집중인 글</div>
+    </button>
+
     </section>
     <section class='mainPostCards'>
       <div class="replaceDiv"></div>
@@ -149,6 +150,11 @@ export default class MainPage extends Component {
     this.replaceElement(replaceDiv, cardContainer);
   };
 
+  toggleButton = (activated, deactivated) => {
+    activated.classList.add('activated');
+    deactivated.classList.remove('activated');
+  };
+
   addEvent = () => {
     const skillIcon = this.$dom.getElementsByClassName('skill-icon')[0];
     const avail = this.$dom.querySelector('.avail');
@@ -174,7 +180,7 @@ export default class MainPage extends Component {
       };
     }
 
-    const skillStackFiltter = () => {
+    const skillStackFilter = () => {
       if (this.filterStacks) {
         const statelist = this.data.filter(el =>
           this.filterStacks.every(post => el.stacks.includes(post)),
@@ -192,11 +198,11 @@ export default class MainPage extends Component {
           this.filterStacks.push(e.target.id);
           e.target.classList.add('activateBtn');
         }
-        skillStackFiltter();
+        skillStackFilter();
       }
     });
 
-    const populatEventHandler = datalist => {
+    const populateEventHandler = datalist => {
       const statelist = datalist.sort(
         (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
       );
@@ -205,10 +211,11 @@ export default class MainPage extends Component {
 
     populate.addEventListener('click', () => {
       if (this.filterStacks.length === 0) {
-        this.setState(populatEventHandler(this.data));
+        this.setState(populateEventHandler(this.data));
       } else {
-        this.setState(populatEventHandler(this.state));
+        this.setState(populateEventHandler(this.state));
       }
+      this.toggleButton(populate, recent);
     });
 
     const recentEventHandler = datalist => {
@@ -226,10 +233,12 @@ export default class MainPage extends Component {
       } else {
         this.setState(recentEventHandler(this.state));
       }
+      this.toggleButton(recent, populate);
     });
 
     entirePost.addEventListener('click', () => {
-      skillStackFiltter();
+      skillStackFilter();
+      this.toggleButton(entirePost, avail);
     });
 
     avail.addEventListener('click', () => {
@@ -238,6 +247,7 @@ export default class MainPage extends Component {
       } else {
         this.setState(this.availFiltter(this.data));
       }
+      this.toggleButton(avail, entirePost);
     });
 
     const createNot = () => {
