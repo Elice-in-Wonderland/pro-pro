@@ -19,7 +19,7 @@
     "no-restricted-syntax": "off",
     "no-else-return": "off",
     "no-restricted-globals": ["off"],
-    "implicit-arrow-linebreak": ["error", "below"],
-    "consistent-return": ["off", { "treatUndefinedAsUnspecified": true }]
+    "consistent-return": ["off", { "treatUndefinedAsUnspecified": true }],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
   }
 }
