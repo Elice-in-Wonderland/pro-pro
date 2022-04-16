@@ -3,32 +3,26 @@
 
 .home {
   background: url('../../assets/images/background.svg');
-  // opacity: 0.33;
   background-size: 400px;
   background-repeat: no-repeat;
-  // background-size: cover;
   background-position: 90% 150%;
   height: 400px;
   background-color: var(--background-blue);
   padding: 40px;
-  // display: flex;
   padding-top: 120px;
   @include mobile {
     height: 500px;
     background-position: 50% 90%;
   }
   .banerContainer {
-    // position: relative;
-
     .banerWord {
-      // text-align: center;
-      position: relative;
-      left: 10%;
-      top: 20px;
+      margin-left: 5vw;
       .homeTitle {
         display: flex;
         font-size: 1.5rem;
-        margin: 40px 0px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+
         color: var(--black);
         @include tablet {
           display: none;
@@ -50,10 +44,10 @@
       }
       .homeDescription {
         display: flex;
-        font-size: 2vh;
+        font-size: 25px;
         margin: 8px, 0;
         color: var(--medium);
-        line-height: 3vh;
+        line-height: 35px;
         @include tablet {
           display: none;
         }
