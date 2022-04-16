@@ -47,16 +47,19 @@
       .searchDiv {
         display: flex;
         height: 40px;
+        margin: 0 20px;
         background-color: #ffffff;
         opacity: 0.6;
         border: 1px solid #495057;
         border-radius: 50px;
-        // max-width: 800px;
+        align-items: center;
         #searchInput {
+          padding-left: 20px;
           outline: none;
           width: 100%;
           border-radius: 80px;
           border: none;
+          font-size: 20px;
           &:focus {
             outline: none;
             box-shadow: 0 0 0px;
@@ -64,6 +67,9 @@
         }
         .searchIconImg {
           cursor: pointer;
+          width: 35px;
+          height: 35px;
+          padding-right: 10px;
         }
       }
     }
