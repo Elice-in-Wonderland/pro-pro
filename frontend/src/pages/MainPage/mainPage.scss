@@ -77,12 +77,13 @@
 }
 
 .mainPostCards {
-  height: 700px;
+  min-height: 700px;
   .cardContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 0 auto;
-    align-items: center;
+    display: grid;
+    padding: 0px 40px;
+    width: 100%;
+    justify-items: center;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
   }
 }
