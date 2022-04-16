@@ -14,7 +14,7 @@ export default class MainPage extends Component {
   constructor(props) {
     super(props);
     this.$dom = this.createDom('div', {
-      className: 'main-page-wraper',
+      className: 'main-page-wrapper',
     });
     this.projectOrStudy = Routercontext.state.pathname;
 
@@ -174,7 +174,7 @@ export default class MainPage extends Component {
       };
     }
 
-    const skillStackFiltter = () => {
+    const skillStackFilter = () => {
       if (this.filterStacks) {
         const statelist = this.data.filter(el =>
           this.filterStacks.every(post => el.stacks.includes(post)),
@@ -192,11 +192,11 @@ export default class MainPage extends Component {
           this.filterStacks.push(e.target.id);
           e.target.classList.add('activateBtn');
         }
-        skillStackFiltter();
+        skillStackFilter();
       }
     });
 
-    const populatEventHandler = datalist => {
+    const populateEventHandler = datalist => {
       const statelist = datalist.sort(
         (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
       );
@@ -205,9 +205,9 @@ export default class MainPage extends Component {
 
     populate.addEventListener('click', () => {
       if (this.filterStacks.length === 0) {
-        this.setState(populatEventHandler(this.data));
+        this.setState(populateEventHandler(this.data));
       } else {
-        this.setState(populatEventHandler(this.state));
+        this.setState(populateEventHandler(this.state));
       }
     });
 
@@ -229,7 +229,7 @@ export default class MainPage extends Component {
     });
 
     entirePost.addEventListener('click', () => {
-      skillStackFiltter();
+      skillStackFilter();
     });
 
     avail.addEventListener('click', () => {
