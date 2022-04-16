@@ -71,18 +71,12 @@ export default class MainPage extends Component {
       <div class="drop-content"></div>
     </section>
     <section id="searchBar">
-      <div class="avail btns">
-        <div class="availTitle btn-title">모집중인 글</div>
-      </div>
-      <div class="entire btns">
-        <div class="entireTitle btn-title">전체 글</div>
-      </div>
-      <div class="recent btns">
+      <button type="button" class="recent activated">
         <div class="recentTitle btn-title">최신순</div>
-      </div>
-      <div class="populate btns">
+      </button>
+      <button type="button" class="populate">
         <div class="populateTitle btn-title">인기순</div>
-      </div>
+      </button>
       <div class="wrapper">
         <div class="searchDiv">
           <input type="text" id="searchInput"/>
@@ -92,6 +86,13 @@ export default class MainPage extends Component {
             class="searchIconImg"/> 
         </div>
       </div>
+      <button type="button" class="entire activated">
+      <div class="entireTitle btn-title">전체 글</div>
+    </button>
+      <button type="button" class="avail">
+      <div class="availTitle btn-title">모집중인 글</div>
+    </button>
+
     </section>
     <section class='mainPostCards'>
       <div class="replaceDiv"></div>
@@ -147,6 +148,11 @@ export default class MainPage extends Component {
     cardContainer.appendChild($createFrag);
     const replaceDiv = this.$dom.querySelector('.replaceDiv');
     this.replaceElement(replaceDiv, cardContainer);
+  };
+
+  toggleButton = (activated, deactivated) => {
+    activated.classList.add('activated');
+    deactivated.classList.remove('activated');
   };
 
   addEvent = () => {
@@ -209,6 +215,7 @@ export default class MainPage extends Component {
       } else {
         this.setState(populateEventHandler(this.state));
       }
+      this.toggleButton(populate, recent);
     });
 
     const recentEventHandler = datalist => {
@@ -226,10 +233,12 @@ export default class MainPage extends Component {
       } else {
         this.setState(recentEventHandler(this.state));
       }
+      this.toggleButton(recent, populate);
     });
 
     entirePost.addEventListener('click', () => {
       skillStackFilter();
+      this.toggleButton(entirePost, avail);
     });
 
     avail.addEventListener('click', () => {
@@ -238,6 +247,7 @@ export default class MainPage extends Component {
       } else {
         this.setState(this.availFiltter(this.data));
       }
+      this.toggleButton(avail, entirePost);
     });
 
     const createNot = () => {
