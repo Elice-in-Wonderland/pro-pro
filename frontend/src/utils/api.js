@@ -1,6 +1,6 @@
 import axios from 'axios';
 import RouterContext from '../router/RouterContext';
-import auth from './auth';
+import { getToken, removeToken } from './auth';
 
 import { removeState } from './store';
 
@@ -19,7 +19,7 @@ axiosInstance.defaults.withCredentials = true;
 axiosInstance.interceptors.request.use(
   config => {
     config.headers = {
-      Authorization: `Bearer ${auth.getToken()}`,
+      Authorization: `Bearer ${getToken()}`,
     };
     return config;
   },
@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
         error.response.data.message === '유효하지 않은 토큰값입니다.'
       ) {
         alert('로그인 기간이 만료되었습니다. 다시 로그인해주세요.');
-        auth.removeToken();
+        removeToken();
         removeState('myInfo');
         RouterContext.state.reload();
       }

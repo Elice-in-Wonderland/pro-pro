@@ -50,7 +50,6 @@ module.exports = {
       favicon: './public/favicon.png',
       templateParameters: {
         kakaoURL: process.env.KAKAO_API_KEY,
-        googleURL: process.env.GOOGLE_API_KEY,
       },
     }),
   ],

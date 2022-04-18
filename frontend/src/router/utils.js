@@ -1,4 +1,4 @@
-import auth from '../utils/auth';
+import { getToken } from '../utils/auth';
 
 const getPathname = () => {
   return window.location.pathname;
@@ -33,7 +33,7 @@ const pathValidation = (currentPath, routePath) => {
 const loginValidation = isRequired => {
   let isPass = true;
 
-  const token = auth.getToken();
+  const token = getToken();
   const loginState = token !== undefined; // getLoginState()
   if (isRequired) isPass = loginState;
 

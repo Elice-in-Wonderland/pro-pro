@@ -2,6 +2,14 @@ function padding(value) {
   return `00${value}`.slice(-2);
 }
 
+function parseJwt(token) {
+  try {
+    return JSON.parse(window.atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+}
+
 function debounce(callback, wait = 1000) {
   let timer;
 
@@ -63,28 +71,28 @@ function createPostCode() {
 }
 
 function createMap($container, region) {
-  const coords = new window.kakao.maps.LatLng(region[0], region[1]);
+  window.kakao.maps.load(function () {
+    const coords = new window.kakao.maps.LatLng(region[0], region[1]);
 
-  const mapOption = {
-    center: coords,
-    draggable: false,
-    level: 3,
-  };
+    const mapOption = {
+      center: coords,
+      draggable: false,
+      level: 3,
+    };
+    // add map
+    const map = new window.kakao.maps.Map($container, mapOption);
 
-  // add map
-  const map = new window.kakao.maps.Map($container, mapOption);
-
-  // add marker
-  new window.kakao.maps.Marker({
-    map,
-    position: coords,
+    // add marker
+    new window.kakao.maps.Marker({
+      map,
+      position: coords,
+    });
   });
-
-  // map.setCenter(coords);
 }
 
 export {
   padding,
+  parseJwt,
   debounce,
   throttle,
   createPostCode,

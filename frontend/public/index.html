@@ -4,18 +4,25 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="google-signin-client_id"
-      content="<%= googleURL%>.apps.googleusercontent.com"
+    <meta name="description" content="프로젝트 및 스터디 모집 서비스, ProPro 입니다." />
+    <meta name=”keywords” content="팀빌딩, 프로젝트, 스터디, ProPro" />
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/EliceDigitalBaeum_Regular.woff"
+      as="font" 
+      type="font/woff" 
+      crossorigin="anonymous"
     />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=<%= kakaoURL%>&libraries=services"
+      defer
+    ></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer></script>
     <title>pro-pro</title>
   </head>
   <body>
     <div id="root"></div>
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= kakaoURL%>&libraries=services"
-    ></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
   </body>
 </html>
