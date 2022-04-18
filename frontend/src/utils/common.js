@@ -71,21 +71,22 @@ function createPostCode() {
 }
 
 function createMap($container, region) {
-  const coords = new window.kakao.maps.LatLng(region[0], region[1]);
+  window.kakao.maps.load(function () {
+    const coords = new window.kakao.maps.LatLng(region[0], region[1]);
 
-  const mapOption = {
-    center: coords,
-    draggable: false,
-    level: 3,
-  };
+    const mapOption = {
+      center: coords,
+      draggable: false,
+      level: 3,
+    };
+    // add map
+    const map = new window.kakao.maps.Map($container, mapOption);
 
-  // add map
-  const map = new window.kakao.maps.Map($container, mapOption);
-
-  // add marker
-  new window.kakao.maps.Marker({
-    map,
-    position: coords,
+    // add marker
+    new window.kakao.maps.Marker({
+      map,
+      position: coords,
+    });
   });
 }
 
