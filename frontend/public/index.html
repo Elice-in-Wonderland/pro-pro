@@ -4,18 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="google-signin-client_id"
-      content="<%= googleURL%>.apps.googleusercontent.com"
-    />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <title>pro-pro</title>
   </head>
   <body>
     <div id="root"></div>
     <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= kakaoURL%>&libraries=services"
+    type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= kakaoURL%>&libraries=services"
     ></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
   </body>
 </html>

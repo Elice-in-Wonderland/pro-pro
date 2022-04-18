@@ -2,6 +2,14 @@ function padding(value) {
   return `00${value}`.slice(-2);
 }
 
+function parseJwt(token) {
+  try {
+    return JSON.parse(window.atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+}
+
 function debounce(callback, wait = 1000) {
   let timer;
 
@@ -79,12 +87,11 @@ function createMap($container, region) {
     map,
     position: coords,
   });
-
-  // map.setCenter(coords);
 }
 
 export {
   padding,
+  parseJwt,
   debounce,
   throttle,
   createPostCode,

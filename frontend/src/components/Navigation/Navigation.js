@@ -1,4 +1,4 @@
-import auth from '../../utils/auth';
+import { getToken } from '../../utils/auth';
 import Component from '../component';
 import Logo from '../Logo/Logo';
 import './navigation.scss';
@@ -7,7 +7,7 @@ import NavItem from './NavItem';
 export default class Navigation extends Component {
   constructor(props) {
     super(props);
-    const token = auth.getToken();
+    const token = getToken();
 
     this.$dom = this.createDom('nav', {
       className: 'gnb',

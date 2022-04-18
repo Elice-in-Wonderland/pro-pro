@@ -1,6 +1,6 @@
 import Component from '../component';
 import LoginModal from '../LoginModal/LoginModal';
-import auth from '../../utils/auth';
+import { removeToken } from '../../utils/auth';
 import { state, removeState } from '../../utils/store';
 import RouterContext from '../../router/RouterContext';
 
@@ -51,7 +51,7 @@ export default class NavItem extends Component {
         if (li.text === '로그아웃') {
           $a.addEventListener('click', e => {
             e.preventDefault();
-            auth.removeToken();
+            removeToken();
             removeState('myInfo');
             RouterContext.state.reload();
           });

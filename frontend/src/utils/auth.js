@@ -29,4 +29,22 @@ function getMyInfo() {
   });
 }
 
-export default { getToken, getMyInfo, removeToken };
+function restructingMyInfo(info) {
+  const { _id, nickname, position, stacks, imageURL, sido, sigungu } = info;
+  const myInfo = {
+    _id,
+    nickname,
+    position,
+    stacks,
+    imageURL,
+    region: {
+      sido,
+      sigungu,
+    },
+    bookmarks: [],
+  };
+
+  return myInfo;
+}
+
+export { getToken, getMyInfo, restructingMyInfo, removeToken };

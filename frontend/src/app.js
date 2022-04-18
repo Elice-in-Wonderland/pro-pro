@@ -8,7 +8,7 @@ import RecommendPage from './pages/RecommendPage/RecommendPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Router from './router/Router';
 import Navigation from './components/Navigation/Navigation';
-import auth from './utils/auth';
+import { getMyInfo } from './utils/auth';
 
 class App {
   constructor(target) {
@@ -29,7 +29,7 @@ class App {
 
   async render() {
     // auto login
-    await auth.getMyInfo();
+    await getMyInfo();
 
     new Navigation(this.target);
     new Router(this.target, this.routes, this.NotFoundPage, this.navigation);
