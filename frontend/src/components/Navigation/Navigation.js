@@ -12,19 +12,25 @@ export default class Navigation extends Component {
     this.$dom = this.createDom('nav', {
       className: 'gnb',
     });
-    this.loginState = !!token;
+
     this.$logo = new Logo();
+
+    this.state = {
+      loginState: !!token,
+    };
+
     this.render();
   }
 
   replaceNav = () => {
-    this.loginState = true;
-    location.reload();
-    // this.render();
+    this.setState({
+      ...this.state,
+      loginState: true,
+    });
   };
 
   render = () => {
-    this.$navItems = this.loginState
+    this.$navItems = this.state.loginState
       ? [
           {
             type: 'a',
@@ -75,7 +81,7 @@ export default class Navigation extends Component {
               },
             ],
           },
-        ].map(li => new NavItem(li))
+        ]
       : [
           {
             type: 'a',
@@ -95,20 +101,20 @@ export default class Navigation extends Component {
             className: 'nav-login',
             onLogin: this.replaceNav,
           },
-        ].map(li => new NavItem(li));
+        ];
 
     this.$dom.innerHTML = `
-        <ul class='nav-list'>
-        </ul>
+      <ul class='nav-list'>
+      </ul>
     `;
 
-    // append
     const $navList = this.$dom.querySelector('.nav-list');
     const fragment = new DocumentFragment();
     this.$dom.prepend(this.$logo.$dom);
     this.$navItems.forEach(li => {
-      if (li.$dom) {
-        fragment.appendChild(li.$dom);
+      const list = new NavItem(li);
+      if (list.$dom) {
+        fragment.appendChild(list.$dom);
       }
     });
     $navList.appendChild(fragment);

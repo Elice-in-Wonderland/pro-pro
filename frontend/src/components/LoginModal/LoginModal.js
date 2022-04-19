@@ -54,6 +54,11 @@ export default class LoginModal extends Component {
     );
   }
 
+  hiddenModal() {
+    this.$dom.classList.add('hidden');
+    document.body.style.overflow = 'scroll';
+  }
+
   async handleCredentialResponse(response) {
     const { sub: snsId, picture } = parseJwt(response.credential);
 
@@ -74,7 +79,7 @@ export default class LoginModal extends Component {
 
       setState('myInfo', myInfo);
       Cookies.set('AG3_JWT', AG3_JWT);
-      this.$dom.classList.add('hidden');
+      this.hiddenModal();
       this.props.onLogin();
     } catch (e) {
       new Toast({ content: '로그인에 실패하였습니다' });
@@ -85,12 +90,11 @@ export default class LoginModal extends Component {
     const $modalContainer = this.$dom.querySelector('.login-modal-wrapper');
 
     this.$dom.addEventListener('click', e => {
-      if (e.target.classList.contains('login-exit-btn')) {
-        this.$dom.classList.add('hidden');
-      }
-
-      if (!$modalContainer.contains(e.target)) {
-        this.$dom.classList.add('hidden');
+      if (
+        e.target.classList.contains('login-exit-btn') ||
+        !$modalContainer.contains(e.target)
+      ) {
+        this.hiddenModal();
       }
     });
 

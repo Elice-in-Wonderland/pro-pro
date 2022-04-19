@@ -92,7 +92,10 @@ export default class NavItem extends Component {
     this.$loginModal = new LoginModal({ onLogin: this.props.onLogin });
     this.$dom.append(this.$loginModal.$dom);
     this.$dom.addEventListener('click', e => {
-      if (e.target === $p) this.$loginModal.$dom.classList.remove('hidden');
+      if (e.target === $p) {
+        this.$loginModal.$dom.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
     });
   };
 }
