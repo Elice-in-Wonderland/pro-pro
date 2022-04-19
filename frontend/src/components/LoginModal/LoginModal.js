@@ -98,7 +98,7 @@ export default class LoginModal extends Component {
       }
     });
 
-    window.onGoogleLibraryLoad = () => {
+    window.onload = () => {
       this.initGoogle();
     };
   };
