@@ -15,35 +15,6 @@ export default class NavItem extends Component {
   }
 
   componentDidMount() {
-    if (this.props.type === 'link') return;
-
-    if (this.props.type === 'profile') {
-      const menu = this.$dom.querySelector('.menu');
-      const fragment = new DocumentFragment();
-
-      this.props.list.forEach(li => {
-        const $li = this.createDom('li', {});
-        const $a = this.createDom('a', {
-          href: li.href,
-          className: li.className,
-          innerText: li.text,
-        });
-        if (li.text === '로그아웃') {
-          $a.addEventListener('click', e => {
-            e.preventDefault();
-            removeToken();
-            removeState('myInfo');
-            RouterContext.state.reload();
-          });
-        }
-        $li.appendChild($a);
-        fragment.appendChild($li);
-      });
-
-      menu.appendChild(fragment);
-      return;
-    }
-
     if (this.props.type === 'modal') {
       this.loginModalRef = new LoginModal({ onLogin: this.props.onLogin }).$dom;
       this.$dom.append(this.loginModalRef);
@@ -55,6 +26,7 @@ export default class NavItem extends Component {
     const dropBox = this.$dom.querySelector('.drop-box');
     const profileImg = this.$dom.querySelector('.profile-img');
     const loginText = this.$dom.querySelector('.login-text');
+    const logoutBtn = this.$dom.querySelector('.nav-logout');
 
     if (this.props.type === 'link') return;
 
@@ -67,6 +39,13 @@ export default class NavItem extends Component {
         if (e.target.classList.contains('router')) {
           menu.classList.remove('active');
         }
+      });
+
+      logoutBtn.addEventListener('click', e => {
+        e.preventDefault();
+        removeToken();
+        removeState('myInfo');
+        RouterContext.state.reload();
       });
 
       document.querySelector('#root').addEventListener('click', e => {
@@ -103,6 +82,12 @@ export default class NavItem extends Component {
             } alt="profile" class="profile-img" />
           </div>
           <ul class="menu">
+            ${this.props.list
+              .map(
+                li =>
+                  `<li><a href=${li.href} class="${li.className}">${li.text}</a></li>`,
+              )
+              .join('')}
           </ul>
         </div>
       `;
