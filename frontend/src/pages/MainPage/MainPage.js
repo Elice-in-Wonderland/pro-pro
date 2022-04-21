@@ -79,7 +79,7 @@ export default class MainPage extends Component {
       </button>
       <div class="wrapper">
         <div class="searchDiv">
-          <input type="text" id="searchInput"/>
+          <input aria-label="검색" type="text" id="searchInput"/>
           <img
             src="${searchIcon}"
             alt="search image"

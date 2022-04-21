@@ -13,7 +13,7 @@ export default class Logo extends Component {
 
   render = () => {
     this.$dom.innerHTML = `
-        <img src=${logo} alt='logo'>
+        <img src=${logo} alt='logo' width="130px" height="80px">
     `;
   };
 }
