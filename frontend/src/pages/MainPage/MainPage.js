@@ -29,7 +29,7 @@ export default class MainPage extends Component {
     const $fragment = document.createDocumentFragment();
     $fragment.appendChild(this.$dom);
     this.state = [];
-    this.data = [];
+    this.totalData = [];
     this.filterStacks = [];
     this.appendRoot(props, $fragment);
     this.render();
@@ -45,7 +45,7 @@ export default class MainPage extends Component {
       } = await axiosInstance.get('/posts?category=study&page=1&perPage=30', {
         withCredentials: true,
       });
-      this.data = data;
+      this.totalData = data;
     }
     if (this.projectOrStudy === '/') {
       const {
@@ -53,7 +53,7 @@ export default class MainPage extends Component {
       } = await axiosInstance.get('/posts?category=project&page=1&perPage=30', {
         withCredentials: true,
       });
-      this.data = data;
+      this.totalData = data;
     }
     this.setState(this.data);
     this.availToggleData = this.availFiltter(this.data);
