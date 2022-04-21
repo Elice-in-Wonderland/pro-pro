@@ -31,6 +31,8 @@ export default class MainPage extends Component {
     this.state = [];
     this.totalData = [];
     this.filterStacks = [];
+    this.basisData = [];
+    this.sortStandard = recentSort;
     this.appendRoot(props, $fragment);
     this.render();
     this.createSkeletonCard();
@@ -46,6 +48,7 @@ export default class MainPage extends Component {
         withCredentials: true,
       });
       this.totalData = data;
+      this.basisData = data;
     }
     if (this.projectOrStudy === '/') {
       const {
@@ -54,9 +57,9 @@ export default class MainPage extends Component {
         withCredentials: true,
       });
       this.totalData = data;
+      this.basisData = data;
     }
-    this.setState(this.data);
-    this.availToggleData = this.availFiltter(this.data);
+    this.setState(recentSort(this.totalData));
   };
 
   setState = nextState => {
@@ -149,6 +152,22 @@ export default class MainPage extends Component {
     this.replaceElement(replaceDiv, cardContainer);
   };
 
+  toggleBasisData = buttonType => {
+    if (buttonType === 'avail') {
+      this.basisData = availFiltter(this.totalData);
+      this.setState(this.sortStandard(availFiltter(this.state)));
+      return;
+    }
+    this.basisData = this.totalData;
+    this.setState(this.sortStandard(this.totalData));
+  };
+
+  toggleBasisSort = sortType => {
+    if (sortType === 'recent') {
+      this.sortStandard = recentSort;
+      return;
+    }
+    this.sortStandard = populateSort;
   };
 
   addEvent = () => {
@@ -162,10 +181,10 @@ export default class MainPage extends Component {
 
     const skillStackFilter = () => {
       if (this.filterStacks) {
-        const statelist = this.data.filter(el =>
+        const statelist = this.basisData.filter(el =>
           this.filterStacks.every(post => el.stacks.includes(post)),
         );
-        this.setState(statelist);
+        this.setState(this.sortStandard(statelist));
       }
     };
 
@@ -182,35 +201,27 @@ export default class MainPage extends Component {
     });
 
     populate.addEventListener('click', () => {
-      if (this.filterStacks.length === 0) {
-        this.setState(populateEventHandler(this.data));
-      } else {
-        this.setState(populateEventHandler(this.state));
-      }
-      this.toggleButton(populate, recent);
+      toggleButton(populate, recent);
+      this.toggleBasisSort('populate');
+      this.setState(populateSort(this.state));
     });
 
     recent.addEventListener('click', () => {
-      if (this.filterStacks.length === 0) {
-        this.setState(recentEventHandler(this.data));
-      } else {
-        this.setState(recentEventHandler(this.state));
-      }
-      this.toggleButton(recent, populate);
+      toggleButton(recent, populate);
+      this.toggleBasisSort('recent');
+      this.setState(recentSort(this.state));
     });
 
     entirePost.addEventListener('click', () => {
+      toggleButton(entirePost, avail);
+      this.toggleBasisData('entire');
       skillStackFilter();
-      this.toggleButton(entirePost, avail);
     });
 
     avail.addEventListener('click', () => {
-      if (this.filterStacks.length !== 0) {
-        this.setState(this.availFiltter(this.state));
-      } else {
-        this.setState(this.availFiltter(this.data));
-      }
-      this.toggleButton(avail, entirePost);
+      toggleButton(avail, entirePost);
+      this.toggleBasisData('avail');
+      skillStackFilter();
     });
 
     const createNot = () => {
