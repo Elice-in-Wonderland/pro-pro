@@ -205,6 +205,7 @@ export default class MainPage extends Component {
       }
       this.filterStacks.push(e.target.id);
       e.target.classList.add('activateBtn');
+      skillStackFilter();
     });
 
     populate.addEventListener('click', () => {
@@ -245,15 +246,17 @@ export default class MainPage extends Component {
       if (!searchInput.value) {
         return;
       }
-      const searchList = this.data.filter(character => {
+      const searchList = this.basisData.filter(character => {
         return character.title.includes(searchInput.value);
       });
       if (searchList.length === 0) {
         this.setState([]);
+        searchInput.value = null;
         createNot();
         return;
       }
       this.setState(searchList);
+      searchInput.value = null;
     };
 
     searchbtn.addEventListener(
