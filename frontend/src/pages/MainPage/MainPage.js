@@ -188,6 +188,13 @@ export default class MainPage extends Component {
       }
     };
 
+    const removeSkillStackFilter = () => {
+      this.filterStacks = [];
+      skillIcon.childNodes.forEach(imgNode =>
+        imgNode.classList.remove('activateBtn'),
+      );
+    };
+
     skillIcon.addEventListener('click', e => {
       if (e.target?.nodeName !== 'IMG') return;
       if (this.filterStacks.includes(e.target.id)) {
@@ -234,6 +241,7 @@ export default class MainPage extends Component {
     };
 
     const searchEventhandler = () => {
+      removeSkillStackFilter();
       if (!searchInput.value) {
         return;
       }
