@@ -170,16 +170,15 @@ export default class MainPage extends Component {
     };
 
     skillIcon.addEventListener('click', e => {
-      if (e.target && e.target.nodeName === 'IMG') {
-        if (this.filterStacks.includes(e.target.id)) {
-          this.filterStacks.splice(this.filterStacks.indexOf(e.target.id), 1);
-          e.target.classList.remove('activateBtn');
-        } else {
-          this.filterStacks.push(e.target.id);
-          e.target.classList.add('activateBtn');
-        }
+      if (e.target?.nodeName !== 'IMG') return;
+      if (this.filterStacks.includes(e.target.id)) {
+        this.filterStacks.splice(this.filterStacks.indexOf(e.target.id), 1);
+        e.target.classList.remove('activateBtn');
         skillStackFilter();
+        return;
       }
+      this.filterStacks.push(e.target.id);
+      e.target.classList.add('activateBtn');
     });
 
     populate.addEventListener('click', () => {
