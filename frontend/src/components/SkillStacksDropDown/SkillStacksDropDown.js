@@ -44,6 +44,7 @@ export default class Navigation extends Component {
       if ({}.hasOwnProperty.call(imgsrc, key)) {
         const imageNode = document.createElement('img');
         imageNode.id = key;
+        imageNode.alt = key;
         imageNode.src = imgsrc[key];
         $fragment.appendChild(imageNode);
       }

@@ -47,12 +47,12 @@ export default class Card extends Component {
                 </div>
                 <div class="card-info-number">
                     <div class="card-info-number-detail">
-                        <img src="${viewImage}"/>
+                        <img src="${viewImage}" aria-label="조회수"/>
                         <div>${this.state.post.views}</div>
                     </div>
                     <div class="card-info-number-detail">
-                        <button type="button" class="bookmark-btn">
-                          <img src="${bookmarkImage}"/>
+                        <button type="button" class="bookmark-btn" aria-label="북마크">
+                          <img src="${bookmarkImage}" aria-label="북마크"/>
                         </button>
                         <div>${this.state.post.marks}</div>
                     </div>
