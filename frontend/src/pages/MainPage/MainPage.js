@@ -9,6 +9,13 @@ import MainBanner from '../../components/MainBanner/MainBanner';
 import axiosInstance from '../../utils/api';
 import Routercontext from '../../router/RouterContext';
 import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
+import {
+  availFiltter,
+  populateSort,
+  recentSort,
+  toggleButton,
+  debounce,
+} from '../../utils/filter';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -30,14 +37,6 @@ export default class MainPage extends Component {
     this.getInitState();
     this.addEvent();
   }
-
-  availFiltter = datalist => {
-    const today = new Date();
-    const statelist = datalist.filter(
-      post => post.registerDeadline >= today.toISOString(),
-    );
-    return statelist;
-  };
 
   getInitState = async () => {
     if (this.projectOrStudy === '/study') {
@@ -150,9 +149,6 @@ export default class MainPage extends Component {
     this.replaceElement(replaceDiv, cardContainer);
   };
 
-  toggleButton = (activated, deactivated) => {
-    activated.classList.add('activated');
-    deactivated.classList.remove('activated');
   };
 
   addEvent = () => {
@@ -163,22 +159,6 @@ export default class MainPage extends Component {
     const populate = this.$dom.querySelector('.populate');
     const searchInput = this.$dom.querySelector('#searchInput');
     const searchbtn = this.$dom.querySelector('.searchIconImg');
-
-    function debounce(eventHandlerFunc, leading = true) {
-      let inDebounce;
-      return (...args) => {
-        const context = this;
-        const nowCall = leading && !inDebounce;
-        const later = () => {
-          inDebounce = null;
-          if (!leading) eventHandlerFunc.apply(context, args);
-        };
-
-        clearTimeout(inDebounce);
-        inDebounce = setTimeout(later, 500);
-        if (nowCall) eventHandlerFunc.apply(context, args);
-      };
-    }
 
     const skillStackFilter = () => {
       if (this.filterStacks) {
@@ -202,13 +182,6 @@ export default class MainPage extends Component {
       }
     });
 
-    const populateEventHandler = datalist => {
-      const statelist = datalist.sort(
-        (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
-      );
-      return statelist;
-    };
-
     populate.addEventListener('click', () => {
       if (this.filterStacks.length === 0) {
         this.setState(populateEventHandler(this.data));
@@ -217,15 +190,6 @@ export default class MainPage extends Component {
       }
       this.toggleButton(populate, recent);
     });
-
-    const recentEventHandler = datalist => {
-      const statelist = datalist.sort((a, b) => {
-        if (a.createdAt < b.createdAt) return 1;
-        if (a.createdAt > b.createdAt) return -1;
-        return 0;
-      });
-      return statelist;
-    };
 
     recent.addEventListener('click', () => {
       if (this.filterStacks.length === 0) {
