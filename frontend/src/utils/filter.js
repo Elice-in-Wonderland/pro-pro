@@ -8,7 +8,7 @@ export const availFiltter = dataList => {
 
 export const populateSort = dataList => {
   const statelist = dataList.sort(
-    (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
+    (view1, view2) => parseFloat(view2.views) - parseFloat(view1.views),
   );
   return statelist;
 };
