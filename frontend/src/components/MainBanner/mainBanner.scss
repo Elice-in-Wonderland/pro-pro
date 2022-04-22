@@ -11,8 +11,9 @@
   padding: 40px;
   padding-top: 120px;
   @include mobile {
-    height: 500px;
-    background-position: 50% 90%;
+    height: 300px;
+    background-size: 200px;
+    background-position: 90% 130%;
   }
   .banerContainer {
     .banerWord {
