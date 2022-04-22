@@ -18,30 +18,9 @@ export default class LoginModal extends Component {
     });
 
     this.render();
-    this.addEvent();
   }
 
-  render = () => {
-    this.$dom.insertAdjacentHTML(
-      'beforeend',
-      `
-        <div class="login-modal-wrapper">
-            <img class="login-exit-btn" src="${xButton}" />
-            <div class="login-container">
-              <div class="login-header">
-                <div class="login-greeting">
-                  환영합니다!
-                </div>
-                <img class="login-image" src="${proproLogo}" />
-              </div>
-              <div class="login-btn-wrapper">
-                <div id="google-login-btn"></div>
-              </div>
-            </div>
-        </div>
-      `,
-    );
-  };
+  componentDidMount() {}
 
   initGoogle() {
     window.google.accounts.id.initialize({
@@ -85,6 +64,31 @@ export default class LoginModal extends Component {
       new Toast({ content: '로그인에 실패하였습니다' });
     }
   }
+
+  render = () => {
+    this.$dom.insertAdjacentHTML(
+      'beforeend',
+      `
+        <div class="login-modal-wrapper">
+            <img class="login-exit-btn" src="${xButton}" />
+            <div class="login-container">
+              <div class="login-header">
+                <div class="login-greeting">
+                  환영합니다!
+                </div>
+                <img class="login-image" src="${proproLogo}" />
+              </div>
+              <div class="login-btn-wrapper">
+                <div id="google-login-btn"></div>
+              </div>
+            </div>
+        </div>
+      `,
+    );
+
+    this.addEvent();
+    this.componentDidMount();
+  };
 
   addEvent = () => {
     const $modalContainer = this.$dom.querySelector('.login-modal-wrapper');

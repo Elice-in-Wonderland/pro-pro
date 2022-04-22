@@ -123,6 +123,7 @@ export default class Navigation extends Component {
     `;
 
     this.appendRoot(this.props, this.$dom, true);
+    this.addEvent();
     this.componentDidMount();
   };
 }

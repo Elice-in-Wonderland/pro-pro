@@ -10,8 +10,6 @@ export default class NavItem extends Component {
     this.$dom = this.createDom('li', {});
 
     this.render();
-    this.addEvent();
-    this.componentDidMount();
   }
 
   componentDidMount() {
@@ -20,6 +18,44 @@ export default class NavItem extends Component {
       this.$dom.append(this.loginModalRef);
     }
   }
+
+  render = () => {
+    if (this.props.type === 'link') {
+      this.$dom.innerHTML = `
+        <a href=${this.props.href} class="${this.props.className}">${this.props.text}</a>
+      `;
+    }
+
+    if (this.props.type === 'profile') {
+      this.$dom.innerHTML = `
+        <div class="drop-box">
+          <div class="profile">
+            <img src=${
+              state.myInfo?.imageURL ||
+              'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png'
+            } alt="profile" class="profile-img" />
+          </div>
+          <ul class="menu">
+            ${this.props.list
+              .map(
+                li =>
+                  `<li><a href=${li.href} class="${li.className}">${li.text}</a></li>`,
+              )
+              .join('')}
+          </ul>
+        </div>
+      `;
+    }
+
+    if (this.props.type === 'modal') {
+      this.$dom.innerHTML = `
+        <p class="login-text">로그인</p>
+      `;
+    }
+
+    this.addEvent();
+    this.componentDidMount();
+  };
 
   addEvent = () => {
     const menu = this.$dom.querySelector('.menu');
@@ -61,43 +97,6 @@ export default class NavItem extends Component {
           document.body.style.overflow = 'hidden';
         }
       });
-    }
-  };
-
-  render = () => {
-    if (this.props.type === 'link') {
-      this.$dom.innerHTML = `
-        <a href=${this.props.href} class="${this.props.className}">${this.props.text}</a>
-      `;
-      return;
-    }
-
-    if (this.props.type === 'profile') {
-      this.$dom.innerHTML = `
-        <div class="drop-box">
-          <div class="profile">
-            <img src=${
-              state.myInfo?.imageURL ||
-              'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png'
-            } alt="profile" class="profile-img" />
-          </div>
-          <ul class="menu">
-            ${this.props.list
-              .map(
-                li =>
-                  `<li><a href=${li.href} class="${li.className}">${li.text}</a></li>`,
-              )
-              .join('')}
-          </ul>
-        </div>
-      `;
-      return;
-    }
-
-    if (this.props.type === 'modal') {
-      this.$dom.innerHTML = `
-        <p class="login-text">로그인</p>
-      `;
     }
   };
 }
