@@ -1,33 +1,20 @@
-import Component from '../component';
 import LoginModal from '../LoginModal/LoginModal';
 import { removeToken } from '../../utils/auth';
 import { state, removeState } from '../../utils/store';
 import RouterContext from '../../router/RouterContext';
+import CustomComponent from '../CustomComponent';
+import { createDom } from '../../utils/dom';
 
-export default class NavItem extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('li', {});
-
-    this.render();
-  }
-
-  componentDidMount() {
-    if (this.props.type === 'modal') {
-      this.loginModalRef = new LoginModal({ onLogin: this.props.onLogin }).$dom;
-      this.$dom.append(this.loginModalRef);
-    }
-  }
-
-  render = () => {
+export default class NavItem extends CustomComponent {
+  markup() {
     if (this.props.type === 'link') {
-      this.$dom.innerHTML = `
+      return `
         <a href=${this.props.href} class="${this.props.className}">${this.props.text}</a>
       `;
     }
 
     if (this.props.type === 'profile') {
-      this.$dom.innerHTML = `
+      return `
         <div class="drop-box">
           <div class="profile">
             <img src=${
@@ -48,21 +35,34 @@ export default class NavItem extends Component {
     }
 
     if (this.props.type === 'modal') {
-      this.$dom.innerHTML = `
+      return `
         <p class="login-text">로그인</p>
       `;
     }
+  }
 
-    this.addEvent();
-    this.componentDidMount();
-  };
+  renderCallback() {
+    if (this.props.type === 'modal') {
+      const modalContainer = createDom('div', {
+        className: 'modal-background hidden',
+      });
 
-  addEvent = () => {
-    const menu = this.$dom.querySelector('.menu');
-    const dropBox = this.$dom.querySelector('.drop-box');
-    const profileImg = this.$dom.querySelector('.profile-img');
-    const loginText = this.$dom.querySelector('.login-text');
-    const logoutBtn = this.$dom.querySelector('.nav-logout');
+      new LoginModal({
+        container: modalContainer,
+        props: { onLogin: this.props.onLogin },
+      });
+
+      this.container.append(modalContainer);
+    }
+  }
+
+  setEvent() {
+    const menu = this.container.querySelector('.menu');
+    const dropBox = this.container.querySelector('.drop-box');
+    const profileImg = this.container.querySelector('.profile-img');
+    const loginText = this.container.querySelector('.login-text');
+    const logoutBtn = this.container.querySelector('.nav-logout');
+    const modalContainer = this.container.querySelector('.modal-background');
 
     if (this.props.type === 'link') return;
 
@@ -91,12 +91,12 @@ export default class NavItem extends Component {
     }
 
     if (this.props.type === 'modal') {
-      this.$dom.addEventListener('click', e => {
+      this.container.addEventListener('click', e => {
         if (e.target === loginText) {
-          this.loginModalRef.classList.remove('hidden');
+          modalContainer.classList.remove('hidden');
           document.body.style.overflow = 'hidden';
         }
       });
     }
-  };
+  }
 }

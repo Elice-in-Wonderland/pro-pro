@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 import './loginModal.scss';
 import proproLogo from '../../assets/images/pro-pro.png';
 import xButton from '../../assets/images/x-button.svg';
@@ -9,18 +9,44 @@ import { setState } from '../../utils/store';
 import { parseJwt } from '../../utils/common';
 import { restructingMyInfo } from '../../utils/auth';
 
-export default class LoginModal extends Component {
-  constructor(props) {
-    super(props);
-
-    this.$dom = this.createDom('div', {
-      className: 'modal-background hidden',
-    });
-
-    this.render();
+export default class LoginModal extends CustomComponent {
+  markup() {
+    return `
+      <div class="login-modal-wrapper">
+          <img class="login-exit-btn" src="${xButton}" />
+          <div class="login-container">
+            <div class="login-header">
+              <div class="login-greeting">
+                환영합니다!
+              </div>
+              <img class="login-image" src="${proproLogo}" />
+            </div>
+            <div class="login-btn-wrapper">
+              <div id="google-login-btn"></div>
+            </div>
+          </div>
+      </div>
+  `;
   }
 
-  componentDidMount() {}
+  setEvent() {
+    const $modalContainer = this.container.querySelector(
+      '.login-modal-wrapper',
+    );
+
+    this.container.addEventListener('click', e => {
+      if (
+        e.target.classList.contains('login-exit-btn') ||
+        !$modalContainer.contains(e.target)
+      ) {
+        this.hiddenModal();
+      }
+    });
+
+    window.onload = () => {
+      this.initGoogle();
+    };
+  }
 
   initGoogle() {
     window.google.accounts.id.initialize({
@@ -34,7 +60,7 @@ export default class LoginModal extends Component {
   }
 
   hiddenModal() {
-    this.$dom.classList.add('hidden');
+    this.container.classList.add('hidden');
     document.body.style.overflow = 'scroll';
   }
 
@@ -64,46 +90,4 @@ export default class LoginModal extends Component {
       new Toast({ content: '로그인에 실패하였습니다' });
     }
   }
-
-  render = () => {
-    this.$dom.insertAdjacentHTML(
-      'beforeend',
-      `
-        <div class="login-modal-wrapper">
-            <img class="login-exit-btn" src="${xButton}" />
-            <div class="login-container">
-              <div class="login-header">
-                <div class="login-greeting">
-                  환영합니다!
-                </div>
-                <img class="login-image" src="${proproLogo}" />
-              </div>
-              <div class="login-btn-wrapper">
-                <div id="google-login-btn"></div>
-              </div>
-            </div>
-        </div>
-      `,
-    );
-
-    this.addEvent();
-    this.componentDidMount();
-  };
-
-  addEvent = () => {
-    const $modalContainer = this.$dom.querySelector('.login-modal-wrapper');
-
-    this.$dom.addEventListener('click', e => {
-      if (
-        e.target.classList.contains('login-exit-btn') ||
-        !$modalContainer.contains(e.target)
-      ) {
-        this.hiddenModal();
-      }
-    });
-
-    window.onload = () => {
-      this.initGoogle();
-    };
-  };
 }

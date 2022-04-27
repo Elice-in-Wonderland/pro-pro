@@ -17,7 +17,7 @@ class Router {
   }
 
   initRouter() {
-    this.target.addEventListener('click', e => {
+    window.addEventListener('click', e => {
       const closest = e.target.closest('a');
       if (!closest || !closest.classList.contains('router')) return;
       e.preventDefault();

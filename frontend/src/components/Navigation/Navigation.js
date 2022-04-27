@@ -1,33 +1,26 @@
 import { getToken } from '../../utils/auth';
-import Component from '../component';
+import { createDom } from '../../utils/dom';
+import CustomComponent from '../CustomComponent';
 import Logo from '../Logo/Logo';
 import './navigation.scss';
 import NavItem from './NavItem';
 
-export default class Navigation extends Component {
-  constructor(props) {
-    super(props);
-
-    this.$dom = this.createDom('nav', {
-      className: 'gnb',
-    });
-
+export default class Navigation extends CustomComponent {
+  init() {
     this.state = {
       loginState: !!getToken(),
     };
-
-    this.render();
   }
 
-  replaceNav() {
-    this.setState({
-      ...this.state,
-      loginState: true,
-    });
+  markup() {
+    return `
+      <ul class='nav-list'>
+      </ul>
+    `;
   }
 
-  componentDidMount() {
-    const navList = this.$dom.querySelector('.nav-list');
+  renderCallback() {
+    const navList = this.container.querySelector('.nav-list');
     const { loginState } = this.state;
 
     const navItems = loginState
@@ -99,31 +92,29 @@ export default class Navigation extends Component {
             type: 'modal',
             text: '로그인',
             className: 'nav-login',
-            onLogin: this.replaceNav.bind(this),
+            onLogin: this.handleLogin.bind(this),
           },
         ];
 
+    const logo = createDom('a', {
+      className: 'logo router',
+      href: '/',
+    });
     const fragment = new DocumentFragment();
 
-    navItems.forEach(li => {
-      const list = new NavItem(li);
-      if (list.$dom) {
-        fragment.appendChild(list.$dom);
-      }
+    new Logo({ container: logo });
+
+    navItems.forEach(item => {
+      const li = createDom('li', {});
+      new NavItem({ container: li, props: item });
+      fragment.appendChild(li);
     });
 
-    this.$dom.prepend(new Logo().$dom);
+    this.container.prepend(logo);
     navList.appendChild(fragment);
   }
 
-  render = () => {
-    this.$dom.innerHTML = `
-      <ul class='nav-list'>
-      </ul>
-    `;
-
-    this.appendRoot(this.props, this.$dom, true);
-    this.addEvent();
-    this.componentDidMount();
-  };
+  handleLogin() {
+    this.setState({ ...this.state, loginState: true });
+  }
 }
