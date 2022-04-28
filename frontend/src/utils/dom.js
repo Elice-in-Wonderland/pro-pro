@@ -21,7 +21,7 @@ const appendRoot = (root, newEl, isNav = false) => {
   else root.appendChild(newEl);
 };
 
-const setEvent = (container, eventType, selector, callback) => {
+const addEvent = (container, eventType, selector, callback) => {
   const children = [...container.querySelectorAll(selector)];
   const isTarget = target =>
     children.includes(target) || target.closest(selector);
@@ -31,4 +31,4 @@ const setEvent = (container, eventType, selector, callback) => {
   });
 };
 
-export { createDom, replaceElement, appendRoot, setEvent };
+export { createDom, replaceElement, appendRoot, addEvent };
