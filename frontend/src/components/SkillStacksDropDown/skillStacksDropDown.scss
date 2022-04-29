@@ -14,10 +14,10 @@
     opacity: 0.25;
     .activateBtn {
       opacity: 1;
-      transform: scale(2);
+      width: 60px;
     }
     &:hover {
-      transform: rotate(-30deg) scale(1.1);
+      transform: scale(1.2);
     }
     @include tablet {
       width: 40px;
