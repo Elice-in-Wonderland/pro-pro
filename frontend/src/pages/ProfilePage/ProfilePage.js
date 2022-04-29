@@ -77,27 +77,32 @@ export default class ProfilePage extends CustomComponent {
   }
 
   handleChangeUserInfo(newUserInfo) {
-    this.nonReRenderState = newUserInfo;
+    this.nonReRenderState = {
+      ...this.nonReRenderState,
+      ...newUserInfo,
+    };
   }
 
   async handleSubmit(event) {
     event.preventDefault();
     const isFullField = this.checkEmptyField();
-    if (isFullField) {
-      try {
-        await axiosInstance.put(
-          '/users',
-          { ...this.nonReRenderState },
-          {
-            withCredentials: true,
-          },
-        );
-        new Toast({ content: '프로필 수정 성공' });
-        RouterContext.state.replace('/');
-      } catch (error) {
-        new Toast({ content: '프로필 수정 실패', type: 'fail' });
-      }
-    }
+    // TODO: REMOVE 콘솔
+    console.log('제출 방지');
+    // if (isFullField) {
+    //   try {
+    //     await axiosInstance.put(
+    //       '/users',
+    //       { ...this.nonReRenderState },
+    //       {
+    //         withCredentials: true,
+    //       },
+    //     );
+    //     new Toast({ content: '프로필 수정 성공' });
+    //     RouterContext.state.replace('/');
+    //   } catch (error) {
+    //     new Toast({ content: '프로필 수정 실패', type: 'fail' });
+    //   }
+    // }
   }
 
   checkEmptyField() {
