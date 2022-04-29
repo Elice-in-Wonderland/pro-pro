@@ -1,17 +1,9 @@
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 import './mainBanner.scss';
 
-export default class Logo extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('section', {
-      className: 'home',
-    });
-    this.render();
-  }
-
-  render = () => {
-    this.$dom.innerHTML = `
+export default class MainBanner extends CustomComponent {
+  markup() {
+    return `
     <div class="banerContainer">
       <div class="banerWord">
         <h1 class="homeTitle">팀은 프로젝트보다 만들기 어렵습니다.</h1>
@@ -25,5 +17,5 @@ export default class Logo extends Component {
       </div>
     </div>
     `;
-  };
+  }
 }
