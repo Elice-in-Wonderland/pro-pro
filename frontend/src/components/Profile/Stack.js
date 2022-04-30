@@ -10,7 +10,7 @@ export default class Stack extends CustomComponent {
     return `
       <label for="${stack}" class="label-for-check">${stack}</label>
       <input type="checkbox" class="check-with-label" value="${stack}" id="${stack}" name="stacks" ${
-      checked && 'checked'
+      checked ? 'checked' : ''
     }>
     `;
   }

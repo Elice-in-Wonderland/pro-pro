@@ -18,7 +18,7 @@ class Form extends CustomComponent {
       <div class="field nickname">
         <label for="nickname"><b>닉네임</b></label>
         <input type="text" id="nickname" class="nickname-input" value="${
-          this.props.userInfo.nickname || ''
+          this.props.userInfo.current.nickname || ''
         }" placeholder="닉네임을 입력하세요."/>
       </div>
 
@@ -59,9 +59,9 @@ class Form extends CustomComponent {
     const positionSelect = this.container.querySelector('.position-select');
     const stackSelect = this.container.querySelector('.stack-select');
 
-    if (this.props.userInfo.imageURL !== '') {
+    if (this.props.userInfo.current.imageURL !== '') {
       const img = createDom('img', {
-        src: this.props.userInfo.imageURL,
+        src: this.props.userInfo.current.imageURL,
         alt: 'profile',
       });
       userImg.appendChild(img);
@@ -77,7 +77,7 @@ class Form extends CustomComponent {
           const obj = {
             value: sido,
             text: sido,
-            selected: this.props.userInfo.region.sido === sido,
+            selected: this.props.userInfo.current.region.sido === sido,
           };
 
           return obj;
@@ -96,7 +96,7 @@ class Form extends CustomComponent {
           const obj = {
             value: position[0],
             text: position[1],
-            selected: this.props.userInfo.position === position[0],
+            selected: this.props.userInfo.current.position === position[0],
           };
 
           return obj;
@@ -115,7 +115,7 @@ class Form extends CustomComponent {
         container: div,
         props: {
           stack,
-          selectedStack: this.props.userInfo.stacks,
+          selectedStack: this.props.userInfo.current.stacks,
         },
       });
       stacks.appendChild(div);
@@ -123,8 +123,8 @@ class Form extends CustomComponent {
 
     stackSelect.appendChild(stacks);
 
-    if (this.props.userInfo.region.sido) {
-      this.handleSigunguChange(this.props.userInfo.region.sido);
+    if (this.props.userInfo.current.region.sido) {
+      this.handleSigunguChange(this.props.userInfo.current.region.sido);
     }
   }
 
@@ -157,7 +157,6 @@ class Form extends CustomComponent {
 
   handleSigunguChange(selectedSido) {
     const sigunguSelect = this.container.querySelector('#sigungu');
-    const sido = this.container.querySelector('#sido');
     const selectedSigungu = defaultSigungu[selectedSido];
     sigunguSelect.options.length = 1;
 
@@ -169,7 +168,7 @@ class Form extends CustomComponent {
           const obj = {
             value: sigungu,
             text: sigungu,
-            selected: sigungu === this.props.userInfo.region.sigungu,
+            selected: sigungu === this.props.userInfo.current.region.sigungu,
           };
 
           return obj;
@@ -177,7 +176,7 @@ class Form extends CustomComponent {
         onChange: event => {
           this.props.onChangeUserInfo({
             region: {
-              sido: sido.value,
+              ...this.props.userInfo.current.region,
               sigungu: event.target.value,
             },
           });

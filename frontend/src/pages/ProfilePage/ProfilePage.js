@@ -9,14 +9,16 @@ import './profilePage.scss';
 export default class ProfilePage extends CustomComponent {
   init() {
     this.nonReRenderState = {
-      nickname: '',
-      region: {
-        sido: '',
-        sigungu: '',
+      current: {
+        nickname: '',
+        region: {
+          sido: '',
+          sigungu: '',
+        },
+        position: '',
+        stacks: [],
+        imageURL: '',
       },
-      position: '',
-      stacks: [],
-      imageURL: '',
     };
   }
 
@@ -39,10 +41,7 @@ export default class ProfilePage extends CustomComponent {
         imageURL: data.imageURL || '',
       };
 
-      this.nonReRenderState = {
-        ...this.nonReRenderState,
-        ...profile,
-      };
+      this.handleChangeUserInfo(profile);
 
       this.setState({
         ...this.state,
@@ -77,8 +76,8 @@ export default class ProfilePage extends CustomComponent {
   }
 
   handleChangeUserInfo(newUserInfo) {
-    this.nonReRenderState = {
-      ...this.nonReRenderState,
+    this.nonReRenderState.current = {
+      ...this.nonReRenderState.current,
       ...newUserInfo,
     };
   }
@@ -86,27 +85,26 @@ export default class ProfilePage extends CustomComponent {
   async handleSubmit(event) {
     event.preventDefault();
     const isFullField = this.checkEmptyField();
-    // TODO: REMOVE 콘솔
-    console.log('제출 방지');
-    // if (isFullField) {
-    //   try {
-    //     await axiosInstance.put(
-    //       '/users',
-    //       { ...this.nonReRenderState },
-    //       {
-    //         withCredentials: true,
-    //       },
-    //     );
-    //     new Toast({ content: '프로필 수정 성공' });
-    //     RouterContext.state.replace('/');
-    //   } catch (error) {
-    //     new Toast({ content: '프로필 수정 실패', type: 'fail' });
-    //   }
-    // }
+    if (isFullField) {
+      try {
+        await axiosInstance.put(
+          '/users',
+          { ...this.nonReRenderState.current },
+          {
+            withCredentials: true,
+          },
+        );
+        new Toast({ content: '프로필 수정 성공' });
+        RouterContext.state.replace('/');
+      } catch (error) {
+        new Toast({ content: '프로필 수정 실패', type: 'fail' });
+      }
+    }
   }
 
   checkEmptyField() {
-    const { nickname, position, region, stacks } = this.nonReRenderState;
+    const { nickname, position, region, stacks } =
+      this.nonReRenderState.current;
     if (nickname === '') {
       new Toast({ content: '닉네임을 입력하세요', type: 'fail' });
       return false;
