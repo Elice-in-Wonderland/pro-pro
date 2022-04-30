@@ -124,7 +124,7 @@ class Form extends CustomComponent {
     stackSelect.appendChild(stacks);
 
     if (this.props.userInfo.current.region.sido) {
-      this.handleSigunguChange(this.props.userInfo.current.region.sido);
+      this.handleSigunguUpdate(this.props.userInfo.current.region.sido);
     }
   }
 
@@ -155,7 +155,7 @@ class Form extends CustomComponent {
     });
   }
 
-  handleSigunguChange(selectedSido) {
+  handleSigunguUpdate(selectedSido) {
     const sigunguSelect = this.container.querySelector('#sigungu');
     const selectedSigungu = defaultSigungu[selectedSido];
     sigunguSelect.options.length = 1;
@@ -174,13 +174,17 @@ class Form extends CustomComponent {
           return obj;
         }),
         onChange: event => {
-          this.props.onChangeUserInfo({
-            region: {
-              ...this.props.userInfo.current.region,
-              sigungu: event.target.value,
-            },
-          });
+          this.handleSigunguChange(event);
         },
+      },
+    });
+  }
+
+  handleSigunguChange(event) {
+    this.props.onChangeUserInfo({
+      region: {
+        ...this.props.userInfo.current.region,
+        sigungu: event.target.value,
       },
     });
   }
@@ -193,7 +197,7 @@ class Form extends CustomComponent {
       },
     });
 
-    this.handleSigunguChange(event.target.value);
+    this.handleSigunguUpdate(event.target.value);
   }
 
   handlePostionChange(event) {
