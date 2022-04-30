@@ -1,7 +1,7 @@
 $mobile: 744px;
 $tablet: 1023px;
 $desktop: 1024px;
-$navigation: 80px;
+$navigation-height: 80px;
 
 .container {
   background-color: var(--white);
@@ -12,7 +12,7 @@ $navigation: 80px;
   align-items: center;
   justify-content: center;
   user-select: none;
-  margin-top: $navigation;
+  margin-top: $navigation-height;
 
   label {
     b {
@@ -34,9 +34,11 @@ $navigation: 80px;
 }
 body main .form {
   margin: 0;
+  padding: 30px;
 }
 body main .form div {
   margin: 0;
+  
 }
 // TODO: class 충돌
 
@@ -153,13 +155,13 @@ input[type='text']:focus {
 .clearfix {
   display: flex;
   justify-content: flex-end;
-
+  padding-top: 30px;
 
   button {
     border-radius: 10px;
     border: none;
     background: none;
-    padding: 8px 15px;
+    padding: 10px 15px;
     cursor: pointer;
   }
 
