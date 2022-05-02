@@ -2,7 +2,7 @@
 @import '../../styles/utils';
 
 .main-page-wrapper {
-  #searchBar {
+  #filter-bar {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -52,7 +52,7 @@
     .wrapper {
       width: 100%;
       max-width: 500px;
-      .searchDiv {
+      .search-bar {
         display: flex;
         height: 40px;
         margin: 0 20px;
@@ -61,7 +61,7 @@
         border: 1px solid #495057;
         border-radius: 50px;
         align-items: center;
-        #searchInput {
+        #search-input {
           padding-left: 20px;
           outline: none;
           width: 100%;
@@ -73,7 +73,7 @@
             box-shadow: 0 0 0px;
           }
         }
-        .searchIconImg {
+        .search-icon {
           cursor: pointer;
           width: 35px;
           height: 35px;

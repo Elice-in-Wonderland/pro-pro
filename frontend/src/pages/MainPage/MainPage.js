@@ -85,10 +85,13 @@ export default class MainPage extends CustomComponent {
   markup() {
     return `
     <div class="main-page-wrapper">
+    <section class="home-banner">
+
+    </section>
       <section class="skills-bar">
-        <div class="drop-content"></div>
+
       </section>
-      <section id="searchBar">
+      <section id="filter-bar">
         <button type="button" class="recent activated">
           <div class="recentTitle btn-title">최신순</div>
         </button>
@@ -96,19 +99,19 @@ export default class MainPage extends CustomComponent {
           <div class="populateTitle btn-title">인기순</div>
         </button>
         <div class="wrapper">
-          <div class="searchDiv">
-            <input aria-label="검색" type="text" id="searchInput"/>
+          <div class="search-bar">
+            <input aria-label="검색" type="text" id="search-input"/>
             <img
               src="${searchIcon}"
               alt="search image"
-              class="searchIconImg"/> 
+              class="search-icon"/> 
           </div>
         </div>
         <button type="button" class="entire activated">
-        <div class="entireTitle btn-title">전체 글</div>
+        <div class="entire-title btn-title">전체 글</div>
       </button>
         <button type="button" class="avail">
-        <div class="availTitle btn-title">모집중인 글</div>
+        <div class="avail-title btn-title">모집중인 글</div>
       </button>
 
       </section>
@@ -171,13 +174,13 @@ export default class MainPage extends CustomComponent {
   };
 
   setEvent() {
-    const skillIcon = this.container.getElementsByClassName('skill-icon')[0];
+    const skillIcon = this.container.querySelector('.skill-icon');
     const avail = this.container.querySelector('.avail');
     const entirePost = this.container.querySelector('.entire');
     const recent = this.container.querySelector('.recent');
     const populate = this.container.querySelector('.populate');
-    const searchInput = this.container.querySelector('#searchInput');
-    const searchbtn = this.container.querySelector('.searchIconImg');
+    const searchInput = this.container.querySelector('#search-input');
+    const searchbtn = this.container.querySelector('.search-icon');
 
     const skillStackFilter = () => {
       if (this.filterStacks) {
