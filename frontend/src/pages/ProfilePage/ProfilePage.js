@@ -16,7 +16,7 @@ export default class ProfilePage extends CustomComponent {
           sigungu: '',
         },
         position: '',
-        stacks: [],
+        stacks: new Set(),
         imageURL: '',
       },
     };
@@ -37,7 +37,7 @@ export default class ProfilePage extends CustomComponent {
           sigungu: data.region.sigungu || '',
         },
         position: data.position || '',
-        stacks: data.stacks,
+        stacks: new Set(data.stacks),
         imageURL: data.imageURL || '',
       };
 
@@ -85,6 +85,7 @@ export default class ProfilePage extends CustomComponent {
   async handleSubmit(event) {
     event.preventDefault();
     const isFullField = this.checkEmptyField();
+
     if (!isFullField) return;
 
     try {
@@ -119,7 +120,7 @@ export default class ProfilePage extends CustomComponent {
       new Toast({ content: '직무를 선택하세요', type: 'fail' });
       return false;
     }
-    if (stacks.length === 0) {
+    if (stacks.size === 0) {
       new Toast({
         content: '하나 이상의 기술 스택을 선택하세요',
         type: 'fail',

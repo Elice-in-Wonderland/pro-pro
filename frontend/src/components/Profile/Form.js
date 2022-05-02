@@ -150,7 +150,7 @@ class Form extends CustomComponent {
       }, []);
 
       this.props.onChangeUserInfo({
-        stacks: checkedList,
+        stacks: new Set(checkedList),
       });
     });
   }

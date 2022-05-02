@@ -5,7 +5,7 @@ export default class Stack extends CustomComponent {
     const { stack, selectedStack } = this.props;
     let checked = false;
 
-    if (selectedStack.indexOf(this.props.stack) !== -1) checked = true;
+    if (selectedStack.has(this.props.stack)) checked = true;
 
     return `
       <label for="${stack}" class="label-for-check">${stack}</label>
