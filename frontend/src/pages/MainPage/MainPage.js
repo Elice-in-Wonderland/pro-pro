@@ -69,10 +69,20 @@ export default class MainPage extends CustomComponent {
     const skillsBar = this.container.querySelector('.skills-bar');
     new SkillStacksFilter({ container: skillsBar });
   }
+
+  bannerRender() {
+    const banner = this.container.querySelector('.home-banner');
+    new MainBanner({ container: banner });
+  }
+
   searchNoResultRender = () => {
     const cardContainer = this.container.querySelector('.card-container');
     new SearchNotFound({ container: cardContainer });
   };
+
+  setState = nextState => {
+    this.state = nextState;
+    this.cardRender();
   };
 
   async mounted() {
@@ -96,11 +106,6 @@ export default class MainPage extends CustomComponent {
     }
     this.setState(recentSort(this.totalData));
   }
-
-  setState = nextState => {
-    this.state = nextState;
-    this.cardRender();
-  };
 
   markup() {
     return `
@@ -142,13 +147,7 @@ export default class MainPage extends CustomComponent {
   }
 
   renderCallback() {
-
-    const banner = createDom('section', {
-      className: 'home',
-    });
-    new MainBanner({ container: banner });
-
-    this.container.prepend(banner);
+    this.bannerRender();
     this.skillStackRender();
   }
 
