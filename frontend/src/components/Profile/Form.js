@@ -73,18 +73,9 @@ class Form extends CustomComponent {
       container: sidoSelect,
       props: {
         defaultOption: '시/도',
-        items: defaultSido.map(sido => {
-          const obj = {
-            value: sido,
-            text: sido,
-            selected: this.props.userInfo.current.region.sido === sido,
-          };
-
-          return obj;
-        }),
-        onChange: event => {
-          this.handleSidoChange(event);
-        },
+        items: defaultSido,
+        selectedItem: this.props.userInfo.current.region.sido,
+        onChange: event => this.handleSidoChange(event),
       },
     });
 
@@ -92,34 +83,18 @@ class Form extends CustomComponent {
       container: positionSelect,
       props: {
         defaultOption: '직무를 선택하세요',
-        items: defaultPosition.map(position => {
-          const obj = {
-            value: position[0],
-            text: position[1],
-            selected: this.props.userInfo.current.position === position[0],
-          };
-
-          return obj;
-        }),
-        onChange: event => {
-          this.handlePostionChange(event);
-        },
+        items: defaultPosition,
+        selectedItem: this.props.userInfo.current.position,
+        onChange: event => this.handlePostionChange(event),
       },
     });
 
     new Stack({
       container: stackSelect,
       props: {
-        stacks: defaultStacks.map(stack => {
-          const obj = {
-            value: stack,
-            checked: this.props.userInfo.current.stacks.has(stack),
-          };
-          return obj;
-        }),
-        onChange: event => {
-          this.handleStackChange(event);
-        },
+        stacks: defaultStacks,
+        selectedStacks: this.props.userInfo.current.stacks,
+        onChange: event => this.handleStackChange(event),
       },
     });
 
@@ -149,18 +124,9 @@ class Form extends CustomComponent {
       container: sigunguSelect,
       props: {
         defaultOption: '시/군/구',
-        items: selectedSigungu.map(sigungu => {
-          const obj = {
-            value: sigungu,
-            text: sigungu,
-            selected: sigungu === this.props.userInfo.current.region.sigungu,
-          };
-
-          return obj;
-        }),
-        onChange: event => {
-          this.handleSigunguChange(event);
-        },
+        items: selectedSigungu,
+        selectedItem: this.props.userInfo.current.region.sigungu,
+        onChange: event => this.handleSigunguChange(event),
       },
     });
   }
