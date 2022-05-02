@@ -1,4 +1,4 @@
-import Component from '../../components/component';
+import CustomComponent from '../../components/CustomComponent';
 import './detailPage.scss';
 import viewIcon from '../../assets/icons/view.svg';
 import javascriptLogo from '../../assets/icons/javascript.svg';
@@ -15,41 +15,48 @@ import axiosInstance from '../../utils/api';
 import Bookmark from '../../components/Bookmark/Bookmark';
 import { state as userState } from '../../utils/store';
 import { createMap } from '../../utils/common';
+import { createDom, appendRoot, replaceElement } from '../../utils/dom';
 
-export default class DetailPage extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('article', {
+export default class DetailPage extends CustomComponent {
+  init() {
+    this.state = {
+      userType: null,
+      userId: userState.myInfo ? userState.myInfo._id : null,
+      postId: RouterContext.state.params.postId,
+    };
+    this.$dom = createDom('article', {
       className: 'detailContainer',
     });
-    this.appendRoot(props, this.$dom);
-    this.loading();
+    appendRoot(this.container, this.$dom);
+  }
+
+  renderCallback() {
+    if (this.state.userType) {
+      this.makeComponent();
+      this.replaceDOM();
+    }
+  }
+
+  mounted() {
     this.getPostInfo();
   }
 
-  getPostInfo = () => {
-    const { postId } = RouterContext.state.params;
+  getPostInfo() {
     axiosInstance
-      .get(`/posts/${postId}`)
+      .get(`/posts/${this.state.postId}`)
       .then(res => {
         return res.data.data;
       })
       .then(postInfo => {
-        this.setState(postInfo, postId);
-        this.makeComponent();
-        this.render();
-        this.replaceDOM();
-        this.addEvent();
+        this.setState({
+          ...this.state,
+          ...postInfo,
+          userType: this.findUserType(postInfo.author._id),
+        });
       });
-  };
+  }
 
-  setState = (postState, postId) => {
-    const userId = this.findUserId();
-    const userType = this.findUserType(postState.author._id);
-    this.state = { ...postState, ...userState, postId, userType, userId };
-  };
-
-  makeComponent = () => {
+  makeComponent() {
     const {
       state: {
         stacks,
@@ -95,13 +102,12 @@ export default class DetailPage extends Component {
       parentId: postId,
       userId,
     });
-  };
+  }
 
-  loading = () => {
-    this.$dom.innerHTML = Loading;
-  };
-
-  render = () => {
+  markup() {
+    if (!this.state.userType) {
+      return Loading;
+    }
     const {
       author: { imageURL, nickname },
       title,
@@ -115,7 +121,7 @@ export default class DetailPage extends Component {
       content,
     } = this.state;
 
-    this.$dom.innerHTML = `
+    return `
       <h2 class="detailTitle">${title}</h2>
       <div class="userWrapper">
         <img src=${imageURL} width="30px" height="30px" />
@@ -181,41 +187,39 @@ export default class DetailPage extends Component {
       </div>
       <div class="editSection"></div>
     `;
-  };
+  }
 
-  replaceDOM = () => {
+  replaceDOM() {
     this.getMapImg();
-    this.replaceElement(
-      this.$dom.querySelector('.stacksReplace'),
+    replaceElement(
+      this.container.querySelector('.stacksReplace'),
       this.stacks.$dom,
     );
-    this.replaceElement(
-      this.$dom.querySelector('.banner'),
+    replaceElement(
+      this.container.querySelector('.banner'),
       this.postBanner.$dom,
     );
-    this.replaceElement(
-      this.$dom.querySelector('.comments'),
+    replaceElement(
+      this.container.querySelector('.comments'),
       this.comments.$dom,
     );
-    this.replaceElement(
-      this.$dom.querySelector('.commentForm'),
+    replaceElement(
+      this.container.querySelector('.commentForm'),
       this.commentForm.$dom,
     );
-    this.replaceElement(
-      this.$dom.querySelector('.bookmarkWrapper'),
+    replaceElement(
+      this.container.querySelector('.bookmarkWrapper'),
       this.bookmark.$dom,
     );
     if (this.editButtons) {
-      this.replaceElement(
-        this.$dom.querySelector('.editSection'),
+      replaceElement(
+        this.container.querySelector('.editSection'),
         this.editButtons.$dom,
       );
     }
-  };
+  }
 
-  addEvent = () => {};
-
-  getMapImg = () => {
+  getMapImg() {
     const { coordinates } = this.state.location;
     const mapContainer = document.getElementById('map');
     if (coordinates[0] === null) {
@@ -223,16 +227,9 @@ export default class DetailPage extends Component {
     } else {
       createMap(mapContainer, coordinates);
     }
-  };
+  }
 
-  findUserId = () => {
-    if (userState.myInfo) {
-      return userState.myInfo._id;
-    }
-    return null;
-  };
-
-  findUserType = postUserId => {
+  findUserType(postUserId) {
     if (userState.myInfo === undefined) {
       return 'notLoggedUser';
     }
@@ -240,5 +237,5 @@ export default class DetailPage extends Component {
       return 'author';
     }
     return 'loggedUser';
-  };
+  }
 }
