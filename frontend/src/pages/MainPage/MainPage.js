@@ -9,6 +9,13 @@ import MainBanner from '../../components/MainBanner/MainBanner';
 import axiosInstance from '../../utils/api';
 import Routercontext from '../../router/RouterContext';
 import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
+import {
+  availFiltter,
+  populateSort,
+  recentSort,
+  toggleButton,
+  debounce,
+} from '../../utils/filter';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -22,22 +29,16 @@ export default class MainPage extends Component {
     const $fragment = document.createDocumentFragment();
     $fragment.appendChild(this.$dom);
     this.state = [];
-    this.data = [];
+    this.totalData = [];
     this.filterStacks = [];
+    this.basisData = [];
+    this.sortStandard = recentSort;
     this.appendRoot(props, $fragment);
     this.render();
     this.createSkeletonCard();
     this.getInitState();
     this.addEvent();
   }
-
-  availFiltter = datalist => {
-    const today = new Date();
-    const statelist = datalist.filter(
-      post => post.registerDeadline >= today.toISOString(),
-    );
-    return statelist;
-  };
 
   getInitState = async () => {
     if (this.projectOrStudy === '/study') {
@@ -46,7 +47,8 @@ export default class MainPage extends Component {
       } = await axiosInstance.get('/posts?category=study&page=1&perPage=30', {
         withCredentials: true,
       });
-      this.data = data;
+      this.totalData = data;
+      this.basisData = data;
     }
     if (this.projectOrStudy === '/') {
       const {
@@ -54,10 +56,10 @@ export default class MainPage extends Component {
       } = await axiosInstance.get('/posts?category=project&page=1&perPage=30', {
         withCredentials: true,
       });
-      this.data = data;
+      this.totalData = data;
+      this.basisData = data;
     }
-    this.setState(this.data);
-    this.availToggleData = this.availFiltter(this.data);
+    this.setState(recentSort(this.totalData));
   };
 
   setState = nextState => {
@@ -79,7 +81,7 @@ export default class MainPage extends Component {
       </button>
       <div class="wrapper">
         <div class="searchDiv">
-          <input type="text" id="searchInput"/>
+          <input aria-label="검색" type="text" id="searchInput"/>
           <img
             src="${searchIcon}"
             alt="search image"
@@ -150,9 +152,22 @@ export default class MainPage extends Component {
     this.replaceElement(replaceDiv, cardContainer);
   };
 
-  toggleButton = (activated, deactivated) => {
-    activated.classList.add('activated');
-    deactivated.classList.remove('activated');
+  toggleBasisData = buttonType => {
+    if (buttonType === 'avail') {
+      this.basisData = availFiltter(this.totalData);
+      this.setState(this.sortStandard(availFiltter(this.state)));
+      return;
+    }
+    this.basisData = this.totalData;
+    this.setState(this.sortStandard(this.totalData));
+  };
+
+  toggleBasisSort = sortType => {
+    if (sortType === 'recent') {
+      this.sortStandard = recentSort;
+      return;
+    }
+    this.sortStandard = populateSort;
   };
 
   addEvent = () => {
@@ -164,90 +179,57 @@ export default class MainPage extends Component {
     const searchInput = this.$dom.querySelector('#searchInput');
     const searchbtn = this.$dom.querySelector('.searchIconImg');
 
-    function debounce(eventHandlerFunc, leading = true) {
-      let inDebounce;
-      return (...args) => {
-        const context = this;
-        const nowCall = leading && !inDebounce;
-        const later = () => {
-          inDebounce = null;
-          if (!leading) eventHandlerFunc.apply(context, args);
-        };
-
-        clearTimeout(inDebounce);
-        inDebounce = setTimeout(later, 500);
-        if (nowCall) eventHandlerFunc.apply(context, args);
-      };
-    }
-
     const skillStackFilter = () => {
       if (this.filterStacks) {
-        const statelist = this.data.filter(el =>
+        const statelist = this.basisData.filter(el =>
           this.filterStacks.every(post => el.stacks.includes(post)),
         );
-        this.setState(statelist);
+        this.setState(this.sortStandard(statelist));
       }
+    };
+
+    const removeSkillStackFilter = () => {
+      this.filterStacks = [];
+      skillIcon.childNodes.forEach(imgNode =>
+        imgNode.classList.remove('activateBtn'),
+      );
     };
 
     skillIcon.addEventListener('click', e => {
-      if (e.target && e.target.nodeName === 'IMG') {
-        if (this.filterStacks.includes(e.target.id)) {
-          this.filterStacks.splice(this.filterStacks.indexOf(e.target.id), 1);
-          e.target.classList.remove('activateBtn');
-        } else {
-          this.filterStacks.push(e.target.id);
-          e.target.classList.add('activateBtn');
-        }
+      if (e.target?.nodeName !== 'IMG') return;
+      if (this.filterStacks.includes(e.target.id)) {
+        this.filterStacks.splice(this.filterStacks.indexOf(e.target.id), 1);
+        e.target.classList.remove('activateBtn');
         skillStackFilter();
+        return;
       }
+      this.filterStacks.push(e.target.id);
+      e.target.classList.add('activateBtn');
+      skillStackFilter();
     });
-
-    const populateEventHandler = datalist => {
-      const statelist = datalist.sort(
-        (view1, view2) => -(parseFloat(view1.views) - parseFloat(view2.views)),
-      );
-      return statelist;
-    };
 
     populate.addEventListener('click', () => {
-      if (this.filterStacks.length === 0) {
-        this.setState(populateEventHandler(this.data));
-      } else {
-        this.setState(populateEventHandler(this.state));
-      }
-      this.toggleButton(populate, recent);
+      toggleButton(populate, recent);
+      this.toggleBasisSort('populate');
+      this.setState(populateSort(this.state));
     });
 
-    const recentEventHandler = datalist => {
-      const statelist = datalist.sort((a, b) => {
-        if (a.createdAt < b.createdAt) return 1;
-        if (a.createdAt > b.createdAt) return -1;
-        return 0;
-      });
-      return statelist;
-    };
-
     recent.addEventListener('click', () => {
-      if (this.filterStacks.length === 0) {
-        this.setState(recentEventHandler(this.data));
-      } else {
-        this.setState(recentEventHandler(this.state));
-      }
-      this.toggleButton(recent, populate);
+      toggleButton(recent, populate);
+      this.toggleBasisSort('recent');
+      this.setState(recentSort(this.state));
     });
 
     entirePost.addEventListener('click', () => {
+      toggleButton(entirePost, avail);
+      this.toggleBasisData('entire');
       skillStackFilter();
-      this.toggleButton(entirePost, avail);
     });
 
     avail.addEventListener('click', () => {
-      if (this.filterStacks.length !== 0) {
-        this.setState(this.availFiltter(this.state));
-      } else {
-        this.setState(this.availFiltter(this.data));
-      }
-      this.toggleButton(avail, entirePost);
+      toggleButton(avail, entirePost);
+      this.toggleBasisData('avail');
+      skillStackFilter();
     });
 
     const createNot = () => {
@@ -260,18 +242,21 @@ export default class MainPage extends Component {
     };
 
     const searchEventhandler = () => {
+      removeSkillStackFilter();
       if (!searchInput.value) {
         return;
       }
-      const searchList = this.data.filter(character => {
+      const searchList = this.basisData.filter(character => {
         return character.title.includes(searchInput.value);
       });
       if (searchList.length === 0) {
         this.setState([]);
+        searchInput.value = null;
         createNot();
         return;
       }
       this.setState(searchList);
+      searchInput.value = null;
     };
 
     searchbtn.addEventListener(

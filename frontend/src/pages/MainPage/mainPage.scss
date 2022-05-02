@@ -32,6 +32,14 @@
       .btn-title {
         font-size: 1rem;
         line-height: 36px;
+        @include mobile {
+          font-size: 0.8rem;
+          line-height: 20px;
+        }
+      }
+      @include mobile {
+        height: 30px;
+        padding: 0px 15px;
       }
     }
     .activated {
@@ -42,7 +50,7 @@
       color: var(--medium);
     }
     .wrapper {
-      width: 40%;
+      width: 100%;
       max-width: 500px;
       .searchDiv {
         display: flex;
@@ -71,6 +79,18 @@
           height: 35px;
           padding-right: 10px;
         }
+      }
+    }
+    @include mobile {
+      & > :nth-child(3) {
+        order: 5;
+        margin-top: 20px;
+      }
+      & > :nth-child(4) {
+        order: 3;
+      }
+      & > :nth-child(5) {
+        order: 4;
       }
     }
   }

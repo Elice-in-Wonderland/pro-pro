@@ -1,3 +1,4 @@
+@import '../../styles/utils';
 #gnb {
   position: absolute;
   background-color: var(--white);
@@ -11,6 +12,9 @@
   top: 0;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
+  @include mobile {
+    height: 60px;
+  }
 }
 
 .nav-list {
