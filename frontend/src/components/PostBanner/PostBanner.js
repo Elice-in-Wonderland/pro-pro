@@ -1,4 +1,4 @@
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 import './postBanner.scss';
 import { defaultStacks } from '../../library/Profile';
 
@@ -34,40 +34,32 @@ const stackLogos = [
   vue,
 ];
 
-export default class PostBanner extends Component {
-  constructor(props) {
-    super(props);
-
+export default class PostBanner extends CustomComponent {
+  init() {
     this.state = {
-      stackList: props.stackList,
-      firstStack: props.stackList[0].toLowerCase(),
+      stackLogoURLs: [],
     };
 
-    this.$dom = this.createDom('div', {
-      className: `banner ${this.state.firstStack}`,
-    });
+    const { stacks } = this.props;
 
-    this.state.stackLogoURLs = [];
-
-    this.state.stackList.forEach(stack => {
-      for (let i = 0; i < defaultStacks.length; i++) {
+    stacks.forEach(stack => {
+      for (let i = 0; i < defaultStacks.length; i += 1) {
         if (defaultStacks[i] === stack.toLowerCase()) {
           this.state.stackLogoURLs.push(stackLogos[i]);
           break;
         }
       }
     });
-
-    this.render();
   }
 
-  render = () => {
-    this.$dom.innerHTML = this.state.stackLogoURLs
+  markup() {
+    const { stackLogoURLs } = this.state;
+    return stackLogoURLs
       .map(stack => {
         return `
-        <img class="bannerLogo" src='${stack}' aria-label="기술스택"/>
-        `;
+      <img class="bannerLogo" src='${stack}' aria-label="기술스택"/>
+      `;
       })
       .join('');
-  };
+  }
 }
