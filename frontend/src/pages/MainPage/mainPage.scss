@@ -96,14 +96,13 @@
   }
 }
 
-.mainPostCards {
+.card-container {
   min-height: 700px;
-  .cardContainer {
-    display: grid;
-    padding: 0px 40px;
-    width: 100%;
-    justify-items: center;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  }
+
+  display: grid;
+  padding: 0px 40px;
+  width: 100%;
+  justify-items: center;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
 }

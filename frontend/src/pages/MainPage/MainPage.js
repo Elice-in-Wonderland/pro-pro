@@ -70,8 +70,8 @@ export default class MainPage extends CustomComponent {
     new SkillStacksFilter({ container: skillsBar });
   }
   searchNoResultRender = () => {
-    const replaceDiv = this.container.querySelector('.cardContainer');
-    new SearchNotFound({ container: replaceDiv });
+    const cardContainer = this.container.querySelector('.card-container');
+    new SearchNotFound({ container: cardContainer });
   };
   };
 
@@ -135,8 +135,7 @@ export default class MainPage extends CustomComponent {
       </button>
 
       </section>
-      <section class='mainPostCards'>
-        <div class="replaceDiv"></div>
+      <section class='card-container'>
       </section>
     </div>
     `;
