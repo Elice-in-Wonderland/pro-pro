@@ -5,7 +5,7 @@ import searchIcon from '../../assets/icons/search-icon.svg';
 import { createDom, replaceElement } from '../../utils/dom';
 import Card from '../../components/Card/Card';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
-import SkillStacksDropDown from '../../components/SkillStacksDropDown/SkillStacksDropDown';
+import SkillStacksFilter from '../../components/SkillStacksFilter/SkillStacksFilter';
 import MainBanner from '../../components/MainBanner/MainBanner';
 import axiosInstance from '../../utils/api';
 import Routercontext from '../../router/RouterContext';
@@ -52,6 +52,10 @@ export default class MainPage extends CustomComponent {
     const oldContainer = this.container.querySelector('.mainPostCards');
     replaceElement(oldContainer, Cards);
     this.createCard();
+  skillStackRender() {
+    const skillsBar = this.container.querySelector('.skills-bar');
+    new SkillStacksFilter({ container: skillsBar });
+  }
   searchNoResultRender = () => {
     const replaceDiv = this.container.querySelector('.cardContainer');
     new SearchNotFound({ container: replaceDiv });
@@ -141,13 +145,6 @@ export default class MainPage extends CustomComponent {
       replaceElement(replaceDiv, cardContainer);
     };
 
-    const skillStackRender = () => {
-      const dropContent = this.container.querySelector('.drop-content');
-      const stacks = new SkillStacksDropDown({
-        stackList: defaultStacks,
-      });
-      dropContent.appendChild(stacks.$dom);
-    };
     const banner = createDom('section', {
       className: 'home',
     });
@@ -155,7 +152,7 @@ export default class MainPage extends CustomComponent {
 
     this.container.prepend(banner);
     createSkeletonCard();
-    skillStackRender();
+    this.skillStackRender();
   }
 
   toggleBasisData = buttonType => {
