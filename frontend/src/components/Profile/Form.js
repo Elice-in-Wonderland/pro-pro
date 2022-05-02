@@ -93,7 +93,7 @@ class Form extends CustomComponent {
       container: stackSelect,
       props: {
         stacks: defaultStacks,
-        selectedStacks: this.props.userInfo.current.stacks,
+        selectedStacks: new Set(this.props.userInfo.current.stacks),
         onChange: event => this.handleStackChange(event),
       },
     });
@@ -165,7 +165,7 @@ class Form extends CustomComponent {
     else nextStacks.add(selectedStack);
 
     this.props.onChangeUserInfo({
-      stacks: nextStacks,
+      stacks: [...nextStacks],
     });
   }
 }
