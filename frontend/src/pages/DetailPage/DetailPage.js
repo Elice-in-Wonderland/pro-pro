@@ -23,6 +23,7 @@ export default class DetailPage extends CustomComponent {
       userType: null,
       userId: userState.myInfo ? userState.myInfo._id : null,
       postId: RouterContext.state.params.postId,
+      comments: [],
     };
     this.$dom = createDom('article', {
       className: 'detailContainer',
@@ -122,6 +123,7 @@ export default class DetailPage extends CustomComponent {
     } = this.state;
 
     return `
+    <div class="detailContainer">
       <h2 class="detailTitle">${title}</h2>
       <div class="userWrapper">
         <img src=${imageURL} width="30px" height="30px" />
@@ -186,6 +188,7 @@ export default class DetailPage extends CustomComponent {
         <div class="commentForm"></div>
       </div>
       <div class="editSection"></div>
+    </div>
     `;
   }
 
@@ -217,6 +220,7 @@ export default class DetailPage extends CustomComponent {
         this.editButtons.$dom,
       );
     }
+    console.log(this.state);
   }
 
   getMapImg() {
