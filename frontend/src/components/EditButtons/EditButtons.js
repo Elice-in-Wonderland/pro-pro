@@ -1,37 +1,32 @@
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 import './editButtons.scss';
 import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
-import Toast from '../../components/Toast/Toast';
+import Toast from '../Toast/Toast';
+import { addEvent } from '../../utils/dom';
 
-export default class EditButtons extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('form', {
-      className: 'editBtns',
-    });
-    this.render();
-    this.addEvent();
+export default class EditButtons extends CustomComponent {
+  renderCallback() {
+    this.setEvent();
   }
 
-  render = () => {
-    this.$dom.innerHTML = `
+  setEvent() {
+    addEvent(this.container, 'click', '.editBtn', this.editPost);
+    addEvent(this.container, 'click', '.deleteBtn', this.deletePost);
+  }
+
+  markup() {
+    return `
     <input class="editBtn" type="submit" value="수정" />
     <input class="deleteBtn" type="submit" value="삭제" />
     `;
-  };
+  }
 
-  addEvent = () => {
-    const editBtn = this.$dom.querySelector('.editBtn');
-    const deleteBtn = this.$dom.querySelector('.deleteBtn');
-    deleteBtn.addEventListener('click', this.deletePost);
-    editBtn.addEventListener('click', this.editPost);
-  };
-
-  deletePost = event => {
+  deletePost(event) {
     event.preventDefault();
+    const { postId } = RouterContext.state.params;
     axiosInstance
-      .delete(`/posts/${this.props.postId}`, {
+      .delete(`/posts/${postId}`, {
         withCredentials: true,
       })
       .then(res => {
@@ -44,10 +39,11 @@ export default class EditButtons extends Component {
           type: 'fail',
         });
       });
-  };
+  }
 
-  editPost = event => {
+  editPost(event) {
     event.preventDefault();
-    RouterContext.state.push(`/write/${this.props.postId}`);
-  };
+    const { postId } = RouterContext.state.params;
+    RouterContext.state.push(`/write/${postId}`);
+  }
 }
