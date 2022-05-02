@@ -1,19 +1,10 @@
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 import './searchNoResult.scss';
 import noResult from '../../assets/images/no-result-img.svg';
 
-export default class Navigation extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('div', {
-      className: 'searchNotFound',
-    });
-
-    this.render();
-  }
-
-  render = () => {
-    this.$dom.innerHTML = `
+export default class Navigation extends CustomComponent {
+  markup() {
+    return `
         <div class="no-result">
         <img
         src="${noResult}"
@@ -24,5 +15,5 @@ export default class Navigation extends Component {
         </p>
       </div>
       `;
-  };
+  }
 }

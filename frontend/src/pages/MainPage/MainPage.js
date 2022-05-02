@@ -3,7 +3,6 @@ import CustomComponent from '../../components/CustomComponent';
 import './mainPage.scss';
 import searchIcon from '../../assets/icons/search-icon.svg';
 import { createDom, replaceElement } from '../../utils/dom';
-import { defaultStacks } from '../../library/MainPage';
 import Card from '../../components/Card/Card';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
 import SkillStacksDropDown from '../../components/SkillStacksDropDown/SkillStacksDropDown';
@@ -53,6 +52,10 @@ export default class MainPage extends CustomComponent {
     const oldContainer = this.container.querySelector('.mainPostCards');
     replaceElement(oldContainer, Cards);
     this.createCard();
+  searchNoResultRender = () => {
+    const replaceDiv = this.container.querySelector('.cardContainer');
+    new SearchNotFound({ container: replaceDiv });
+  };
   };
 
   async mounted() {
@@ -235,15 +238,6 @@ export default class MainPage extends CustomComponent {
       skillStackFilter();
     });
 
-    const createNot = () => {
-      const searchNotFound = new SearchNotFound();
-      const searchNotFoundContainer = document.createElement('div');
-      searchNotFoundContainer.className = 'searchNotFoundContainer';
-      searchNotFoundContainer.appendChild(searchNotFound.$dom);
-      const replaceDiv = this.$dom.querySelector('.cardContainer');
-      replaceElement(replaceDiv, searchNotFoundContainer);
-    };
-
     const searchEventhandler = () => {
       removeSkillStackFilter();
       if (!searchInput.value) {
@@ -255,7 +249,7 @@ export default class MainPage extends CustomComponent {
       if (searchList.length === 0) {
         this.setState([]);
         searchInput.value = null;
-        createNot();
+        this.searchNoResultRender();
         return;
       }
       this.setState(searchList);
