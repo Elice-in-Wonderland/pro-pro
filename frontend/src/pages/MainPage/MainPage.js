@@ -37,9 +37,22 @@ export default class MainPage extends CustomComponent {
     });
     this.cardList.forEach(el => {
       $createFrag.appendChild(el);
+  skeletonCardRender() {
+    const $createFrag = new DocumentFragment();
+
+    Array.from({ length: 30 }).forEach(() => {
+      const cardSkelton = createDom('div', {
+        className: 'card-skeleton',
+      });
+
+      new SkeletonCard({
+        container: cardSkelton,
+        props: { fragment: $createFrag },
+      });
     });
-    const cardContainer = createDom('div', {
-      className: 'cardContainer',
+    const cardContainer = this.container.querySelector('.card-container');
+    cardContainer.appendChild($createFrag);
+  }
     });
     cardContainer.appendChild($createFrag);
     const replaceDiv = this.container.querySelector('.replaceDiv');
@@ -130,20 +143,6 @@ export default class MainPage extends CustomComponent {
   }
 
   renderCallback() {
-    const createSkeletonCard = () => {
-      const $createFrag = new DocumentFragment();
-      Array.from({ length: 30 }).forEach(() => {
-        const newCard = new SkeletonCard();
-        $createFrag.appendChild(newCard.$dom);
-      });
-
-      const cardContainer = createDom('div', {
-        className: 'cardContainer',
-      });
-      cardContainer.appendChild($createFrag);
-      const replaceDiv = this.container.querySelector('.replaceDiv');
-      replaceElement(replaceDiv, cardContainer);
-    };
 
     const banner = createDom('section', {
       className: 'home',
@@ -151,7 +150,6 @@ export default class MainPage extends CustomComponent {
     new MainBanner({ container: banner });
 
     this.container.prepend(banner);
-    createSkeletonCard();
     this.skillStackRender();
   }
 
