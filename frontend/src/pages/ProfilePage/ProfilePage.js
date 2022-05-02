@@ -85,20 +85,20 @@ export default class ProfilePage extends CustomComponent {
   async handleSubmit(event) {
     event.preventDefault();
     const isFullField = this.checkEmptyField();
-    if (isFullField) {
-      try {
-        await axiosInstance.put(
-          '/users',
-          { ...this.nonReRenderState.current },
-          {
-            withCredentials: true,
-          },
-        );
-        new Toast({ content: '프로필 수정 성공' });
-        RouterContext.state.replace('/');
-      } catch (error) {
-        new Toast({ content: '프로필 수정 실패', type: 'fail' });
-      }
+    if (!isFullField) return;
+
+    try {
+      await axiosInstance.put(
+        '/users',
+        { ...this.nonReRenderState.current },
+        {
+          withCredentials: true,
+        },
+      );
+      new Toast({ content: '프로필 수정 성공' });
+      RouterContext.state.replace('/');
+    } catch (error) {
+      new Toast({ content: '프로필 수정 실패', type: 'fail' });
     }
   }
 
