@@ -129,21 +129,21 @@ class Form extends CustomComponent {
   }
 
   setEvent() {
-    const $nicknameInput = this.container.querySelector('.nickname-input');
-    const $stackSelect = this.container.querySelector('.stack-select');
+    const nicknameInput = this.container.querySelector('.nickname-input');
+    const stackSelect = this.container.querySelector('.stack-select');
     const stacks = this.container.querySelectorAll(
       'input[type=checkbox][name=stacks]',
     );
 
     this.container.addEventListener('submit', this.props.onSubmit);
 
-    $nicknameInput.addEventListener('input', () => {
+    nicknameInput.addEventListener('input', event => {
       this.props.onChangeUserInfo({
-        nickname: $nicknameInput.value,
+        nickname: event.target.value,
       });
     });
 
-    $stackSelect.addEventListener('change', () => {
+    stackSelect.addEventListener('change', () => {
       const checkedList = [...stacks].reduce((acc, stack) => {
         if (stack.checked) acc.push(stack.value);
         return acc;
