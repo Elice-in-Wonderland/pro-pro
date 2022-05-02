@@ -107,21 +107,21 @@ class Form extends CustomComponent {
       },
     });
 
-    const stacks = new DocumentFragment();
-
-    defaultStacks.forEach(stack => {
-      const div = createDom('div', {});
-      new Stack({
-        container: div,
-        props: {
-          stack,
-          selectedStack: this.props.userInfo.current.stacks,
+    new Stack({
+      container: stackSelect,
+      props: {
+        stacks: defaultStacks.map(stack => {
+          const obj = {
+            value: stack,
+            checked: this.props.userInfo.current.stacks.has(stack),
+          };
+          return obj;
+        }),
+        onChange: event => {
+          this.handleStackChange(event);
         },
-      });
-      stacks.appendChild(div);
+      },
     });
-
-    stackSelect.appendChild(stacks);
 
     if (this.props.userInfo.current.region.sido) {
       this.handleSigunguUpdate(this.props.userInfo.current.region.sido);
@@ -130,27 +130,12 @@ class Form extends CustomComponent {
 
   setEvent() {
     const nicknameInput = this.container.querySelector('.nickname-input');
-    const stackSelect = this.container.querySelector('.stack-select');
-    const stacks = this.container.querySelectorAll(
-      'input[type=checkbox][name=stacks]',
-    );
 
     this.container.addEventListener('submit', this.props.onSubmit);
 
     nicknameInput.addEventListener('input', event => {
       this.props.onChangeUserInfo({
         nickname: event.target.value,
-      });
-    });
-
-    stackSelect.addEventListener('change', () => {
-      const checkedList = [...stacks].reduce((acc, stack) => {
-        if (stack.checked) acc.push(stack.value);
-        return acc;
-      }, []);
-
-      this.props.onChangeUserInfo({
-        stacks: new Set(checkedList),
       });
     });
   }
@@ -203,6 +188,18 @@ class Form extends CustomComponent {
   handlePostionChange(event) {
     this.props.onChangeUserInfo({
       position: event.target.value,
+    });
+  }
+
+  handleStackChange(event) {
+    const nextStacks = new Set(this.props.userInfo.current.stacks);
+    const selectedStack = event.target.value;
+
+    if (nextStacks.has(selectedStack)) nextStacks.delete(selectedStack);
+    else nextStacks.add(selectedStack);
+
+    this.props.onChangeUserInfo({
+      stacks: nextStacks,
     });
   }
 }

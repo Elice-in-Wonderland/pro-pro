@@ -2,16 +2,26 @@ import CustomComponent from '../CustomComponent';
 
 export default class Stack extends CustomComponent {
   markup() {
-    const { stack, selectedStack } = this.props;
-    let checked = false;
-
-    if (selectedStack.has(this.props.stack)) checked = true;
+    const { stacks } = this.props;
 
     return `
-      <label for="${stack}" class="label-for-check">${stack}</label>
-      <input type="checkbox" class="check-with-label" value="${stack}" id="${stack}" name="stacks" ${
-      checked ? 'checked' : ''
-    }>
+      ${stacks
+        .map(
+          stack => `
+            <label for="${stack.value}" class="label-for-check">
+              ${stack.value}
+            </label>
+            <input type="checkbox" class="check-with-label" 
+            value="${stack.value}" id="${stack.value}" name="stacks" 
+            ${stack.checked ? 'checked' : ''}>
+          `,
+        )
+        .join('')}
     `;
+  }
+
+  setEvent() {
+    const { onChange } = this.props;
+    this.container.onchange = onChange;
   }
 }
