@@ -4,7 +4,6 @@ import './commentForm.scss';
 export default class CommentForm extends CustomComponent {
   markup() {
     const { userType } = this.props;
-    console.log(userType);
     return userType === 'loggedUser' || userType === 'author'
       ? this.loggedUserForm()
       : this.notLoggedUserForm();
