@@ -1,5 +1,6 @@
 @import '../../styles/utils';
 .skill-icon {
+  margin-top: 20px;
   cursor: pointer;
   z-index: 1;
   right: 10;
@@ -12,10 +13,7 @@
     margin: 10px;
     align-items: center;
     opacity: 0.25;
-    .activateBtn {
-      opacity: 1;
-      width: 60px;
-    }
+
     &:hover {
       transform: scale(1.2);
     }
@@ -28,5 +26,6 @@
   }
   .activateBtn {
     opacity: 1;
+    transform: scale(1.2);
   }
 }
