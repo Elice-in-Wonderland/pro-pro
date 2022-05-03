@@ -15,7 +15,7 @@ import axiosInstance from '../../utils/api';
 import Bookmark from '../../components/Bookmark/Bookmark';
 import { state as userState } from '../../utils/store';
 import { createMap } from '../../utils/common';
-import { addEvent, createDom, replaceElement } from '../../utils/dom';
+import { createDom, replaceElement } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
 
 export default class DetailPage extends CustomComponent {
@@ -230,43 +230,34 @@ export default class DetailPage extends CustomComponent {
   getMapImg() {
     const { coordinates } = this.state.location;
     const mapContainer = document.getElementById('map');
-    if (coordinates[0] === null) {
+    if (coordinates[0] === null)
       mapContainer.parentNode.removeChild(mapContainer);
-    } else {
-      createMap(mapContainer, coordinates);
-    }
+    else createMap(mapContainer, coordinates);
   }
 
   setEvent() {
     this.container.addEventListener('click', ({ target }) => {
-      const { userType, isMyBookmark } = this.state;
       if (target.classList.contains('bookmark')) {
-        if (userType === 'loggedUser' || userType === 'author') {
-          return isMyBookmark
-            ? this.deleteBookmarkHandler()
-            : this.postBookmarkHandler();
-        } else {
-          this.notLoggedUserHandler();
-        }
+        const { userType, isMyBookmark } = this.state;
+        if (userType === 'loggedUser' || userType === 'author')
+          return isMyBookmark ? this.deleteBookmark() : this.addBookmark();
+        else new Toast({ content: '로그인 먼저 해주세요.', type: 'fail' });
       }
 
-      if (target.classList.contains('commentDelete')) {
+      if (target.classList.contains('commentDelete'))
         this.deleteComment(target);
-      }
-      if (target.classList.contains('commentReply')) {
+
+      if (target.classList.contains('commentReply'))
         this.createCommentForm(target);
-      }
     });
 
     this.container.addEventListener('submit', event => {
       event.preventDefault();
-      if (event.target.classList.contains('commentForm')) {
-        this.postComment();
-      }
+      if (event.target.classList.contains('commentForm')) this.addComment();
     });
   }
 
-  deleteBookmarkHandler = async () => {
+  deleteBookmark = async () => {
     const { marks, postId } = this.state;
     this.setState({
       ...this.state,
@@ -282,7 +273,7 @@ export default class DetailPage extends CustomComponent {
       });
   };
 
-  postBookmarkHandler = async () => {
+  addBookmark = async () => {
     const { marks, postId } = this.state;
     this.setState({
       ...this.state,
@@ -296,31 +287,25 @@ export default class DetailPage extends CustomComponent {
       });
   };
 
-  notLoggedUserHandler() {
-    new Toast({ content: '로그인 먼저 해주세요.', type: 'fail' });
-  }
+  // TODO: 답변 기능 추가
+  // createCommentForm = target => {
+  //   const targetComment = target.parentNode.parentNode;
+  //   const { id } = targetComment.dataset;
+  //   this.setState({
+  //     ...this.state,
+  //     replyComment: id,
+  //   });
+  // };
 
-  createCommentForm = target => {
-    const targetComment = target.parentNode.parentNode;
-    const { id } = targetComment.dataset;
-    this.setState({
-      ...this.state,
-      replyComment: id,
-    });
-  };
-
-  deleteCommentForm(event) {
-    const replyBtn = event.target;
-    const targetComment = replyBtn.parentNode.parentNode;
-    const commentForm = targetComment.querySelector('.commentForm');
-    replyBtn.removeEventListener('click', this.deleteCommentForm);
-    replyBtn.addEventListener('click', this.createCommentForm);
-    if (commentForm) {
-      commentForm.parentNode.removeChild(commentForm);
-    } else {
-      replyBtn.click();
-    }
-  }
+  // deleteCommentForm(event) {
+  //   const replyBtn = event.target;
+  //   const targetComment = replyBtn.parentNode.parentNode;
+  //   const commentForm = targetComment.querySelector('.commentForm');
+  //   replyBtn.removeEventListener('click', this.deleteCommentForm);
+  //   replyBtn.addEventListener('click', this.createCommentForm);
+  //   if (commentForm) commentForm.parentNode.removeChild(commentForm);
+  //   else replyBtn.click();
+  // }
 
   deleteComment = target => {
     const targetComment = target.parentNode.parentNode;
@@ -334,7 +319,7 @@ export default class DetailPage extends CustomComponent {
     });
   };
 
-  postComment = () => {
+  addComment = () => {
     const content = this.container.querySelector('.writeComment').value;
     const { postId } = this.state;
     this.container.querySelector('.writeComment').value = '';
