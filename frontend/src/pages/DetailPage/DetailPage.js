@@ -15,24 +15,22 @@ import axiosInstance from '../../utils/api';
 import Bookmark from '../../components/Bookmark/Bookmark';
 import { state as userState } from '../../utils/store';
 import { createMap } from '../../utils/common';
-import { createDom, appendRoot, replaceElement } from '../../utils/dom';
+import { addEvent, createDom, replaceElement } from '../../utils/dom';
+import Toast from '../../components/Toast/Toast';
 
 export default class DetailPage extends CustomComponent {
   init() {
     this.state = {
+      isLoading: true,
       userType: null,
       userId: userState.myInfo ? userState.myInfo._id : null,
       postId: RouterContext.state.params.postId,
       comments: [],
     };
-    this.$dom = createDom('article', {
-      className: 'detailContainer',
-    });
-    appendRoot(this.container, this.$dom);
   }
 
   renderCallback() {
-    if (this.state.userType) {
+    if (!this.state.isLoading) {
       this.makeComponent();
       this.replaceDOM();
     }
@@ -52,6 +50,7 @@ export default class DetailPage extends CustomComponent {
         this.setState({
           ...this.state,
           ...postInfo,
+          isLoading: false,
           userType: this.findUserType(postInfo.author._id),
         });
       });
@@ -71,44 +70,50 @@ export default class DetailPage extends CustomComponent {
     } = this;
 
     this.stacks = new Stacks({
-      stacks,
+      container: createDom('ul', {
+        className: 'stackList',
+      }),
+      props: { stacks },
     });
 
     this.postBanner = new PostBanner({
-      stackList: stacks,
+      container: createDom('div', {
+        className: `banner ${stacks[0]}`,
+      }),
+      props: { stacks },
     });
 
     if (userType === 'author') {
       this.editButtons = new EditButtons({
-        postId,
+        container: createDom('form', {
+          className: 'editBtns',
+        }),
       });
     }
 
     this.bookmark = new Bookmark({
-      marks,
-      postId,
-      userType,
-      isMyBookmark,
+      container: createDom('div', {
+        className: 'bookmarkWrapper',
+      }),
+      props: { isMyBookmark, marks },
     });
 
     this.comments = new Comments({
-      commentList: comments,
-      userType,
-      userId,
+      container: createDom('div', {
+        className: 'comments',
+      }),
+      props: { comments, userType, userId },
     });
-
     this.commentForm = new CommentForm({
-      userType,
-      parentType: 'post',
-      parentId: postId,
-      userId,
+      container: createDom('form', {
+        className: 'commentForm',
+      }),
+      props: { userType, parentType: 'post', parentId: postId, userId },
     });
   }
 
   markup() {
-    if (!this.state.userType) {
-      return Loading;
-    }
+    if (this.state.isLoading) return Loading;
     const {
       author: { imageURL, nickname },
       title,
@@ -196,31 +201,30 @@ export default class DetailPage extends CustomComponent {
     this.getMapImg();
     replaceElement(
       this.container.querySelector('.stacksReplace'),
-      this.stacks.$dom,
+      this.stacks.container,
     );
     replaceElement(
       this.container.querySelector('.banner'),
-      this.postBanner.$dom,
+      this.postBanner.container,
     );
     replaceElement(
       this.container.querySelector('.comments'),
-      this.comments.$dom,
+      this.comments.container,
     );
     replaceElement(
       this.container.querySelector('.commentForm'),
-      this.commentForm.$dom,
+      this.commentForm.container,
     );
     replaceElement(
       this.container.querySelector('.bookmarkWrapper'),
-      this.bookmark.$dom,
+      this.bookmark.container,
     );
     if (this.editButtons) {
       replaceElement(
         this.container.querySelector('.editSection'),
-        this.editButtons.$dom,
+        this.editButtons.container,
       );
     }
-    console.log(this.state);
   }
 
   getMapImg() {
@@ -232,6 +236,138 @@ export default class DetailPage extends CustomComponent {
       createMap(mapContainer, coordinates);
     }
   }
+
+  setEvent() {
+    this.container.addEventListener('click', ({ target }) => {
+      const { userType, isMyBookmark } = this.state;
+      if (target.classList.contains('bookmark')) {
+        if (userType === 'loggedUser' || userType === 'author') {
+          return isMyBookmark
+            ? this.deleteBookmarkHandler()
+            : this.postBookmarkHandler();
+        } else {
+          this.notLoggedUserHandler();
+        }
+      }
+
+      if (target.classList.contains('commentDelete')) {
+        this.deleteComment(target);
+      }
+      if (target.classList.contains('commentReply')) {
+        this.createCommentForm(target);
+      }
+    });
+
+    this.container.addEventListener('submit', event => {
+      event.preventDefault();
+      if (event.target.classList.contains('commentForm')) {
+        this.postComment();
+      }
+    });
+  }
+
+  deleteBookmarkHandler = async () => {
+    const { marks, postId } = this.state;
+    this.setState({
+      ...this.state,
+      marks: marks - 1,
+      isMyBookmark: false,
+    });
+    await axiosInstance
+      .delete(`users/mark/${postId}`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        new Toast({ content: '북마크 해제 되었습니다.', type: 'success' });
+      });
+  };
+
+  postBookmarkHandler = async () => {
+    const { marks, postId } = this.state;
+    this.setState({
+      ...this.state,
+      marks: marks + 1,
+      isMyBookmark: true,
+    });
+    await axiosInstance
+      .post(`users/mark/${postId}`, {}, { withCredentials: true })
+      .then(() => {
+        new Toast({ content: '북마크 되었습니다.', type: 'success' });
+      });
+  };
+
+  notLoggedUserHandler() {
+    new Toast({ content: '로그인 먼저 해주세요.', type: 'fail' });
+  }
+
+  createCommentForm = target => {
+    const targetComment = target.parentNode.parentNode;
+    const { id } = targetComment.dataset;
+    this.setState({
+      ...this.state,
+      replyComment: id,
+    });
+  };
+
+  deleteCommentForm(event) {
+    const replyBtn = event.target;
+    const targetComment = replyBtn.parentNode.parentNode;
+    const commentForm = targetComment.querySelector('.commentForm');
+    replyBtn.removeEventListener('click', this.deleteCommentForm);
+    replyBtn.addEventListener('click', this.createCommentForm);
+    if (commentForm) {
+      commentForm.parentNode.removeChild(commentForm);
+    } else {
+      replyBtn.click();
+    }
+  }
+
+  deleteComment = target => {
+    const targetComment = target.parentNode.parentNode;
+    const { id } = targetComment.dataset;
+    axiosInstance.delete(`comments/${id}`, {
+      withCredentials: true,
+    });
+    this.setState({
+      ...this.state,
+      comments: [...this.state.comments.filter(comment => comment._id !== id)],
+    });
+  };
+
+  postComment = () => {
+    const content = this.container.querySelector('.writeComment').value;
+    const { postId } = this.state;
+    this.container.querySelector('.writeComment').value = '';
+    axiosInstance.post(
+      'comments',
+      {
+        content,
+        parentType: 'post',
+        parentId: postId,
+      },
+      { withCredentials: true },
+    );
+    const { imageURL, nickname, _id } = userState.myInfo;
+    this.setState({
+      ...this.state,
+      comments: [
+        ...this.state.comments,
+        {
+          nestedComments: [],
+          author: {
+            imageURL,
+            nickname,
+          },
+          updatedAt: '지금',
+          _id: content,
+          parentId: postId,
+          content,
+          userId: _id,
+          parentType: 'post',
+        },
+      ],
+    });
+  };
 
   findUserType(postUserId) {
     if (userState.myInfo === undefined) {
