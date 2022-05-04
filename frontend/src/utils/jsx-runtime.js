@@ -18,20 +18,20 @@ function addChild(parent, childNode) {
   parent.appendChild(document.createTextNode(childNode));
 }
 
-function jsx(name, attributes, ...children) {
+function jsx(name, attributes = {}, ...children) {
   const node =
     name === 'fragment'
       ? document.createDocumentFragment()
       : document.createElement(name);
 
   if (!(node instanceof DocumentFragment)) {
-    Object.entries(attributes || {}).forEach(([key, value]) => {
+    Object.entries(attributes).forEach(([key, value]) => {
       node.setAttribute(key, value);
     });
   }
 
   // 자식 노드들 처리
-  (children || []).forEach(childNode => addChild(node, childNode));
+  children.forEach(childNode => addChild(node, childNode));
 
   return node;
 }
