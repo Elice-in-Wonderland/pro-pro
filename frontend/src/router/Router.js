@@ -53,7 +53,14 @@ class Router {
       const Page = this.routes[i].component;
       window.scrollTo(0, 0);
 
-      if (currentPath[0] === 'profile') {
+      // TODO: 전체 리팩토링 후  삭제해야할 부분
+      if (
+        currentPath[0] === 'profile' ||
+        currentPath[0] === '' ||
+        currentPath[0] === 'detail' ||
+        currentPath[0] === 'bookmark' ||
+        currentPath[0] === 'study'
+      ) {
         new Page({ container: this.target });
         return;
       }
