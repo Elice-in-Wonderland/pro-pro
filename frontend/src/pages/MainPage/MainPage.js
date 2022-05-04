@@ -49,7 +49,7 @@ export default class MainPage extends CustomComponent {
   cardRender = () => {
     const cardContainer = this.container.querySelector('.card-container');
     cardContainer.innerHTML = '';
-    const $createFrag = document.createDocumentFragment();
+    const fragment = document.createDocumentFragment();
 
     this.state.forEach(el => {
       const cardWrapper = createDom('div', {
@@ -60,9 +60,9 @@ export default class MainPage extends CustomComponent {
         container: cardWrapper,
         props: { post: el, postList: this.state },
       });
-      $createFrag.appendChild(cardWrapper);
+      fragment.appendChild(cardWrapper);
     });
-    cardContainer.appendChild($createFrag);
+    cardContainer.appendChild(fragment);
   };
 
   skillStackRender() {
