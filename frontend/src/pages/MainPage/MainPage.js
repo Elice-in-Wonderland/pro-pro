@@ -147,6 +147,7 @@ export default class MainPage extends CustomComponent {
 
   renderCallback() {
     this.bannerRender();
+    this.skeletonCardRender();
     this.skillStackRender();
   }
 
