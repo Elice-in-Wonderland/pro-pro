@@ -68,10 +68,6 @@ export default class MainCard extends CustomComponent {
     `;
   }
 
-  renderCallback() {
-    this.props.fragment.appendChild(this.container);
-  }
-
   setEvent() {
     const images = this.container.querySelector('.image');
     const cardWrap = this.container.querySelector('.card-wrap');
