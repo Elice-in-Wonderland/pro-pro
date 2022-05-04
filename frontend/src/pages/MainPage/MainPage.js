@@ -58,8 +58,9 @@ export default class MainPage extends CustomComponent {
 
       new MainCard({
         container: cardWrapper,
-        props: { post: el, postList: this.state, fragment: $createFrag },
+        props: { post: el, postList: this.state },
       });
+      $createFrag.appendChild(cardWrapper);
     });
     cardContainer.appendChild($createFrag);
   };
