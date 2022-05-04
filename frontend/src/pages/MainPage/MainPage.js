@@ -30,7 +30,7 @@ export default class MainPage extends CustomComponent {
   }
 
   skeletonCardRender() {
-    const $createFrag = new DocumentFragment();
+    const fragment = new DocumentFragment();
 
     Array.from({ length: 30 }).forEach(() => {
       const cardSkelton = createDom('div', {
@@ -39,11 +39,12 @@ export default class MainPage extends CustomComponent {
 
       new SkeletonCard({
         container: cardSkelton,
-        props: { fragment: $createFrag },
       });
+      fragment.appendChild(cardSkelton);
     });
+
     const cardContainer = this.container.querySelector('.card-container');
-    cardContainer.appendChild($createFrag);
+    cardContainer.appendChild(fragment);
   }
 
   cardRender = () => {
