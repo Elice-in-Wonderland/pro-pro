@@ -87,7 +87,7 @@ export default class LoginModal extends CustomComponent {
       this.hiddenModal();
       this.props.onLogin();
     } catch (e) {
-      new Toast({ content: '로그인에 실패하였습니다' });
+      new Toast({ content: '로그인에 실패하였습니다', type: 'fail' });
     }
   }
 }
