@@ -1,27 +1,17 @@
 import axiosInstance from '../../utils/api';
-import Component from '../../components/component';
 import Card from '../../components/Card/Card';
 import './bookmarkPage.scss';
+import CustomComponent from '../../components/CustomComponent';
+import { createDom } from '../../utils/dom';
 
-export default class BookmarkPage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.$dom = this.createDom('div', { className: 'bookmark-page-wrapper' });
-
-    this.updateCards();
-
-    this.appendRoot(props, this.$dom);
+export default class BookmarkPage extends CustomComponent {
+  init() {
+    this.$dom = createDom('div', { className: 'bookmark-page-wrapper' });
+    this.state = [];
+    // this.appendRoot(props, this.$dom);
   }
 
-  updateCards = async () => {
-    await this.getData();
-    this.render();
-    this.createCard();
-    this.addEvent();
-  };
-
-  getData = async () => {
+  async mounted() {
     await axiosInstance
       .get('/users/mark?category=project&page=1&perPage=10', {
         withCredentials: true,
@@ -30,12 +20,12 @@ export default class BookmarkPage extends Component {
         return res.data.data;
       })
       .then(cards => {
-        this.state = cards;
+        this.setState(cards);
       });
-  };
+  }
 
-  render = () => {
-    this.$dom.innerHTML = `
+  markup() {
+    return `
       <section class="filter-buttons">
         <button type="button" id="bookmark-button">북마크한 프로젝트/스터디</button>
       </section>
@@ -43,9 +33,9 @@ export default class BookmarkPage extends Component {
         <div class="card-elements"></div>
       </section>
     `;
-  };
+  }
 
-  createCard = () => {
+  cardRender() {
     const cards = this.$dom.querySelector('.card-elements');
 
     const $createFrag = document.createDocumentFragment();
@@ -65,9 +55,18 @@ export default class BookmarkPage extends Component {
     });
 
     this.replaceElement(cards, $createFrag);
+  }
+
+  renderCallback() {
+    cardRender();
+  }
+
+  updateCards = async () => {
+    await this.mounted();
+    this.render();
   };
 
-  addEvent = () => {
+  setEvent = () => {
     const bookmarkBtn = this.$dom.querySelector('#bookmark-button');
 
     bookmarkBtn.addEventListener('click', () => {

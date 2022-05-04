@@ -52,10 +52,6 @@ class Router {
       RouterContext.setState({ params });
       const Page = this.routes[i].component;
       window.scrollTo(0, 0);
-      if (currentPath[0] === '') { 
-        new Page({ container: this.target }); 
-        return; 
-      }
       new Page(this.target);
       return;
     }
