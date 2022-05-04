@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 import cpp from '../../assets/icons/cpp.svg';
 import django from '../../assets/icons/django-icon.svg';
 import flutter from '../../assets/icons/flutter.svg';
@@ -14,15 +14,17 @@ import spring from '../../assets/icons/spring.svg';
 import swift from '../../assets/icons/swift.svg';
 import typescript from '../../assets/icons/typescript.svg';
 import vue from '../../assets/icons/vue.svg';
-import './skillStacksDropDown.scss';
+import './skillStacksFilter.scss';
 
-export default class Navigation extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('div', {
-      className: 'skills-drop-down',
-    });
+export default class SkillStacksFilter extends CustomComponent {
+  markup() {
+    return `<div class="skill-icon"></div>
+    `;
+  }
+
+  renderCallback() {
     const $fragment = document.createDocumentFragment();
+    const skillIcon = this.container.querySelector('.skill-icon');
     const imgsrc = {
       cpp,
       django,
@@ -49,14 +51,6 @@ export default class Navigation extends Component {
         $fragment.appendChild(imageNode);
       }
     }
-
-    this.render();
-    this.$dom.querySelector('.skill-icon').appendChild($fragment);
+    skillIcon.appendChild($fragment);
   }
-
-  render = () => {
-    this.$dom.innerHTML = `
-        <div class="skill-icon"></div>
-    `;
-  };
 }

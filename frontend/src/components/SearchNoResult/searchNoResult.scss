@@ -1,23 +1,20 @@
-.searchNotFound {
-  position: relative;
-  .no-result {
-    width: 30%;
-    flex-direction: column;
-    height: 100vh;
-    position: absolute;
-    left: 50%;
-    top: 50%;
+.no-result {
+  width: 30%;
+  flex-direction: column;
+  height: 100vh;
+  position: absolute;
+  left: 50%;
+  top: 50%;
 
-    transform: translate(-50%, 0%);
-    text-align: center;
-    .no-result-img {
-      margin-top: 10vh;
-      width: 100%;
-      display: flex;
-    }
-    p {
-      color: gray;
-      font-size: 20px;
-    }
+  transform: translate(-50%, 0%);
+  text-align: center;
+  .no-result-img {
+    margin-top: 10vh;
+    width: 100%;
+    display: flex;
+  }
+  p {
+    color: gray;
+    font-size: 20px;
   }
 }

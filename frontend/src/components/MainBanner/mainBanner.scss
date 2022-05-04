@@ -1,7 +1,7 @@
 @import '../../styles/index.css';
 @import '../../styles/utils';
 
-.home {
+.home-banner {
   background: url('../../assets/images/background.svg');
   background-size: 400px;
   background-repeat: no-repeat;
@@ -15,10 +15,10 @@
     background-size: 200px;
     background-position: 90% 130%;
   }
-  .banerContainer {
-    .banerWord {
+  .baner-container {
+    .baner-word {
       margin-left: 5vw;
-      .homeTitle {
+      .home-title {
         display: flex;
         font-size: 1.5rem;
         margin-top: 40px;
@@ -43,7 +43,7 @@
           font-size: 1.5rem;
         }
       }
-      .homeDescription {
+      .home-description {
         display: flex;
         font-size: 25px;
         margin: 8px, 0;

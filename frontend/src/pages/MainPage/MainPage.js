@@ -1,10 +1,11 @@
-import Component from '../../components/component';
+// import Component from '../../components/component';
+import CustomComponent from '../../components/CustomComponent';
 import './mainPage.scss';
 import searchIcon from '../../assets/icons/search-icon.svg';
-import { defaultStacks } from '../../library/MainPage';
-import Card from '../../components/Card/Card';
+import { createDom } from '../../utils/dom';
+import MainCard from '../../components/MainCard/MainCard';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
-import SkillStacksDropDown from '../../components/SkillStacksDropDown/SkillStacksDropDown';
+import SkillStacksFilter from '../../components/SkillStacksFilter/SkillStacksFilter';
 import MainBanner from '../../components/MainBanner/MainBanner';
 import axiosInstance from '../../utils/api';
 import Routercontext from '../../router/RouterContext';
@@ -17,30 +18,73 @@ import {
   debounce,
 } from '../../utils/filter';
 
-export default class MainPage extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('div', {
-      className: 'main-page-wrapper',
-    });
+export default class MainPage extends CustomComponent {
+  init() {
     this.projectOrStudy = Routercontext.state.pathname;
 
-    this.$banner = new MainBanner();
-    const $fragment = document.createDocumentFragment();
-    $fragment.appendChild(this.$dom);
     this.state = [];
     this.totalData = [];
     this.filterStacks = [];
     this.basisData = [];
     this.sortStandard = recentSort;
-    this.appendRoot(props, $fragment);
-    this.render();
-    this.createSkeletonCard();
-    this.getInitState();
-    this.addEvent();
   }
 
-  getInitState = async () => {
+  skeletonCardRender() {
+    const $createFrag = new DocumentFragment();
+
+    Array.from({ length: 30 }).forEach(() => {
+      const cardSkelton = createDom('div', {
+        className: 'card-skeleton',
+      });
+
+      new SkeletonCard({
+        container: cardSkelton,
+        props: { fragment: $createFrag },
+      });
+    });
+    const cardContainer = this.container.querySelector('.card-container');
+    cardContainer.appendChild($createFrag);
+  }
+
+  cardRender = () => {
+    const cardContainer = this.container.querySelector('.card-container');
+    cardContainer.innerHTML = '';
+    const $createFrag = document.createDocumentFragment();
+
+    this.state.forEach(el => {
+      const cardWrapper = createDom('div', {
+        className: 'card-wrapper',
+      });
+
+      new MainCard({
+        container: cardWrapper,
+        props: { post: el, postList: this.state, fragment: $createFrag },
+      });
+    });
+    cardContainer.appendChild($createFrag);
+  };
+
+  skillStackRender() {
+    const skillsBar = this.container.querySelector('.skills-bar');
+    new SkillStacksFilter({ container: skillsBar });
+  }
+
+  bannerRender() {
+    const banner = this.container.querySelector('.home-banner');
+    new MainBanner({ container: banner });
+  }
+
+  searchNoResultRender = () => {
+    const cardContainer = this.container.querySelector('.card-container');
+    new SearchNotFound({ container: cardContainer });
+  };
+
+  setState = nextState => {
+    this.state = nextState;
+    this.cardRender();
+  };
+
+  async mounted() {
     if (this.projectOrStudy === '/study') {
       const {
         data: { data },
@@ -60,97 +104,52 @@ export default class MainPage extends Component {
       this.basisData = data;
     }
     this.setState(recentSort(this.totalData));
-  };
+  }
 
-  setState = nextState => {
-    this.state = nextState;
-    this.cardRender();
-  };
+  markup() {
+    return `
+    <div class="main-page-wrapper">
+    <section class="home-banner">
 
-  render = () => {
-    this.$dom.innerHTML = `
-    <section class="skills-bar">
-      <div class="drop-content"></div>
     </section>
-    <section id="searchBar">
-      <button type="button" class="recent activated">
-        <div class="recentTitle btn-title">최신순</div>
-      </button>
-      <button type="button" class="populate">
-        <div class="populateTitle btn-title">인기순</div>
-      </button>
-      <div class="wrapper">
-        <div class="searchDiv">
-          <input aria-label="검색" type="text" id="searchInput"/>
-          <img
-            src="${searchIcon}"
-            alt="search image"
-            class="searchIconImg"/> 
+      <section class="skills-bar">
+
+      </section>
+      <section id="filter-bar">
+        <button type="button" class="recent activated">
+          <div class="recentTitle btn-title">최신순</div>
+        </button>
+        <button type="button" class="populate">
+          <div class="populateTitle btn-title">인기순</div>
+        </button>
+        <div class="wrapper">
+          <div class="search-bar">
+            <input aria-label="검색" type="text" id="search-input"/>
+            <img
+              src="${searchIcon}"
+              alt="search image"
+              class="search-icon"/> 
+          </div>
         </div>
-      </div>
-      <button type="button" class="entire activated">
-      <div class="entireTitle btn-title">전체 글</div>
-    </button>
-      <button type="button" class="avail">
-      <div class="availTitle btn-title">모집중인 글</div>
-    </button>
+        <button type="button" class="entire activated">
+        <div class="entire-title btn-title">전체 글</div>
+      </button>
+        <button type="button" class="avail">
+        <div class="avail-title btn-title">모집중인 글</div>
+      </button>
 
-    </section>
-    <section class='mainPostCards'>
-      <div class="replaceDiv"></div>
-    </section>
+      </section>
+      <section class='card-container'>
+      </section>
+    </div>
     `;
-    this.$dom.prepend(this.$banner.$dom);
-    this.renderSkillStack();
-  };
+  }
 
-  renderSkillStack = () => {
-    const dropContent = this.$dom.querySelector('.drop-content');
-    const stacks = new SkillStacksDropDown({
-      stackList: defaultStacks,
-    });
-    dropContent.appendChild(stacks.$dom);
-  };
-
-  cardRender = () => {
-    const Cards = this.createDom('section', { className: 'mainPostCards' });
-    Cards.innerHTML = '<div class="replaceDiv"></div>';
-    const oldContainer = this.$dom.querySelector('.mainPostCards');
-    this.replaceElement(oldContainer, Cards);
-    this.createCard();
-  };
-
-  createSkeletonCard = () => {
-    const $createFrag = new DocumentFragment();
-    Array.from({ length: 6 }).forEach(li => {
-      const newCard = new SkeletonCard();
-      $createFrag.appendChild(newCard.$dom);
-    });
-
-    const cardContainer = this.createDom('div', {
-      className: 'cardContainer',
-    });
-    cardContainer.appendChild($createFrag);
-    const replaceDiv = this.$dom.querySelector('.replaceDiv');
-    this.replaceElement(replaceDiv, cardContainer);
-  };
-
-  createCard = () => {
-    const $createFrag = document.createDocumentFragment();
-    this.cardList = this.state.map(el => {
-      const newCard = new Card({ post: el, postList: this.state });
-      return newCard.$dom;
-    });
-    this.cardList.forEach(el => {
-      $createFrag.appendChild(el);
-    });
-    const cardContainer = this.createDom('div', {
-      className: 'cardContainer',
-    });
-    cardContainer.appendChild($createFrag);
-    const replaceDiv = this.$dom.querySelector('.replaceDiv');
-    this.replaceElement(replaceDiv, cardContainer);
-  };
+  renderCallback() {
+    this.bannerRender();
+    this.skeletonCardRender();
+    this.skillStackRender();
+  }
 
   toggleBasisData = buttonType => {
     if (buttonType === 'avail') {
@@ -170,14 +169,14 @@ export default class MainPage extends Component {
     this.sortStandard = populateSort;
   };
 
-  addEvent = () => {
-    const skillIcon = this.$dom.getElementsByClassName('skill-icon')[0];
-    const avail = this.$dom.querySelector('.avail');
-    const entirePost = this.$dom.querySelector('.entire');
-    const recent = this.$dom.querySelector('.recent');
-    const populate = this.$dom.querySelector('.populate');
-    const searchInput = this.$dom.querySelector('#searchInput');
-    const searchbtn = this.$dom.querySelector('.searchIconImg');
+  setEvent() {
+    const skillIcon = this.container.querySelector('.skill-icon');
+    const avail = this.container.querySelector('.avail');
+    const entirePost = this.container.querySelector('.entire');
+    const recent = this.container.querySelector('.recent');
+    const populate = this.container.querySelector('.populate');
+    const searchInput = this.container.querySelector('#search-input');
+    const searchbtn = this.container.querySelector('.search-icon');
 
     const skillStackFilter = () => {
       if (this.filterStacks) {
@@ -232,15 +231,6 @@ export default class MainPage extends Component {
       skillStackFilter();
     });
 
-    const createNot = () => {
-      const searchNotFound = new SearchNotFound();
-      const searchNotFoundContainer = document.createElement('div');
-      searchNotFoundContainer.className = 'searchNotFoundContainer';
-      searchNotFoundContainer.appendChild(searchNotFound.$dom);
-      const replaceDiv = this.$dom.querySelector('.cardContainer');
-      this.replaceElement(replaceDiv, searchNotFoundContainer);
-    };
-
     const searchEventhandler = () => {
       removeSkillStackFilter();
       if (!searchInput.value) {
@@ -252,7 +242,7 @@ export default class MainPage extends Component {
       if (searchList.length === 0) {
         this.setState([]);
         searchInput.value = null;
-        createNot();
+        this.searchNoResultRender();
         return;
       }
       this.setState(searchList);
@@ -274,5 +264,5 @@ export default class MainPage extends Component {
         }
       }),
     );
-  };
+  }
 }
