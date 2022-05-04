@@ -8,36 +8,41 @@ import { createDom } from '../../utils/dom';
 export default class NavItem extends CustomComponent {
   markup() {
     if (this.props.type === 'link') {
-      return `
-        <a href=${this.props.href} class="${this.props.className}">${this.props.text}</a>
-      `;
+      return (
+        <a href={this.props.href} class={this.props.className}>
+          {this.props.text}
+        </a>
+      );
     }
 
     if (this.props.type === 'profile') {
-      return `
+      return (
         <div class="drop-box">
           <div class="profile">
-            <img src=${
-              state.myInfo?.imageURL ||
-              'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png'
-            } alt="profile" class="profile-img" />
+            <img
+              src={
+                state.myInfo?.imageURL ||
+                'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png'
+              }
+              alt="profile"
+              class="profile-img"
+            />
           </div>
           <ul class="menu">
-            ${this.props.list
-              .map(
-                li =>
-                  `<li><a href=${li.href} class="${li.className}">${li.text}</a></li>`,
-              )
-              .join('')}
+            {this.props.list.map(li => (
+              <li>
+                <a href={li.href} class={li.className}>
+                  {li.text}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
-      `;
+      );
     }
 
     if (this.props.type === 'modal') {
-      return `
-        <p class="login-text">로그인</p>
-      `;
+      return <p class="login-text">로그인</p>;
     }
   }
 

@@ -11,22 +11,20 @@ import { restructingMyInfo } from '../../utils/auth';
 
 export default class LoginModal extends CustomComponent {
   markup() {
-    return `
+    return (
       <div class="login-modal-wrapper">
-          <img class="login-exit-btn" src="${xButton}" />
-          <div class="login-container">
-            <div class="login-header">
-              <div class="login-greeting">
-                환영합니다!
-              </div>
-              <img class="login-image" src="${proproLogo}" />
-            </div>
-            <div class="login-btn-wrapper">
-              <div id="google-login-btn"></div>
-            </div>
+        <img class="login-exit-btn" src={xButton} />
+        <div class="login-container">
+          <div class="login-header">
+            <div class="login-greeting">환영합니다!</div>
+            <img class="login-image" src={proproLogo} />
           </div>
+          <div class="login-btn-wrapper">
+            <div id="google-login-btn"></div>
+          </div>
+        </div>
       </div>
-  `;
+    );
   }
 
   setEvent() {

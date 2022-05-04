@@ -13,10 +13,7 @@ export default class Navigation extends CustomComponent {
   }
 
   markup() {
-    return `
-      <ul class='nav-list'>
-      </ul>
-    `;
+    return <ul class="nav-list"></ul>;
   }
 
   renderCallback() {
