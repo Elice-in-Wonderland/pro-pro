@@ -8,7 +8,7 @@ import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
 import Toast from '../Toast/Toast';
 import { shortSido } from '../../library/MainPage/index';
-import { replaceElement } from '../../utils/dom';
+import { createDom, replaceElement } from '../../utils/dom';
 
 export default class MainCard extends CustomComponent {
   init() {
@@ -78,10 +78,16 @@ export default class MainCard extends CustomComponent {
     const bookmarkBtn = this.container.querySelector('.bookmark-btn');
     const bookmark =
       this.container.querySelector('.bookmark-btn').childNodes[1];
-    replaceElement(
-      images,
-      new PostBanner({ stackList: this.state.post.stacks }).$dom,
-    );
+    const div = createDom('div', {
+      className: `banner ${this.state.post.stacks[0]}`,
+    });
+
+    new PostBanner({
+      container: div,
+      props: { stacks: this.state.post.stacks },
+    });
+
+    replaceElement(images, div);
     const bookmarkPost = () => {
       for (let i = 0; i < this.state.postList.length; i += 1) {
         // 이미 북마크한 포스트의 북마크 버튼을 누른 경우 북마크를 해제한다.
