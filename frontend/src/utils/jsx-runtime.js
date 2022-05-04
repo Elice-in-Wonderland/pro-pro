@@ -25,7 +25,8 @@ function jsx(name, attributes = {}, ...children) {
       : document.createElement(name);
 
   if (!(node instanceof DocumentFragment)) {
-    Object.entries(attributes).forEach(([key, value]) => {
+    // falsy 값 방어
+    Object.entries(attributes || {}).forEach(([key, value]) => {
       node.setAttribute(key, value);
     });
   }
