@@ -1,6 +1,6 @@
 function addChild(parent, childNode) {
-  // 아무것도 없을 때
-  if (typeof childNode === 'undefined' || childNode === null) return;
+  // null check
+  if (childNode == null) return;
 
   // false 일경우 아무것도 안보이게
   if (typeof childNode === 'boolean') return;
