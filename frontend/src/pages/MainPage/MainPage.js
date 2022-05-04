@@ -2,8 +2,8 @@
 import CustomComponent from '../../components/CustomComponent';
 import './mainPage.scss';
 import searchIcon from '../../assets/icons/search-icon.svg';
-import { createDom, replaceElement } from '../../utils/dom';
-import Card from '../../components/Card/Card';
+import { createDom } from '../../utils/dom';
+import MainCard from '../../components/MainCard/MainCard';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
 import SkillStacksFilter from '../../components/SkillStacksFilter/SkillStacksFilter';
 import MainBanner from '../../components/MainBanner/MainBanner';
@@ -29,14 +29,6 @@ export default class MainPage extends CustomComponent {
     this.sortStandard = recentSort;
   }
 
-  createCard = () => {
-    const $createFrag = document.createDocumentFragment();
-    this.cardList = this.state.map(el => {
-      const newCard = new Card({ post: el, postList: this.state });
-      return newCard.$dom;
-    });
-    this.cardList.forEach(el => {
-      $createFrag.appendChild(el);
   skeletonCardRender() {
     const $createFrag = new DocumentFragment();
 
@@ -53,18 +45,25 @@ export default class MainPage extends CustomComponent {
     const cardContainer = this.container.querySelector('.card-container');
     cardContainer.appendChild($createFrag);
   }
-    });
-    cardContainer.appendChild($createFrag);
-    const replaceDiv = this.container.querySelector('.replaceDiv');
-    replaceElement(replaceDiv, cardContainer);
-  };
 
   cardRender = () => {
-    const Cards = createDom('section', { className: 'mainPostCards' });
-    Cards.innerHTML = '<div class="replaceDiv"></div>';
-    const oldContainer = this.container.querySelector('.mainPostCards');
-    replaceElement(oldContainer, Cards);
-    this.createCard();
+    const cardContainer = this.container.querySelector('.card-container');
+    cardContainer.innerHTML = '';
+    const $createFrag = document.createDocumentFragment();
+
+    this.state.forEach(el => {
+      const cardWrapper = createDom('div', {
+        className: 'card-wrapper',
+      });
+
+      new MainCard({
+        container: cardWrapper,
+        props: { post: el, postList: this.state, fragment: $createFrag },
+      });
+    });
+    cardContainer.appendChild($createFrag);
+  };
+
   skillStackRender() {
     const skillsBar = this.container.querySelector('.skills-bar');
     new SkillStacksFilter({ container: skillsBar });
