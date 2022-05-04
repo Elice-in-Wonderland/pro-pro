@@ -1,19 +1,9 @@
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 import './skeletonCard.scss';
 
-export default class SkeletonCard extends Component {
-  constructor(props) {
-    super(props);
-
-    this.$dom = this.createDom('div', {
-      className: 'card-skeleton',
-    });
-
-    this.render();
-  }
-
-  render = () => {
-    this.$dom.innerHTML = `
+export default class SkeletonCard extends CustomComponent {
+  markup() {
+    return `
         <div class="card-body"></div>
         <div class="card-info-wrapper">
             <div class="card-info">
@@ -26,5 +16,9 @@ export default class SkeletonCard extends Component {
             </div>
         </div>
     `;
-  };
+  }
+
+  renderCallback() {
+    this.props.fragment.appendChild(this.container);
+  }
 }

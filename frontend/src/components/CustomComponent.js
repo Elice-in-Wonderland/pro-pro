@@ -6,6 +6,7 @@ class CustomComponent {
     this.init();
     this.render();
     this.mounted();
+    this.setEvent();
   }
 
   init() {}
@@ -20,7 +21,6 @@ class CustomComponent {
   render() {
     this.container.innerHTML = this.markup();
     this.renderCallback();
-    this.setEvent();
   }
 
   markup() {}

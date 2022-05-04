@@ -1,21 +1,10 @@
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 import './comments.scss';
-import CommentForm from '../CommentForm/CommentForm';
-import axiosInstance from '../../utils/api';
 
-export default class Comments extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('div', {
-      className: 'comments',
-    });
-    this.render();
-    this.addEvent();
-  }
-
-  render = () => {
-    const { commentList } = this.props;
-    this.$dom.innerHTML = commentList
+export default class Comments extends CustomComponent {
+  markup() {
+    const { comments } = this.props;
+    return comments
       .map(comment => {
         if (comment.nestedComments) {
           const nestedComments = this.makeNestedComments(
@@ -26,120 +15,62 @@ export default class Comments extends Component {
         return this.makeCommentHTML(comment);
       })
       .join('');
-  };
+  }
 
-  makeCommentHTML = comment => {
-    return `<div class='comment'
-    parentid='${comment._id}'
-    parent='post' id=${comment._id}
-    >
-      <div class="userWrapper">
-          <img src=${comment.author.imageURL} width="30px" height="30px" />
-          <h4 class="userName">${comment.author.nickname}</h4>
-          <h5 class="commentedTime" >${comment.updatedAt.slice(0, 10)}</h5>
-          ${
-            this.props.userType === 'loggedUser' ||
-            this.props.userType === 'author'
-              ? `<li class="commentReply">답변</li>`
-              : ``
-          }
-          ${
-            comment.userId === this.props.userId
-              ? `<li class="commentDelete">삭제</li>`
-              : ``
-          }
-          </div>
-      <h6 class="commentContent">${comment.content}</h6>
+  makeCommentHTML(comment) {
+    const { userId } = this.props;
+    const { _id, author, updatedAt, content } = comment;
+
+    return `
+    <div class='comment' parentid='${_id}' parent='post' data-id=${_id}>
+        <div class="userWrapper">
+            <img src=${author.imageURL} width="30px" height="30px" />
+            <h4 class="userName">${author.nickname}</h4>
+            <h5 class="commentedTime" >${updatedAt.slice(0, 10)}</h5>
+            ${
+              comment.userId === userId && updatedAt !== '지금'
+                ? '<li class="commentDelete">삭제</li>'
+                : ''
+            }
+            </div>
+        <h6 class="commentContent">${content}</h6>
       </div>
-      <hr>
       `;
-  };
+  }
 
-  makeNestedComments = nestedComments => {
-    let result = ``;
+  makeNestedComments(nestedComments) {
+    let result = '';
     nestedComments.forEach(nestedComment => {
       result += this.makeNestedCommentHTML(nestedComment);
     });
     return result;
-  };
+  }
 
-  makeNestedCommentHTML = comment => {
-    return `<div class='nestedComment'
-    parentid='${comment.parentId}'
-    parent='comment' id=${comment._id}
-    >
+  makeNestedCommentHTML(comment) {
+    const { userId, parentId } = this.props;
+    const { _id, author, updatedAt, content } = comment;
+
+    return `
+    <div class='nestedComment' parentid='${parentId}' parent='comment' id=${_id}>
       <div class="userWrapper">
-          <img src=${comment.author.imageURL} width="30px" height="30px" />
-          <h4 class="userName">${comment.author.nickname}</h4>
-          <h5 class="commentedTime" >${comment.updatedAt.slice(0, 10)}</h5>
+          <img src=${author.imageURL} width="30px" height="30px" />
+          <h4 class="userName">${author.nickname}</h4>
+          <h5 class="commentedTime" >${updatedAt.slice(0, 10)}</h5>
           ${
-            this.props.userType === 'loggedUser' ||
-            this.props.userType === 'author'
-              ? `<li class="commentReply">답변</li>`
-              : ``
-          }
-          ${
-            comment.userId === this.props.userId
-              ? `<li class="commentDelete">삭제</li>`
-              : ``
+            comment.userId === userId && updatedAt !== '지금'
+              ? '<li class="commentDelete">삭제</li>'
+              : ''
           }
           </div>
-      <h6 class="commentContent">${comment.content}</h6>
+      <h6 class="commentContent">${content}</h6>
       </div>
-      <hr>
       `;
-  };
-
-  addEvent = () => {
-    const replyBtns = this.$dom.querySelectorAll('.commentReply');
-    const deleteBtns = this.$dom.querySelectorAll('.commentDelete');
-    replyBtns.forEach(replyBtn => {
-      replyBtn.addEventListener('click', this.createCommentForm);
-    });
-    deleteBtns.forEach(deleteBtn => {
-      deleteBtn.addEventListener('click', this.deleteComment);
-    });
-  };
-
-  createCommentForm = event => {
-    const replyBtn = event.target;
-    const targetComment = replyBtn.parentNode.parentNode;
-    const commentForm = new CommentForm({
-      userType: this.props.userType,
-      parentType: 'comment',
-      parentId: targetComment.getAttribute('parentid'),
-    });
-    targetComment.appendChild(commentForm.$dom);
-    replyBtn.removeEventListener('click', this.createCommentForm);
-    replyBtn.addEventListener('click', this.deleteCommentForm);
-  };
-
-  deleteCommentForm = event => {
-    const replyBtn = event.target;
-    const targetComment = replyBtn.parentNode.parentNode;
-    const commentForm = targetComment.querySelector('.commentForm');
-    replyBtn.removeEventListener('click', this.deleteCommentForm);
-    replyBtn.addEventListener('click', this.createCommentForm);
-    if (commentForm) {
-      commentForm.parentNode.removeChild(commentForm);
-    } else {
-      replyBtn.click();
-    }
-  };
-
-  deleteComment = event => {
-    const replyBtn = event.target;
-    const targetComment = replyBtn.parentNode.parentNode;
-    let hr;
-    if (targetComment.parent === 'comment') {
-      hr = targetComment.nextSibling;
-    } else {
-      hr = targetComment.nextSibling.nextSibling;
-    }
-    axiosInstance.delete(`comments/${targetComment.id}`, {
-      withCredentials: true,
-    });
-    targetComment.parentNode.removeChild(targetComment);
-    hr.parentNode.removeChild(hr);
-  };
+  }
 }
+
+// TODO : 답변기능 추가
+// ${
+//   userType === 'loggedUser' || userType === 'author'
+//     ? '<li class="commentReply">답변</li>'
+//     : ''
+// }
