@@ -11,46 +11,58 @@ import Stack from './Stack';
 
 class Form extends CustomComponent {
   markup() {
-    return `
-      <div class="userImg">
-      </div>
+    return (
+      <fragment>
+        <div class="userImg"></div>
 
-      <div class="field nickname">
-        <label for="nickname"><b>닉네임</b></label>
-        <input type="text" id="nickname" class="nickname-input" value="${
-          this.props.userInfo.current.nickname || ''
-        }" placeholder="닉네임을 입력하세요."/>
-      </div>
-
-      <div class="field">
-        <label for="sido"><b>지역</b></label>
-        <select class="sido-select" id="sido">
-          <option value="">시/도</option>
-        </select>
-        <select class="sigungu-select" id="sigungu">
-          <option value="">시/군/구</option>
-        </select>
-      </div>
-
-      <div class="field">       
-        <label for="position"><b>직무</b></label>
-        <select class="position-select" id="position">
-          <option value="">직무를 선택하세요</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="stack"><b>관심 기술 태그</b></label>
-        <div class="stack-select" id="stack">
+        <div class="field nickname">
+          <label for="nickname">
+            <b>닉네임</b>
+          </label>
+          <input
+            type="text"
+            id="nickname"
+            class="nickname-input"
+            value={this.props.userInfo.current.nickname || ''}
+            placeholder="닉네임을 입력하세요."
+          />
         </div>
-      </div>
-      
-      <div class="clearfix">
-        <button class="updateBtn">
-          <span>수정 완료</span>
-        </button>
-      </div>
-    `;
+
+        <div class="field">
+          <label for="sido">
+            <b>지역</b>
+          </label>
+          <select class="sido-select" id="sido">
+            <option value="">시/도</option>
+          </select>
+          <select class="sigungu-select" id="sigungu">
+            <option value="">시/군/구</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="position">
+            <b>직무</b>
+          </label>
+          <select class="position-select" id="position">
+            <option value="">직무를 선택하세요</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="stack">
+            <b>관심 기술 태그</b>
+          </label>
+          <div class="stack-select" id="stack"></div>
+        </div>
+
+        <div class="clearfix">
+          <button class="updateBtn">
+            <span>수정 완료</span>
+          </button>
+        </div>
+      </fragment>
+    );
   }
 
   renderCallback() {

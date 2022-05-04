@@ -6,7 +6,10 @@
   },
   "extends": ["airbnb-base", "plugin:prettier/recommended"],
   "parserOptions": {
-    "ecmaVersion": "latest"
+    "ecmaVersion": "latest",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "ignorePatterns": ["node_modules/"],
   "rules": {

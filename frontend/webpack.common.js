@@ -31,17 +31,32 @@ module.exports = {
         },
       },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-env'],
-          plugins: ['@babel/plugin-transform-runtime'],
+          plugins: [
+            '@babel/plugin-transform-runtime',
+            [
+              '@babel/plugin-transform-react-jsx',
+              {
+                runtime: 'classic',
+                pragma: 'jsx',
+              },
+            ],
+          ],
         },
         exclude: /node_modules/,
       },
     ],
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      jsx: [
+        path.resolve(path.join(__dirname, 'src/utils/jsx-runtime.js')),
+        'default',
+      ],
+    }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env),
     }),
