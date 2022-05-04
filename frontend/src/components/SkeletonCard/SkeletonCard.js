@@ -17,8 +17,4 @@ export default class SkeletonCard extends CustomComponent {
         </div>
     `;
   }
-
-  renderCallback() {
-    this.props.fragment.appendChild(this.container);
-  }
 }
