@@ -1,98 +1,102 @@
-import Component from '../component';
 import LoginModal from '../LoginModal/LoginModal';
 import { removeToken } from '../../utils/auth';
 import { state, removeState } from '../../utils/store';
 import RouterContext from '../../router/RouterContext';
+import CustomComponent from '../CustomComponent';
+import { createDom } from '../../utils/dom';
 
-export default class NavItem extends Component {
-  constructor(props) {
-    super(props);
-    this.$dom = this.createDom('li', {});
-    this.render();
-  }
-
-  render = () => {
-    if (this.props.type === 'a') {
-      const $a = this.createDom('a', {
-        href: this.props.href,
-        className: this.props.className,
-        innerText: this.props.text,
-      });
-
-      this.$dom.appendChild($a);
-      return;
+export default class NavItem extends CustomComponent {
+  markup() {
+    if (this.props.type === 'link') {
+      return `
+        <a href=${this.props.href} class="${this.props.className}">${this.props.text}</a>
+      `;
     }
 
     if (this.props.type === 'profile') {
-      const $dropBox = this.createDom('div', {
-        className: 'drop-box',
-      });
-      const $profile = this.createDom('div', {
-        className: 'profile',
-      });
-      const $img = this.createDom('img', {
-        src:
-          state.myInfo?.imageURL ||
-          'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
-        alt: 'profile',
-      });
-      const $menu = this.createDom('div', {
-        className: 'menu',
-      });
-      const $ul = this.createDom('ul', {});
+      return `
+        <div class="drop-box">
+          <div class="profile">
+            <img src=${
+              state.myInfo?.imageURL ||
+              'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png'
+            } alt="profile" class="profile-img" />
+          </div>
+          <ul class="menu">
+            ${this.props.list
+              .map(
+                li =>
+                  `<li><a href=${li.href} class="${li.className}">${li.text}</a></li>`,
+              )
+              .join('')}
+          </ul>
+        </div>
+      `;
+    }
 
-      this.props.list.forEach(li => {
-        const $li = this.createDom('li', {});
-        const $a = this.createDom('a', {
-          href: li.href,
-          className: li.className,
-          innerText: li.text,
-        });
-        if (li.text === '로그아웃') {
-          $a.addEventListener('click', e => {
-            e.preventDefault();
-            removeToken();
-            removeState('myInfo');
-            RouterContext.state.reload();
-          });
-        }
-        $li.appendChild($a);
-        $ul.appendChild($li);
-      });
-      $profile.appendChild($img);
-      $menu.appendChild($ul);
-      $dropBox.appendChild($profile);
-      $dropBox.appendChild($menu);
-      this.$dom.appendChild($dropBox);
+    if (this.props.type === 'modal') {
+      return `
+        <p class="login-text">로그인</p>
+      `;
+    }
+  }
 
-      $img.addEventListener('click', e => {
-        $menu.classList.toggle('active');
+  renderCallback() {
+    if (this.props.type === 'modal') {
+      const modalContainer = createDom('div', {
+        className: 'modal-background hidden',
       });
 
-      $menu.addEventListener('click', e => {
+      new LoginModal({
+        container: modalContainer,
+        props: { onLogin: this.props.onLogin },
+      });
+
+      this.container.append(modalContainer);
+    }
+  }
+
+  setEvent() {
+    const menu = this.container.querySelector('.menu');
+    const dropBox = this.container.querySelector('.drop-box');
+    const profileImg = this.container.querySelector('.profile-img');
+    const loginText = this.container.querySelector('.login-text');
+    const logoutBtn = this.container.querySelector('.nav-logout');
+    const modalContainer = this.container.querySelector('.modal-background');
+
+    if (this.props.type === 'link') return;
+
+    if (this.props.type === 'profile') {
+      profileImg.addEventListener('click', () => {
+        menu.classList.toggle('active');
+      });
+
+      menu.addEventListener('click', e => {
         if (e.target.classList.contains('router')) {
-          $menu.classList.remove('active');
+          menu.classList.remove('active');
         }
+      });
+
+      logoutBtn.addEventListener('click', e => {
+        e.preventDefault();
+        removeToken();
+        removeState('myInfo');
+        RouterContext.state.reload();
       });
 
       document.querySelector('#root').addEventListener('click', e => {
-        if (!$dropBox.contains(e.target)) $menu.classList.remove('active');
+        if (!dropBox.contains(e.target)) menu.classList.remove('active');
       });
-
       return;
     }
 
-    // 로그인 버튼 모달
-    const $p = this.createDom('p', {
-      innerText: '로그인',
-      className: 'login-text',
-    });
-
-    this.$dom.appendChild($p);
-    this.$loginModal = new LoginModal({ onLogin: this.props.onLogin });
-    this.$dom.append(this.$loginModal.$dom);
-    this.$dom.addEventListener('click', e => {
-      if (e.target === $p) this.$loginModal.$dom.classList.remove('hidden');
-    });
-  };
+    if (this.props.type === 'modal') {
+      this.container.addEventListener('click', e => {
+        if (e.target === loginText) {
+          modalContainer.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    }
+  }
 }

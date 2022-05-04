@@ -1,51 +1,50 @@
 import { getToken } from '../../utils/auth';
-import Component from '../component';
+import { createDom } from '../../utils/dom';
+import CustomComponent from '../CustomComponent';
 import Logo from '../Logo/Logo';
 import './navigation.scss';
 import NavItem from './NavItem';
 
-export default class Navigation extends Component {
-  constructor(props) {
-    super(props);
-    const token = getToken();
-
-    this.$dom = this.createDom('nav', {
-      className: 'gnb',
-    });
-    this.loginState = !!token;
-    this.$logo = new Logo();
-    this.render();
+export default class Navigation extends CustomComponent {
+  init() {
+    this.state = {
+      loginState: !!getToken(),
+    };
   }
 
-  replaceNav = () => {
-    this.loginState = true;
-    location.reload();
-    // this.render();
-  };
+  markup() {
+    return `
+      <ul class='nav-list'>
+      </ul>
+    `;
+  }
 
-  render = () => {
-    this.$navItems = this.loginState
+  renderCallback() {
+    const navList = this.container.querySelector('.nav-list');
+    const { loginState } = this.state;
+
+    const navItems = loginState
       ? [
           {
-            type: 'a',
+            type: 'link',
             href: '/',
             text: '프로젝트',
             className: 'nav-project router',
           },
           {
-            type: 'a',
+            type: 'link',
             href: '/study',
             text: '스터디',
             className: 'nav-study router',
           },
           {
-            type: 'a',
+            type: 'link',
             href: '/recommend',
             text: '추천',
             className: 'nav-recommend router',
           },
           {
-            type: 'a',
+            type: 'link',
             href: '/write',
             text: '새 글 쓰기',
             className: 'nav-write router',
@@ -56,35 +55,35 @@ export default class Navigation extends Component {
             className: 'nav-profile',
             list: [
               {
-                type: 'a',
+                type: 'link',
                 href: '/bookmark',
                 text: '내 북마크',
                 className: 'nav-bookmark router',
               },
               {
-                type: 'a',
+                type: 'link',
                 href: '/profile',
                 text: '프로필',
                 className: 'nav-profile router',
               },
               {
-                type: 'a',
+                type: 'link',
                 href: '/',
                 text: '로그아웃',
                 className: 'nav-logout',
               },
             ],
           },
-        ].map(li => new NavItem(li))
+        ]
       : [
           {
-            type: 'a',
+            type: 'link',
             href: '/',
             text: '프로젝트',
             className: 'nav-project router',
           },
           {
-            type: 'a',
+            type: 'link',
             href: '/study',
             text: '스터디',
             className: 'nav-study router',
@@ -93,26 +92,29 @@ export default class Navigation extends Component {
             type: 'modal',
             text: '로그인',
             className: 'nav-login',
-            onLogin: this.replaceNav,
+            onLogin: this.handleLogin.bind(this),
           },
-        ].map(li => new NavItem(li));
+        ];
 
-    this.$dom.innerHTML = `
-        <ul class='nav-list'>
-        </ul>
-    `;
-
-    // append
-    const $navList = this.$dom.querySelector('.nav-list');
-    const fragment = new DocumentFragment();
-    this.$dom.prepend(this.$logo.$dom);
-    this.$navItems.forEach(li => {
-      if (li.$dom) {
-        fragment.appendChild(li.$dom);
-      }
+    const logo = createDom('a', {
+      className: 'logo router',
+      href: '/',
     });
-    $navList.appendChild(fragment);
+    const fragment = new DocumentFragment();
 
-    this.appendRoot(this.props, this.$dom, true);
-  };
+    new Logo({ container: logo });
+
+    navItems.forEach(item => {
+      const li = createDom('li', {});
+      new NavItem({ container: li, props: item });
+      fragment.appendChild(li);
+    });
+
+    this.container.prepend(logo);
+    navList.appendChild(fragment);
+  }
+
+  handleLogin() {
+    this.setState({ ...this.state, loginState: true });
+  }
 }

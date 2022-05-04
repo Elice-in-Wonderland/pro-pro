@@ -43,9 +43,9 @@ axiosInstance.interceptors.response.use(
         removeState('myInfo');
         RouterContext.state.reload();
       }
-    } else {
-      console.error('Error Message:', error.message);
     }
+
+    throw new Error(error);
   },
 );
 

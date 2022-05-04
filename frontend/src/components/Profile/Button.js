@@ -1,26 +1,15 @@
-import Component from '../component';
+import CustomComponent from '../CustomComponent';
 
-export default class Button extends Component {
-  constructor(props) {
-    super(props);
-    // top node
-    this.$dom = this.createDom('button', {
-      className: props.className,
-    });
-
-    this.render();
-    this.addEvent();
-  }
-
-  render = () => {
-    this.$dom.innerHTML = `
+export default class Button extends CustomComponent {
+  markup() {
+    return `
       <span>${this.props.buttonText}</span>
     `;
-  };
+  }
 
-  addEvent = () => {
-    this.$dom.addEventListener('click', () => {
-      this.props.onClick();
+  setEvent() {
+    this.container.addEventListener('click', () => {
+      if (this.props.cb) this.props.cb();
     });
-  };
+  }
 }

@@ -255,10 +255,7 @@ const defaultSido = [
   '충북',
 ];
 
-const defaultPosition = [
-  ['frontend', '프론트엔드'],
-  ['backend', '백엔드'],
-];
+const defaultPosition = ['frontend', 'backend'];
 
 const defaultStacks = [
   'cpp',

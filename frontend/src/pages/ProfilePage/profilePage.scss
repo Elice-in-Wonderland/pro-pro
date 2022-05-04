@@ -1,39 +1,49 @@
 $mobile: 744px;
 $tablet: 1023px;
 $desktop: 1024px;
-
-label {
-  b {
-    color: var(--dark);
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 28.13px;
-  }
-}
-
-.profile-page-wrapper {
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--gray);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 10%;
-  padding-right: 10%;
-}
+$navigation-height: 80px;
 
 .container {
   background-color: var(--white);
-  margin-top: 150px;
-  padding: 50px;
-  width: 1200px;
-  border-radius: 20px;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  user-select: none;
+  margin-top: $navigation-height;
+
+  label {
+    b {
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 28.13px;
+    }
+  }
 }
 
-.userImg {
+.form {
+  display: flex;
+}
+
+// TODO: class 충돌
+#root {
+  padding-bottom: 0;
+}
+body main .form {
+  margin: 0;
+  padding: 30px;
+}
+body main .form div {
+  margin: 0;
+  
+}
+// TODO: class 충돌
+
+.form .userImg {
+  align-self: center;
   width: 157px;
   height: 157px;
   margin-bottom: 70px;
@@ -45,16 +55,12 @@ label {
     height: 100%;
     object-fit: cover;
   }
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
+  flex-shrink: 0;
 }
 
 .form > div > label {
-  display: inline-block;
-  width: 150px;
+  width: fit-content;
+  margin: 10px 0;
 }
 
 .field {
@@ -63,8 +69,8 @@ label {
   padding-top: 10px;
   padding-bottom: 10px;
 
-  &:nth-child(2) {
-    display: inline;
+  &:nth-child(3) {
+    display: inline-block;
     label {
       display: block;
     }
@@ -101,6 +107,7 @@ input[type='text']:focus {
     cursor: pointer;
   }
 }
+
 .sigungu-select {
   width: 120px;
   &:hover {
@@ -113,11 +120,13 @@ input[type='text']:focus {
     cursor: pointer;
   }
 }
+
 .stack-select {
   display: grid;
-  row-gap: 10px;
-  column-gap: 20px;
-  margin-top: 10px;
+  gap: 10px;
+  column-gap: 30px;
+  margin: 15px 0;
+
   grid-template-columns: repeat(4, 1fr);
 
   @media (max-width: $tablet) {
@@ -133,9 +142,9 @@ input[type='text']:focus {
     cursor: pointer;
   }
 
-  input {
-    margin-right: 8px;
-    border-radius: 15px;
+  div {
+    display: flex;
+    justify-content: space-between;
   }
 }
 
@@ -146,13 +155,13 @@ input[type='text']:focus {
 .clearfix {
   display: flex;
   justify-content: flex-end;
-  margin-top: 50px;
+  padding-top: 30px;
 
   button {
     border-radius: 10px;
     border: none;
     background: none;
-    padding: 8px 15px;
+    padding: 10px 15px;
     cursor: pointer;
   }
 
