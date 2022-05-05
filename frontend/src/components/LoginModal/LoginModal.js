@@ -28,22 +28,18 @@ export default class LoginModal extends CustomComponent {
   }
 
   setEvent() {
-    const $modalContainer = this.container.querySelector(
-      '.login-modal-wrapper',
-    );
+    const modalContainer = this.container.querySelector('.login-modal-wrapper');
 
-    this.container.addEventListener('click', e => {
-      if (
-        e.target.classList.contains('login-exit-btn') ||
-        !$modalContainer.contains(e.target)
-      ) {
-        this.hiddenModal();
-      }
+    this.container.addEventListener('click', ({ target }) => {
+      if (!modalContainer.contains(target)) return this.hiddenModal();
+
+      if (target.classList.contains('login-exit-btn'))
+        return this.hiddenModal();
     });
 
-    window.onload = () => {
+    window.addEventListener('load', () => {
       this.initGoogle();
-    };
+    });
   }
 
   initGoogle() {

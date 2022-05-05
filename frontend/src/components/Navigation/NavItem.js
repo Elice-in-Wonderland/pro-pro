@@ -64,44 +64,45 @@ export default class NavItem extends CustomComponent {
   setEvent() {
     const menu = this.container.querySelector('.menu');
     const dropBox = this.container.querySelector('.drop-box');
-    const profileImg = this.container.querySelector('.profile-img');
-    const loginText = this.container.querySelector('.login-text');
-    const logoutBtn = this.container.querySelector('.nav-logout');
     const modalContainer = this.container.querySelector('.modal-background');
 
-    if (this.props.type === 'link') return;
+    this.container.addEventListener('click', event => {
+      const { target } = event;
+
+      if (target.classList.contains('profile-img')) {
+        menu.classList.toggle('active');
+      }
+
+      if (target.classList.contains('login-text')) {
+        modalContainer.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      if (menu.contains(target) && target.classList.contains('router')) {
+        this.hiddenDropbox();
+      }
+
+      if (target.classList.contains('nav-logout')) {
+        event.preventDefault();
+        this.handleLogout();
+      }
+    });
 
     if (this.props.type === 'profile') {
-      profileImg.addEventListener('click', () => {
-        menu.classList.toggle('active');
-      });
-
-      menu.addEventListener('click', e => {
-        if (e.target.classList.contains('router')) {
-          menu.classList.remove('active');
-        }
-      });
-
-      logoutBtn.addEventListener('click', e => {
-        e.preventDefault();
-        removeToken();
-        removeState('myInfo');
-        RouterContext.state.reload();
-      });
-
-      document.querySelector('#root').addEventListener('click', e => {
-        if (!dropBox.contains(e.target)) menu.classList.remove('active');
-      });
-      return;
-    }
-
-    if (this.props.type === 'modal') {
-      this.container.addEventListener('click', e => {
-        if (e.target === loginText) {
-          modalContainer.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
-        }
+      window.addEventListener('click', e => {
+        if (!dropBox.contains(e.target)) this.hiddenDropbox();
       });
     }
+  }
+
+  hiddenDropbox() {
+    const menu = this.container.querySelector('.menu');
+    menu.classList.remove('active');
+  }
+
+  handleLogout() {
+    removeToken();
+    removeState('myInfo');
+    RouterContext.state.reload();
   }
 }
