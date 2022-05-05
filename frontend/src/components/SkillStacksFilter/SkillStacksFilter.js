@@ -18,8 +18,7 @@ import './skillStacksFilter.scss';
 
 export default class SkillStacksFilter extends CustomComponent {
   markup() {
-    return `<div class="skill-icon"></div>
-    `;
+    return <div class="skill-icon"></div>;
   }
 
   renderCallback() {

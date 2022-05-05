@@ -109,42 +109,33 @@ export default class MainPage extends CustomComponent {
   }
 
   markup() {
-    return `
-    <div class="main-page-wrapper">
-    <section class="home-banner">
-
-    </section>
-      <section class="skills-bar">
-
-      </section>
-      <section id="filter-bar">
-        <button type="button" class="recent activated">
-          <div class="recentTitle btn-title">최신순</div>
-        </button>
-        <button type="button" class="populate">
-          <div class="populateTitle btn-title">인기순</div>
-        </button>
-        <div class="wrapper">
-          <div class="search-bar">
-            <input aria-label="검색" type="text" id="search-input"/>
-            <img
-              src="${searchIcon}"
-              alt="search image"
-              class="search-icon"/> 
+    return (
+      <div class="main-page-wrapper">
+        <section class="home-banner"></section>
+        <section class="skills-bar"></section>
+        <section id="filter-bar">
+          <button type="button" class="recent activated">
+            <div class="recentTitle btn-title">최신순</div>
+          </button>
+          <button type="button" class="populate">
+            <div class="populateTitle btn-title">인기순</div>
+          </button>
+          <div class="wrapper">
+            <div class="search-bar">
+              <input aria-label="검색" type="text" id="search-input" />
+              <img src={searchIcon} alt="search image" class="search-icon" />
+            </div>
           </div>
-        </div>
-        <button type="button" class="entire activated">
-        <div class="entire-title btn-title">전체 글</div>
-      </button>
-        <button type="button" class="avail">
-        <div class="avail-title btn-title">모집중인 글</div>
-      </button>
-
-      </section>
-      <section class='card-container'>
-      </section>
-    </div>
-    `;
+          <button type="button" class="entire activated">
+            <div class="entire-title btn-title">전체 글</div>
+          </button>
+          <button type="button" class="avail">
+            <div class="avail-title btn-title">모집중인 글</div>
+          </button>
+        </section>
+        <section class="card-container"></section>
+      </div>
+    );
   }
 
   renderCallback() {
