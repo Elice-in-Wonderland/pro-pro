@@ -1,9 +1,9 @@
 import { getToken } from '../../utils/auth';
 import { createDom } from '../../utils/dom';
 import CustomComponent from '../CustomComponent';
+import NavItem from './NavItem';
 import Logo from '../Logo/Logo';
 import './navigation.scss';
-import NavItem from './NavItem';
 
 export default class Navigation extends CustomComponent {
   init() {
@@ -103,13 +103,12 @@ export default class Navigation extends CustomComponent {
     });
     const fragment = new DocumentFragment();
 
-    new Logo({ container: logo });
-
     navItems.forEach(item => {
       const li = createDom('li', { className: 'gnb__item' });
       new NavItem({ container: li, props: item });
       fragment.appendChild(li);
     });
+    new Logo({ container: logo });
 
     gnb.prepend(logo);
     navList.appendChild(fragment);

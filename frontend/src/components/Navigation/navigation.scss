@@ -1,4 +1,5 @@
 @import '../../styles/utils';
+
 .gnb {
   position: absolute;
   background-color: var(--white);
@@ -18,81 +19,22 @@
 
 .gnb__inner {
   display: flex;
-
-  li {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 }
 
-.dropdown {
-  position: relative;
+.gnb__inner .gnb__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
 }
 
-.profile {
-  position: relative;
-  width: 50px;
-  height: 50px;
-}
-
-.profile__image {
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.dropdown__content::before {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  top: -5px;
-  right: 20px;
-  width: 10px;
-  height: 10px;
-  background: var(--dark);
-  transform: rotate(45deg);
-}
-.dropdown__content {
-  position: absolute;
-  top: 70px;
-  right: 0px;
-  width: 110px;
-  padding: 10px 10px;
-  background-color: var(--dark);
-  border-radius: 15px;
-  transition: 0.5s;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
-  visibility: hidden;
-  opacity: 0;
-}
-
-.dropdown__content--active {
-  visibility: visible;
-  opacity: 0.9;
-}
-
-
-.gnb__inner li a,
-.gnb__inner li a:link,
-.gnb__inner li .login {
+.gnb__inner .gnb__link {
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
   color: var(--medium);
   cursor: pointer;
 
-
-  &:hover {
-    opacity: 0.3;
-  }
-}
-
-.dropdown__content .dropdown__item a {
-  color: var(--white);
 
   &:hover {
     opacity: 0.3;

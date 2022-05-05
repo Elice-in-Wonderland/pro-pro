@@ -12,18 +12,23 @@ import { restructingMyInfo } from '../../utils/auth';
 export default class LoginModal extends CustomComponent {
   markup() {
     return (
-      <div class="login-modal__background">
-        <div class="login-modal__content">
-          <button class="login-modal__close">
-            <img src={xButton} />
-          </button>
-          <div class="login-modal__title">환영합니다!</div>
-          <img class="login-modal__image" src={proproLogo} />
-          <div class="google-login">
-            <div id="google-login__button"></div>
+      <fragment>
+        <p class="login">로그인</p>
+        <div class="login-modal login-modal--hidden">
+          <div class="login-modal__background">
+            <div class="login-modal__content">
+              <button class="login-modal__close">
+                <img src={xButton} />
+              </button>
+              <div class="login-modal__title">환영합니다!</div>
+              <img class="login-modal__image" src={proproLogo} />
+              <div class="google-login">
+                <div id="google-login__button"></div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </fragment>
     );
   }
 
@@ -58,7 +63,9 @@ export default class LoginModal extends CustomComponent {
   }
 
   hiddenModal() {
-    this.container.classList.add('login-modal--hidden');
+    const modalContainer = this.container.querySelector('.login-modal');
+
+    modalContainer.classList.add('login-modal--hidden');
     document.body.style.overflow = 'scroll';
   }
 
