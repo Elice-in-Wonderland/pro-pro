@@ -17,7 +17,7 @@ export default class NavItem extends CustomComponent {
 
     if (this.props.type === 'profile') {
       return (
-        <div class="drop-box">
+        <div class={this.props.className}>
           <div class="profile">
             <img
               src={
@@ -25,12 +25,12 @@ export default class NavItem extends CustomComponent {
                 'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png'
               }
               alt="profile"
-              class="profile-img"
+              class="profile__image"
             />
           </div>
-          <ul class="menu">
+          <ul class="dropdown__content">
             {this.props.list.map(li => (
-              <li>
+              <li class="dropdown__item">
                 <a href={li.href} class={li.className}>
                   {li.text}
                 </a>
@@ -42,14 +42,14 @@ export default class NavItem extends CustomComponent {
     }
 
     if (this.props.type === 'modal') {
-      return <p class="login-text">로그인</p>;
+      return <p class="login">로그인</p>;
     }
   }
 
   renderCallback() {
     if (this.props.type === 'modal') {
       const modalContainer = createDom('div', {
-        className: 'modal-background hidden',
+        className: 'login-modal login-modal--hidden',
       });
 
       new LoginModal({
@@ -62,42 +62,49 @@ export default class NavItem extends CustomComponent {
   }
 
   setEvent() {
-    const menu = this.container.querySelector('.menu');
-    const dropBox = this.container.querySelector('.drop-box');
-    const modalContainer = this.container.querySelector('.modal-background');
+    const dropdownCotent = this.container.querySelector('.dropdown__content');
+    const dropdown = this.container.querySelector('.dropdown');
+    const modalContainer = this.container.querySelector('.login-modal');
 
     this.container.addEventListener('click', event => {
       const { target } = event;
 
-      if (target.classList.contains('profile-img')) {
-        menu.classList.toggle('active');
+      if (target.classList.contains('profile__image')) {
+        dropdownCotent.classList.toggle('dropdown__content--active');
       }
 
-      if (target.classList.contains('login-text')) {
-        modalContainer.classList.remove('hidden');
+      if (target.classList.contains('login')) {
+        modalContainer.classList.remove('login-modal--hidden');
         document.body.style.overflow = 'hidden';
       }
 
-      if (menu.contains(target) && target.classList.contains('router')) {
-        this.hiddenDropbox();
-      }
-
-      if (target.classList.contains('nav-logout')) {
+      if (target.classList.contains('logout')) {
         event.preventDefault();
         this.handleLogout();
       }
     });
 
     if (this.props.type === 'profile') {
+      this.container.addEventListener('click', event => {
+        const { target } = event;
+
+        if (
+          dropdownCotent.contains(target) &&
+          target.classList.contains('router')
+        ) {
+          this.hiddendropdown();
+        }
+      });
+
       window.addEventListener('click', e => {
-        if (!dropBox.contains(e.target)) this.hiddenDropbox();
+        if (!dropdown.contains(e.target)) this.hiddendropdown();
       });
     }
   }
 
-  hiddenDropbox() {
-    const menu = this.container.querySelector('.menu');
-    menu.classList.remove('active');
+  hiddendropdown() {
+    const dropdownCotent = this.container.querySelector('.dropdown__content');
+    dropdownCotent.classList.remove('dropdown__content--active');
   }
 
   handleLogout() {

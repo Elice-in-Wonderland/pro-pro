@@ -31,7 +31,7 @@ class App {
     // auto login
     await getMyInfo();
 
-    new Navigation({ container: document.getElementById('gnb') });
+    new Navigation({ container: document.getElementById('header') });
     new Router(this.target, this.routes, this.NotFoundPage, this.navigation);
   }
 }

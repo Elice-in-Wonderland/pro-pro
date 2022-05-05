@@ -13,11 +13,16 @@ export default class Navigation extends CustomComponent {
   }
 
   markup() {
-    return <ul class="nav-list"></ul>;
+    return (
+      <nav class="gnb">
+        <ul class="gnb__inner"></ul>
+      </nav>
+    );
   }
 
   renderCallback() {
-    const navList = this.container.querySelector('.nav-list');
+    const navList = this.container.querySelector('.gnb__inner');
+    const gnb = this.container.querySelector('.gnb');
     const { loginState } = this.state;
 
     const navItems = loginState
@@ -26,48 +31,47 @@ export default class Navigation extends CustomComponent {
             type: 'link',
             href: '/',
             text: '프로젝트',
-            className: 'nav-project router',
+            className: 'gnb__link router',
           },
           {
             type: 'link',
             href: '/study',
             text: '스터디',
-            className: 'nav-study router',
+            className: 'gnb__link router',
           },
           {
             type: 'link',
             href: '/recommend',
             text: '추천',
-            className: 'nav-recommend router',
+            className: 'gnb__link router',
           },
           {
             type: 'link',
             href: '/write',
             text: '새 글 쓰기',
-            className: 'nav-write router',
+            className: 'gnb__link router',
           },
           {
             type: 'profile',
-            text: '프로필',
-            className: 'nav-profile',
+            className: 'dropdown',
             list: [
               {
                 type: 'link',
                 href: '/bookmark',
                 text: '내 북마크',
-                className: 'nav-bookmark router',
+                className: 'dropdown__link router',
               },
               {
                 type: 'link',
                 href: '/profile',
                 text: '프로필',
-                className: 'nav-profile router',
+                className: 'dropdown__link router',
               },
               {
                 type: 'link',
                 href: '/',
                 text: '로그아웃',
-                className: 'nav-logout',
+                className: 'dropdown__link logout',
               },
             ],
           },
@@ -77,13 +81,13 @@ export default class Navigation extends CustomComponent {
             type: 'link',
             href: '/',
             text: '프로젝트',
-            className: 'nav-project router',
+            className: 'gnb__link router',
           },
           {
             type: 'link',
             href: '/study',
             text: '스터디',
-            className: 'nav-study router',
+            className: 'gnb__link router',
           },
           {
             type: 'modal',
@@ -102,12 +106,12 @@ export default class Navigation extends CustomComponent {
     new Logo({ container: logo });
 
     navItems.forEach(item => {
-      const li = createDom('li', {});
+      const li = createDom('li', { className: 'gnb__item' });
       new NavItem({ container: li, props: item });
       fragment.appendChild(li);
     });
 
-    this.container.prepend(logo);
+    gnb.prepend(logo);
     navList.appendChild(fragment);
   }
 

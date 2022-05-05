@@ -1,13 +1,12 @@
 @import '../../styles/utils';
-#gnb {
+.gnb {
   position: absolute;
   background-color: var(--white);
   height: 80px;
   width: 100vw;
   display: flex;
   justify-content: space-between;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding: 0 5%;
   align-items: center;
   top: 0;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
@@ -17,7 +16,7 @@
   }
 }
 
-.nav-list {
+.gnb__inner {
   display: flex;
 
   li {
@@ -28,67 +27,71 @@
   }
 }
 
-.drop-box {
-  top: 20px;
-
-  .profile {
-    position: relative;
-    width: 50px;
-    height: 50px;
-
-    img {
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-  }
-  .menu::before {
-    content: '';
-    position: absolute;
-    z-index: 0;
-    top: -5px;
-    left: 20px;
-    width: 10px;
-    height: 10px;
-    background: var(--dark);
-    transform: rotate(45deg);
-  }
-  .menu {
-    position: absolute;
-    top: 75px;
-    padding: 10px 10px;
-    margin-right: 5px;
-    background-color: var(--dark);
-    border-radius: 15px;
-    transition: 0.5s;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
-    visibility: hidden;
-    opacity: 0;
-  }
-
-  .menu.active {
-    visibility: visible;
-    opacity: 0.9;
-  }
+.dropdown {
+  position: relative;
 }
 
-.nav-list li a,
-.nav-list li a:link,
-.nav-list li .login-text {
+.profile {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+
+.profile__image {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.dropdown__content::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  top: -5px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: var(--dark);
+  transform: rotate(45deg);
+}
+.dropdown__content {
+  position: absolute;
+  top: 70px;
+  right: 0px;
+  width: 110px;
+  padding: 10px 10px;
+  background-color: var(--dark);
+  border-radius: 15px;
+  transition: 0.5s;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.dropdown__content--active {
+  visibility: visible;
+  opacity: 0.9;
+}
+
+
+.gnb__inner li a,
+.gnb__inner li a:link,
+.gnb__inner li .login {
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
   color: var(--medium);
   cursor: pointer;
 
+
   &:hover {
     opacity: 0.3;
   }
 }
 
-.nav-list li .drop-box .menu a {
+.dropdown__content .dropdown__item a {
   color: var(--white);
 
   &:hover {
