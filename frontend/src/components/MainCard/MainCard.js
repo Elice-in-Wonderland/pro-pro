@@ -3,7 +3,7 @@ import viewImage from '../../assets/icons/view.svg';
 import bookmarkImage from '../../assets/icons/bookmark.svg';
 import bookmarkFilledImage from '../../assets/icons/bookmark_filled.svg';
 import PostBanner from '../PostBanner/PostBanner';
-import '../Card/card.scss';
+import '../MainCard/MainCard.scss';
 import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
 import Toast from '../Toast/Toast';
@@ -12,6 +12,8 @@ import { createDom, replaceElement } from '../../utils/dom';
 
 export default class MainCard extends CustomComponent {
   init() {
+    console.log('card');
+    console.log(this.props);
     this.state = {
       type: this.props.type,
       post: this.props.post,
@@ -84,23 +86,23 @@ export default class MainCard extends CustomComponent {
     });
 
     replaceElement(images, div);
-    const bookmarkPost = () => {
-      for (let i = 0; i < this.state.postList.length; i += 1) {
-        // 이미 북마크한 포스트의 북마크 버튼을 누른 경우 북마크를 해제한다.
-        if (this.state.post._id === this.state.postList[i]._id) {
-          axiosInstance.delete(`/users/mark/${this.state.post._id}`, {
-            withCredentials: true,
-          });
-          break;
-        }
-      }
-      this.state.updateCards();
-      new Toast({
-        timeout: 2100,
-        content: '북마크가 해제되었습니다',
-        type: 'success',
-      });
-    };
+    // const bookmarkPost = () => {
+    //   for (let i = 0; i < this.state.postList.length; i += 1) {
+    //     // 이미 북마크한 포스트의 북마크 버튼을 누른 경우 북마크를 해제한다.
+    //     if (this.state.post._id === this.state.postList[i]._id) {
+    //       axiosInstance.delete(`/users/mark/${this.state.post._id}`, {
+    //         withCredentials: true,
+    //       });
+    //       break;
+    //     }
+    //   }
+    //   this.state.updateCards();
+    //   new Toast({
+    //     timeout: 2100,
+    //     content: '북마크가 해제되었습니다',
+    //     type: 'success',
+    //   });
+    // };
     cardWrap.addEventListener('click', event => {
       if (event.target !== bookmark) {
         RouterContext.state.push(`/detail/${this.state.post._id}`);
@@ -111,9 +113,9 @@ export default class MainCard extends CustomComponent {
     });
     if (this.state.type === 'bookmark') {
       bookmark.src = bookmarkFilledImage;
-      bookmarkBtn.addEventListener('click', () => {
-        bookmarkPost();
-      });
+      // bookmarkBtn.addEventListener('click', () => {
+      //   bookmarkPost();
+      // });
     } else {
       bookmarkBtn.className = 'bookmark-btn-main';
     }

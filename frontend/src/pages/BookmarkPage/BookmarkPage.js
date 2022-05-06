@@ -1,77 +1,89 @@
 import axiosInstance from '../../utils/api';
-import Component from '../../components/component';
-import Card from '../../components/Card/Card';
+import MainCard from '../../components/MainCard/MainCard';
 import './bookmarkPage.scss';
+import CustomComponent from '../../components/CustomComponent';
+import { createDom, replaceElement } from '../../utils/dom';
+import Toast from '../../components/Toast/Toast';
 
-export default class BookmarkPage extends Component {
-  constructor(props) {
-    super(props);
+export default class BookmarkPage extends CustomComponent {
+  init() {
+    this.state = [];
+  }
 
-    this.$dom = this.createDom('div', { className: 'bookmark-page-wrapper' });
+  setState = nextState => {
+    this.state = nextState;
+    this.render();
+  };
 
-    this.updateCards();
+  async mounted() {
+    try {
+      await axiosInstance
+        .get('/users/mark?category=project&page=1&perPage=10', {
+          withCredentials: true,
+        })
+        .then(res => {
+          return res.data.data;
+        })
+        .then(cards => {
+          this.setState(cards);
+        });
+    } catch (e) {
+      new Toast({ content: '북마크 정보 불러오기 실패', type: 'fail' });
+    }
+  }
 
-    this.appendRoot(props, this.$dom);
+  markup() {
+    return `
+      <div class="bookmark-page-wrapper">
+        <section class="filter-buttons">
+          <button type="button" id="bookmark-button">북마크한 프로젝트/스터디</button>
+        </section>
+        <section class="cards">
+          <div class="card-elements"></div>
+        </section>
+      </div>
+    `;
+  }
+
+  cardRender() {
+    const cards = this.container.querySelector('.card-elements');
+
+    const frag = document.createDocumentFragment();
+
+    this.state.forEach(item => {
+      const cardWrapper = createDom('div', {
+        className: 'card-wrapper',
+      });
+
+      new MainCard({
+        container: cardWrapper,
+        props: {
+          type: 'bookmark',
+          post: item,
+          postList: this.state,
+          updateCards: this.updateCards,
+        },
+      });
+      frag.appendChild(cardWrapper);
+    });
+    replaceElement(cards, frag);
+  }
+
+  renderCallback() {
+    this.cardRender();
   }
 
   updateCards = async () => {
-    await this.getData();
+    await this.mounted();
     this.render();
-    this.createCard();
-    this.addEvent();
+    this.setEvent();
   };
 
-  getData = async () => {
-    await axiosInstance
-      .get('/users/mark?category=project&page=1&perPage=10', {
-        withCredentials: true,
-      })
-      .then(res => {
-        return res.data.data;
-      })
-      .then(cards => {
-        this.state = cards;
-      });
-  };
-
-  render = () => {
-    this.$dom.innerHTML = `
-      <section class="filter-buttons">
-        <button type="button" id="bookmark-button">북마크한 프로젝트/스터디</button>
-      </section>
-      <section class="cards">
-        <div class="card-elements"></div>
-      </section>
-    `;
-  };
-
-  createCard = () => {
-    const cards = this.$dom.querySelector('.card-elements');
-
-    const $createFrag = document.createDocumentFragment();
-
-    this.cardList = this.state.map(item => {
-      const newCard = new Card({
-        type: 'bookmark',
-        post: item,
-        postList: this.state,
-        updateCards: this.updateCards,
-      });
-      return newCard.$dom;
-    });
-
-    this.cardList.forEach(item => {
-      $createFrag.appendChild(item);
-    });
-
-    this.replaceElement(cards, $createFrag);
-  };
-
-  addEvent = () => {
-    const bookmarkBtn = this.$dom.querySelector('#bookmark-button');
+  setEvent() {
+    const bookmarkBtn = this.container.querySelector('#bookmark-button');
 
     bookmarkBtn.addEventListener('click', () => {
       this.updateCards();
     });
-  };
+  }
 }

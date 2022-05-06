@@ -8,13 +8,15 @@ import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
 import Toast from '../Toast/Toast';
 import { shortSido } from '../../library/MainPage/index';
+import CustomComponent from '../../components/CustomComponent';
+import { createDom } from '../../utils/dom';
 
-export default class Card extends Component {
-  constructor(props) {
-    super(props);
+export default class Card extends CustomComponent {
+  init() {
+    // super(props);
 
     this.state = {
-      type: props.type,
+      type: this.props.type,
       post: props.post,
       postList: props.postList,
       updateCards: props.updateCards,
@@ -23,13 +25,10 @@ export default class Card extends Component {
     this.$dom = this.createDom('div', {
       className: 'card-wrapper',
     });
-
-    this.render();
-    this.addEvent();
   }
 
-  render = () => {
-    this.$dom.innerHTML = `
+  renderCallback() {
+    return `
     <div class="card-wrap">
         <div class="image"></div>
         <div class="card-body">
@@ -61,7 +60,7 @@ export default class Card extends Component {
         </div>
     </div>
     `;
-  };
+  }
 
   makeSido = address => {
     if (address.split(' ')[0] === '온라인') {
@@ -76,7 +75,7 @@ export default class Card extends Component {
     return `${address.split(' ')[0]} ${this.state.post.address.split(' ')[1]}`;
   };
 
-  addEvent = () => {
+  setEvent() {
     const images = this.$dom.querySelector('.image');
     const cardWrap = this.$dom.querySelector('.card-wrap');
     const bookmarkBtn = this.$dom.querySelector('.bookmark-btn');
@@ -122,5 +121,5 @@ export default class Card extends Component {
         type: 'success',
       });
     };
-  };
+  }
 }
