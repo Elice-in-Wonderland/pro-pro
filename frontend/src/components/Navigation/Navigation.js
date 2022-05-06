@@ -16,8 +16,45 @@ export default class Navigation extends CustomComponent {
     return (
       <nav class="gnb">
         <ul class="gnb__inner"></ul>
+        <div class="hamburger">
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+        </div>
       </nav>
     );
+  }
+
+  setEvent() {
+    this.container.addEventListener('click', ({ target }) => {
+      const hamburger = this.container.querySelector('.hamburger');
+
+      if (hamburger.contains(target)) {
+        this.toggleMobileGnb();
+      }
+    });
+
+    window.addEventListener('click', ({ target }) => {
+      const gnb = this.container.querySelector('.gnb');
+
+      if (!gnb.contains(target)) this.hiddenMobileGnb();
+    });
+  }
+
+  hiddenMobileGnb() {
+    const hamburger = this.container.querySelector('.hamburger');
+    const navList = this.container.querySelector('.gnb__inner');
+
+    hamburger.classList.remove('hamburger--active');
+    navList.classList.remove('gnb__inner--active');
+  }
+
+  toggleMobileGnb() {
+    const hamburger = this.container.querySelector('.hamburger');
+    const navList = this.container.querySelector('.gnb__inner');
+
+    hamburger.classList.toggle('hamburger--active');
+    navList.classList.toggle('gnb__inner--active');
   }
 
   renderCallback() {

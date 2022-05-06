@@ -15,6 +15,7 @@
 
 .gnb {
   position: absolute;
+  top: 0;
   background-color: var(--white);
   height: 80px;
   width: 100vw;
@@ -22,7 +23,6 @@
   justify-content: space-between;
   padding: 0 5%;
   align-items: center;
-  top: 0;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
   @include mobile {
@@ -32,6 +32,7 @@
 
 .gnb__inner {
   display: flex;
+  transition: 0.3s;
 }
 
 .gnb__item {
@@ -59,3 +60,57 @@
   font-size: 16px;
   font-weight: 500;
 }
+
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+.hamburger__line {
+  display: block;
+  margin: 5px 0;
+  width: 23px;
+  height: 3px;
+  background-color: var(--medium);
+  transition: all 0.3s ease-in-out;
+}
+
+@include mobile {
+  .hamburger {
+    display: block;
+  }
+
+  .hamburger--active .hamburger__line:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger--active .hamburger__line:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger--active .hamburger__line:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .gnb__inner {
+      position: absolute;
+      flex-direction: column;
+      top: 60px;
+      left: -100%;
+      width: 100%;
+      background-color: var(--white);
+      border-top: 0.5px solid var(--medium);
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+  }
+
+  .gnb__link, .gnb__button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .gnb__inner--active {
+    left: 0;
+  }
+}
+
+

@@ -1,5 +1,8 @@
+@import '../../styles/utils';
+
 .dropdown {
   position: relative;
+  width: 100%;
 }
 
 .profile {
@@ -35,7 +38,6 @@
   padding: 10px 10px;
   background-color: var(--dark);
   border-radius: 15px;
-  transition: 0.5s;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   visibility: hidden;
   opacity: 0;
@@ -64,3 +66,27 @@
     opacity: 0.3;
   }
 }
+
+@include mobile {
+  .profile {
+    display: none;
+  }
+
+  .dropdown__content::before {
+    display: none;
+  }
+
+  .dropdown__content {
+    visibility: visible;
+    opacity: 1;
+    position: relative;
+    top: 0;
+    width: 100%;
+  }
+
+  .dropdown__link {
+    width: 100%;
+    text-align: center;
+  }
+}
+
