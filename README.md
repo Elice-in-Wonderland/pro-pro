@@ -10,9 +10,9 @@
 
 <br />
 
-## :rabbit: [서비스 링크](http://elice-kdt-sw-1st-vm01.koreacentral.cloudapp.azure.com/)
+## :rabbit: [서비스 링크](https://propro.kr/)
 
-> [클릭](http://elice-kdt-sw-1st-vm01.koreacentral.cloudapp.azure.com/)하시면 서비스 페이지로 이동합니다.
+> [클릭](https://propro.kr/)하시면 서비스 페이지로 이동합니다.
 
 <br />
 
