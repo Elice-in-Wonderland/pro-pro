@@ -113,7 +113,7 @@ export default class DetailPage extends CustomComponent {
   }
 
   markup() {
-    if (this.state.isLoading) return Loading;
+    if (this.state.isLoading) return Loading();
     const {
       author: { imageURL, nickname },
       title,
