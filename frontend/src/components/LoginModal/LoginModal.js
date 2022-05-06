@@ -9,6 +9,9 @@ import { setState } from '../../utils/store';
 import { parseJwt } from '../../utils/common';
 import { restructingMyInfo } from '../../utils/auth';
 
+const DEFAULT_PROFILE =
+  'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png';
+
 export default class LoginModal extends CustomComponent {
   markup() {
     return (
@@ -77,9 +80,7 @@ export default class LoginModal extends CustomComponent {
     const user = {
       snsId,
       snsType: 'google',
-      imageURL:
-        picture ||
-        'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
+      imageURL: picture || DEFAULT_PROFILE,
     };
 
     try {
