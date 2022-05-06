@@ -54,12 +54,12 @@ export default class PostBanner extends CustomComponent {
 
   markup() {
     const { stackLogoURLs } = this.state;
-    return stackLogoURLs
-      .map(stack => {
-        return `
-      <img class="bannerLogo" src='${stack}' aria-label="기술스택"/>
-      `;
-      })
-      .join('');
+    return (
+      <fragment>
+        {stackLogoURLs.map(stack => {
+          return <img class="bannerLogo" src={stack} aria-label="기술스택" />;
+        })}
+      </fragment>
+    );
   }
 }
