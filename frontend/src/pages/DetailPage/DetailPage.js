@@ -129,7 +129,7 @@ export default class DetailPage extends CustomComponent {
 
     return (
       <div class="detailContainer">
-        <h2 class="detailTitle">${title}</h2>
+        <h2 class="detailTitle">{title}</h2>
         <div class="userWrapper">
           <img src={imageURL} width="30px" height="30px" />
           <h4 class="userName">{nickname}</h4>
