@@ -92,7 +92,7 @@ export default class Navigation extends CustomComponent {
           {
             type: 'modal',
             text: '로그인',
-            className: 'nav-login',
+            className: 'gnb__button gnb__button--login',
             onLogin: this.handleLogin.bind(this),
           },
         ];

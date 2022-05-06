@@ -1,5 +1,18 @@
 @import '../../styles/utils';
 
+@mixin gnb__item--text {
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--medium);
+  cursor: pointer;
+  line-height: 40px;
+
+  &:hover {
+    opacity: 0.3;
+  }
+}
+
 .gnb {
   position: absolute;
   background-color: var(--white);
@@ -21,22 +34,28 @@
   display: flex;
 }
 
-.gnb__inner .gnb__item {
+.gnb__item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   padding: 15px;
 }
 
-.gnb__inner .gnb__link {
-  font-size: 15px;
-  font-weight: bold;
-  text-decoration: none;
-  color: var(--medium);
-  cursor: pointer;
+.gnb__link {
+  @include gnb__item--text;
+}
 
+.gnb__button {
+  background: none;
+  border: none;
+  outline:none;
+  padding: 0;
+  margin: 0;
+}
 
-  &:hover {
-    opacity: 0.3;
-  }
+.gnb__button--login {
+  @include gnb__item--text;
+  padding-top: 2.5px;
+  font-size: 16px;
+  font-weight: 500;
 }

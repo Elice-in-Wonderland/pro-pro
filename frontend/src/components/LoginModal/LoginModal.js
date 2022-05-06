@@ -13,11 +13,13 @@ export default class LoginModal extends CustomComponent {
   markup() {
     return (
       <fragment>
-        <p class="login">로그인</p>
-        <div class="login-modal login-modal--hidden">
+        <button class={this.props.className} aria-label="로그인버튼">
+          로그인
+        </button>
+        <div class="login-modal">
           <div class="login-modal__background">
             <div class="login-modal__content">
-              <button class="login-modal__close">
+              <button class="login-modal__button login-modal__button--close">
                 <img src={xButton} />
               </button>
               <div class="login-modal__title">환영합니다!</div>
@@ -36,7 +38,7 @@ export default class LoginModal extends CustomComponent {
     const modalContainer = this.container.querySelector(
       '.login-modal__content',
     );
-    const exitBtn = this.container.querySelector('.login-modal__close');
+    const exitBtn = this.container.querySelector('.login-modal__button--close');
 
     this.container.addEventListener('click', ({ target }) => {
       if (!modalContainer.contains(target)) return this.hiddenModal();
@@ -65,7 +67,7 @@ export default class LoginModal extends CustomComponent {
   hiddenModal() {
     const modalContainer = this.container.querySelector('.login-modal');
 
-    modalContainer.classList.add('login-modal--hidden');
+    modalContainer.classList.remove('login-modal--active');
     document.body.style.overflow = 'scroll';
   }
 

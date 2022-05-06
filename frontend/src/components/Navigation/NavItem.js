@@ -24,7 +24,7 @@ export default class NavItem extends CustomComponent {
     if (this.props.type === 'modal') {
       new LoginModal({
         container: this.container,
-        props: { onLogin: this.props.onLogin },
+        props: this.props,
       });
     }
   }
@@ -42,8 +42,8 @@ export default class NavItem extends CustomComponent {
       }
 
       // active modal
-      if (target.classList.contains('login')) {
-        modalContainer.classList.remove('login-modal--hidden');
+      if (target.classList.contains('gnb__button--login')) {
+        modalContainer.classList.add('login-modal--active');
         document.body.style.overflow = 'hidden';
       }
     });
