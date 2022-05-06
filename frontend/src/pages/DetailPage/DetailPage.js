@@ -8,11 +8,11 @@ import Comments from '../../components/Comments/Comments';
 import CommentForm from '../../components/CommentForm/CommentForm';
 import PostBanner from '../../components/PostBanner/PostBanner';
 import EditButtons from '../../components/EditButtons/EditButtons';
+import Bookmark from '../../components/Bookmark/Bookmark';
 
 import RouterContext from '../../router/RouterContext';
 import Loading from '../../components/Loading/Loading';
 import axiosInstance from '../../utils/api';
-import Bookmark from '../../components/Bookmark/Bookmark';
 import { state as userState } from '../../utils/store';
 import { createMap } from '../../utils/common';
 import { createDom, replaceElement } from '../../utils/dom';
