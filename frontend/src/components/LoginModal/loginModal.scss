@@ -1,29 +1,33 @@
-@import '../../styles/index.css';
-
-.modal-background {
+.login-modal {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.53);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 100;
 }
 
-.modal-background.hidden {
-  display: none;
+.login-modal--active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.login-modal-wrapper {
+.login-modal__background {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.53);
+}
+
+.login-modal__content {
   width: 450px;
   height: 550px;
   background-color: var(--white);
   box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: absolute;
@@ -32,21 +36,20 @@
   transform: translate(-50%, -50%);
 }
 
-.login-exit-btn {
+.login-modal__button--close {
   position: absolute;
+  background: none;
+  border: none;
+  display: flex;
   right: 50px;
   top: 50px;
+  padding: 0;
   &:hover {
     cursor: pointer;
   }
 }
 
-.login-header {
-  display: flex;
-  flex-direction: column;
-}
-
-.login-greeting {
+.login-modal__title {
   color: var(--black);
   font-style: normal;
   font-weight: normal;
@@ -56,20 +59,17 @@
   text-align: center;
 }
 
-.login-image {
+.login-modal__image {
   width: 120px;
   height: 120px;
   margin: 0 auto;
 }
 
-.login-btn-wrapper {
+.google-login {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 35px 0;
-}
-
-#google-login-btn {
   width: 193px;
   height: 39px;
 }

@@ -1,9 +1,9 @@
 import { getToken } from '../../utils/auth';
 import { createDom } from '../../utils/dom';
 import CustomComponent from '../CustomComponent';
+import NavItem from './NavItem';
 import Logo from '../Logo/Logo';
 import './navigation.scss';
-import NavItem from './NavItem';
 
 export default class Navigation extends CustomComponent {
   init() {
@@ -13,14 +13,53 @@ export default class Navigation extends CustomComponent {
   }
 
   markup() {
-    return `
-      <ul class='nav-list'>
-      </ul>
-    `;
+    return (
+      <nav class="gnb">
+        <ul class="gnb__inner"></ul>
+        <div class="hamburger">
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+        </div>
+      </nav>
+    );
+  }
+
+  setEvent() {
+    this.container.addEventListener('click', ({ target }) => {
+      const hamburger = this.container.querySelector('.hamburger');
+
+      if (hamburger.contains(target)) {
+        this.toggleMobileGnb();
+      }
+    });
+
+    window.addEventListener('click', ({ target }) => {
+      const gnb = this.container.querySelector('.gnb');
+
+      if (!gnb.contains(target)) this.hiddenMobileGnb();
+    });
+  }
+
+  hiddenMobileGnb() {
+    const hamburger = this.container.querySelector('.hamburger');
+    const navList = this.container.querySelector('.gnb__inner');
+
+    hamburger.classList.remove('hamburger--active');
+    navList.classList.remove('gnb__inner--active');
+  }
+
+  toggleMobileGnb() {
+    const hamburger = this.container.querySelector('.hamburger');
+    const navList = this.container.querySelector('.gnb__inner');
+
+    hamburger.classList.toggle('hamburger--active');
+    navList.classList.toggle('gnb__inner--active');
   }
 
   renderCallback() {
-    const navList = this.container.querySelector('.nav-list');
+    const navList = this.container.querySelector('.gnb__inner');
+    const gnb = this.container.querySelector('.gnb');
     const { loginState } = this.state;
 
     const navItems = loginState
@@ -29,48 +68,47 @@ export default class Navigation extends CustomComponent {
             type: 'link',
             href: '/',
             text: '프로젝트',
-            className: 'nav-project router',
+            className: 'gnb__link router',
           },
           {
             type: 'link',
             href: '/study',
             text: '스터디',
-            className: 'nav-study router',
+            className: 'gnb__link router',
           },
           {
             type: 'link',
             href: '/recommend',
             text: '추천',
-            className: 'nav-recommend router',
+            className: 'gnb__link router',
           },
           {
             type: 'link',
             href: '/write',
             text: '새 글 쓰기',
-            className: 'nav-write router',
+            className: 'gnb__link router',
           },
           {
             type: 'profile',
-            text: '프로필',
-            className: 'nav-profile',
+            className: 'dropdown',
             list: [
               {
                 type: 'link',
                 href: '/bookmark',
                 text: '내 북마크',
-                className: 'nav-bookmark router',
+                className: 'dropdown__link router',
               },
               {
                 type: 'link',
                 href: '/profile',
                 text: '프로필',
-                className: 'nav-profile router',
+                className: 'dropdown__link router',
               },
               {
                 type: 'link',
                 href: '/',
                 text: '로그아웃',
-                className: 'nav-logout',
+                className: 'dropdown__link logout',
               },
             ],
           },
@@ -80,18 +118,18 @@ export default class Navigation extends CustomComponent {
             type: 'link',
             href: '/',
             text: '프로젝트',
-            className: 'nav-project router',
+            className: 'gnb__link router',
           },
           {
             type: 'link',
             href: '/study',
             text: '스터디',
-            className: 'nav-study router',
+            className: 'gnb__link router',
           },
           {
             type: 'modal',
             text: '로그인',
-            className: 'nav-login',
+            className: 'gnb__button gnb__button--login',
             onLogin: this.handleLogin.bind(this),
           },
         ];
@@ -102,15 +140,14 @@ export default class Navigation extends CustomComponent {
     });
     const fragment = new DocumentFragment();
 
-    new Logo({ container: logo });
-
     navItems.forEach(item => {
-      const li = createDom('li', {});
+      const li = createDom('li', { className: 'gnb__item' });
       new NavItem({ container: li, props: item });
       fragment.appendChild(li);
     });
+    new Logo({ container: logo });
 
-    this.container.prepend(logo);
+    gnb.prepend(logo);
     navList.appendChild(fragment);
   }
 

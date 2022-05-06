@@ -1,15 +1,28 @@
 @import '../../styles/utils';
-#gnb {
+
+@mixin gnb__item--text {
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--medium);
+  cursor: pointer;
+  line-height: 40px;
+
+  &:hover {
+    opacity: 0.3;
+  }
+}
+
+.gnb {
   position: absolute;
+  top: 0;
   background-color: var(--white);
   height: 80px;
   width: 100vw;
   display: flex;
   justify-content: space-between;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding: 0 5%;
   align-items: center;
-  top: 0;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
   @include mobile {
@@ -17,81 +30,87 @@
   }
 }
 
-.nav-list {
+.gnb__inner {
   display: flex;
-
-  li {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  transition: 0.3s;
 }
 
-.drop-box {
-  top: 20px;
+.gnb__item {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  padding: 15px;
+}
 
-  .profile {
-    position: relative;
-    width: 50px;
-    height: 50px;
+.gnb__link {
+  @include gnb__item--text;
+}
 
-    img {
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
+.gnb__button {
+  background: none;
+  border: none;
+  outline:none;
+  padding: 0;
+  margin: 0;
+}
+
+.gnb__button--login {
+  @include gnb__item--text;
+  padding-top: 2.5px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+.hamburger__line {
+  display: block;
+  margin: 5px 0;
+  width: 23px;
+  height: 3px;
+  background-color: var(--medium);
+  transition: all 0.3s ease-in-out;
+}
+
+@include mobile {
+  .hamburger {
+    display: block;
   }
-  .menu::before {
-    content: '';
-    position: absolute;
-    z-index: 0;
-    top: -5px;
-    left: 20px;
-    width: 10px;
-    height: 10px;
-    background: var(--dark);
-    transform: rotate(45deg);
+
+  .hamburger--active .hamburger__line:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
   }
-  .menu {
-    position: absolute;
-    top: 75px;
-    padding: 10px 10px;
-    margin-right: 5px;
-    background-color: var(--dark);
-    border-radius: 15px;
-    transition: 0.5s;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
-    visibility: hidden;
+  .hamburger--active .hamburger__line:nth-child(2) {
     opacity: 0;
   }
+  .hamburger--active .hamburger__line:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+  }
 
-  .menu.active {
-    visibility: visible;
-    opacity: 0.9;
+  .gnb__inner {
+      position: absolute;
+      flex-direction: column;
+      top: 60px;
+      left: -100%;
+      width: 100%;
+      background-color: var(--white);
+      border-top: 0.5px solid var(--medium);
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+  }
+
+  .gnb__link, .gnb__button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .gnb__inner--active {
+    left: 0;
   }
 }
 
-.nav-list li a,
-.nav-list li a:link,
-.nav-list li .login-text {
-  font-size: 15px;
-  font-weight: bold;
-  text-decoration: none;
-  color: var(--medium);
-  cursor: pointer;
 
-  &:hover {
-    opacity: 0.3;
-  }
-}
-
-.nav-list li .drop-box .menu a {
-  color: var(--white);
-
-  &:hover {
-    opacity: 0.3;
-  }
-}
