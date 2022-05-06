@@ -33,6 +33,7 @@ export default class DetailPage extends CustomComponent {
     if (!this.state.isLoading) {
       this.makeComponent();
       this.replaceDOM();
+      this.getMapImg();
     }
   }
 
@@ -195,7 +196,6 @@ export default class DetailPage extends CustomComponent {
   }
 
   replaceDOM() {
-    this.getMapImg();
     replaceElement(
       this.container.querySelector('.stacksReplace'),
       this.stacks.container,
