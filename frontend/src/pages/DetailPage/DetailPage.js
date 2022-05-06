@@ -176,7 +176,7 @@ export default class DetailPage extends CustomComponent {
         </main>
         <div class="descriptionWrapper">
           <h3>프로젝트 소개</h3>
-          <p class="postDescription">${content}</p>
+          <p class="postDescription">{content}</p>
         </div>
         <hr />
         <div class="mapWarpper">
