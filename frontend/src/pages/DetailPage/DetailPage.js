@@ -127,74 +127,71 @@ export default class DetailPage extends CustomComponent {
       content,
     } = this.state;
 
-    return `
-    <div class="detailContainer">
-      <h2 class="detailTitle">${title}</h2>
-      <div class="userWrapper">
-        <img src=${imageURL} width="30px" height="30px" />
-        <h4 class="userName">${nickname}</h4>
-      </div>
-      <div class="stacks">
-        <h4 class="stacksTitle">기술스택<h4>
-        <ul class="stacksReplace">
-        </ul>
-      </div>
-      <main class="hero">
-        <div class="banner">
-          <img class="bannerLogo" src='${javascriptLogo}' alt="javascript" />
+    return (
+      <div class="detailContainer">
+        <h2 class="detailTitle">${title}</h2>
+        <div class="userWrapper">
+          <img src={imageURL} width="30px" height="30px" />
+          <h4 class="userName">{nickname}</h4>
         </div>
-        <div class="infos">
-          <ul>
-            <li class="info">
-              <div class="region">지역</div>
-              <div class="region__description">${address || '온라인'}</div>
-            </li>
-            <li class="info">
-              <div class="capacity">모집 인원</div>
-              <div class="capacity__description">${capacity}명</div>
-            </li>
-            <li class="info">
-              <div class="register">모집 기간</div>
-              <div class="registerDescription">${updatedAt.slice(
-                0,
-                10,
-              )} ~ ${registerDeadline.slice(0, 10)}</div>
-            </li>
-            <li class="info">
-              <div class="period">프로젝트 수행 기간</div>
-              <div class="periodDescription">${startDate.slice(
-                0,
-                10,
-              )} ~ ${endDate.slice(0, 10)}</div>
-            </li>
-            <li class="info">
-              <div class="viewWrapper">
-                <img class="view" src='${viewIcon}' />
-                <span class="viewCount">${views}</span>
-              </div>
-              <div class="bookmarkWrapper"></div>
-            </li>
-          </ul>
+        <div class="stacks">
+          <h4 class="stacksTitle">기술스택</h4>
+          <ul class="stacksReplace"></ul>
         </div>
-      </main>
-      <div class="descriptionWrapper">
-      <h3>프로젝트 소개</h3>
-      <p class="postDescription" >${content}</p>
-      </div>
-      <hr>
-      <div class="mapWarpper">
-        <h3>팀 미팅 지역</h3>
-        <h4 class="mapDescription">${address || '온라인'}</h3>
-        <div id="map"></div>
-      </div>
-      <div class="commentSection">
+        <main class="hero">
+          <div class="banner">
+            <img class="bannerLogo" src={javascriptLogo} alt="javascript" />
+          </div>
+          <div class="infos">
+            <ul>
+              <li class="info">
+                <div class="region">지역</div>
+                <div class="region__description">{address || '온라인'}</div>
+              </li>
+              <li class="info">
+                <div class="capacity">모집 인원</div>
+                <div class="capacity__description">{capacity}명</div>
+              </li>
+              <li class="info">
+                <div class="register">모집 기간</div>
+                <div class="registerDescription">
+                  {updatedAt.slice(0, 10)} ~ {registerDeadline.slice(0, 10)}
+                </div>
+              </li>
+              <li class="info">
+                <div class="period">프로젝트 수행 기간</div>
+                <div class="periodDescription">
+                  {startDate.slice(0, 10)} ~ {endDate.slice(0, 10)}
+                </div>
+              </li>
+              <li class="info">
+                <div class="viewWrapper">
+                  <img class="view" src={viewIcon} />
+                  <span class="viewCount">{views}</span>
+                </div>
+                <div class="bookmarkWrapper"></div>
+              </li>
+            </ul>
+          </div>
+        </main>
+        <div class="descriptionWrapper">
+          <h3>프로젝트 소개</h3>
+          <p class="postDescription">${content}</p>
+        </div>
         <hr />
-        <div class="comments"></div>
-        <div class="commentForm"></div>
+        <div class="mapWarpper">
+          <h3>팀 미팅 지역</h3>
+          <h4 class="mapDescription">{address || '온라인'}</h4>
+          <div id="map"></div>
+        </div>
+        <div class="commentSection">
+          <hr />
+          <div class="comments"></div>
+          <div class="commentForm"></div>
+        </div>
+        <div class="editSection"></div>
       </div>
-      <div class="editSection"></div>
-    </div>
-    `;
+    );
   }
 
   replaceDOM() {
