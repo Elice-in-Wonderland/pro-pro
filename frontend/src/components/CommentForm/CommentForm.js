@@ -10,15 +10,26 @@ export default class CommentForm extends CustomComponent {
   }
 
   loggedUserForm() {
-    return `          
-        <textarea placeholder="댓글을 남겨주세요." class="writeComment" type="text" ></textarea>
+    return (
+      <fragment>
+        <textarea
+          placeholder="댓글을 남겨주세요."
+          class="writeComment"
+          type="text"
+        ></textarea>
         <input class="submitComment" type="submit" value="등록" />
-    `;
+      </fragment>
+    );
   }
 
   notLoggedUserForm() {
-    return `          
-        <textarea readonly placeholder="먼저 로그인 해주세요." class="writeComment" type="text" ></textarea>
-    `;
+    return (
+      <textarea
+        readonly
+        placeholder="먼저 로그인 해주세요."
+        class="writeComment"
+        type="text"
+      ></textarea>
+    );
   }
 }
