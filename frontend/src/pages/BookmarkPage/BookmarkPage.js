@@ -12,7 +12,7 @@ export default class BookmarkPage extends CustomComponent {
 
   setState = nextState => {
     this.state = nextState;
-    this.render();
+    this.cardRender();
   };
 
   async mounted() {
@@ -33,16 +33,18 @@ export default class BookmarkPage extends CustomComponent {
   }
 
   markup() {
-    return `
+    return (
       <div class="bookmark-page-wrapper">
         <section class="filter-buttons">
-          <button type="button" id="bookmark-button">북마크한 프로젝트/스터디</button>
+          <button type="button" id="bookmark-button">
+            북마크한 프로젝트/스터디
+          </button>
         </section>
         <section class="cards">
           <div class="card-elements"></div>
         </section>
       </div>
-    `;
+    );
   }
 
   cardRender() {
@@ -69,13 +71,9 @@ export default class BookmarkPage extends CustomComponent {
     replaceElement(cards, frag);
   }
 
-  renderCallback() {
-    this.cardRender();
-  }
-
   updateCards = async () => {
-    await this.mounted();
     this.render();
+    await this.mounted();
     this.setEvent();
   };
 
