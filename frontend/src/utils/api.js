@@ -1,10 +1,8 @@
 import axios from 'axios';
-import RouterContext from '../router/RouterContext';
-import { getToken, removeToken } from './auth';
-
-import { removeState } from './store';
+import { getToken, removeState, removeToken } from './store';
 
 export const url = process.env.SERVER_URL || 'http://localhost:4000/';
+
 const axiosInstance = axios.create({
   baseURL: url,
   headers: {
@@ -15,7 +13,6 @@ const axiosInstance = axios.create({
 });
 axiosInstance.defaults.withCredentials = true;
 
-// api 요청시 사전에 토큰을 header에 셋팅
 axiosInstance.interceptors.request.use(
   config => {
     config.headers = {
@@ -41,7 +38,7 @@ axiosInstance.interceptors.response.use(
         alert('로그인 기간이 만료되었습니다. 다시 로그인해주세요.');
         removeToken();
         removeState('myInfo');
-        RouterContext.state.reload();
+        window.location.reload();
       }
     }
 

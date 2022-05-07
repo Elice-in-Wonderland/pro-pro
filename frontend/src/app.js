@@ -8,7 +8,7 @@ import RecommendPage from './pages/RecommendPage/RecommendPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Router from './router/Router';
 import Navigation from './components/Navigation/Navigation';
-import { getMyInfo } from './utils/auth';
+import { requestAutoLogin } from './utils/auth';
 
 class App {
   constructor(target) {
@@ -28,8 +28,7 @@ class App {
   }
 
   async render() {
-    // auto login
-    await getMyInfo();
+    await requestAutoLogin();
 
     new Navigation({ container: document.getElementById('header') });
     new Router({ target: this.target, routes: this.routes });

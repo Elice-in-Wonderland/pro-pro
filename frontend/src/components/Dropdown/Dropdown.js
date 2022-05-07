@@ -1,5 +1,4 @@
-import { removeToken } from '../../utils/auth';
-import { state, removeState } from '../../utils/store';
+import { state, removeState, removeToken } from '../../utils/store';
 import RouterContext from '../../router/RouterContext';
 import CustomComponent from '../CustomComponent';
 import './dropdown.scss';

@@ -1,10 +1,10 @@
-import { getToken } from '../../utils/auth';
 import { createDom } from '../../utils/dom';
 import CustomComponent from '../CustomComponent';
 import NavItem from './NavItem';
 import Logo from '../Logo/Logo';
 import './navigation.scss';
 import RouterContext from '../../router/RouterContext';
+import { getToken } from '../../utils/store';
 
 export default class Navigation extends CustomComponent {
   init() {

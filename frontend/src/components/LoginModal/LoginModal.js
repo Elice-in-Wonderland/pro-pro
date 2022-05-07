@@ -1,13 +1,10 @@
-import Cookies from 'js-cookie';
 import CustomComponent from '../CustomComponent';
 import './loginModal.scss';
 import proproLogo from '../../assets/images/pro-pro.png';
 import xButton from '../../assets/images/x-button.svg';
-import axiosInstance from '../../utils/api';
 import Toast from '../Toast/Toast';
-import { setState } from '../../utils/store';
 import { parseJwt } from '../../utils/common';
-import { restructingMyInfo } from '../../utils/auth';
+import { requestLogin } from '../../utils/auth';
 
 const DEFAULT_PROFILE =
   'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png';
@@ -84,14 +81,8 @@ export default class LoginModal extends CustomComponent {
     };
 
     try {
-      const res = await axiosInstance.post('/users', user, {
-        withCredentials: true,
-      });
-      const { AG3_JWT } = res.data.data;
-      const myInfo = restructingMyInfo(res.data.data);
+      await requestLogin(user);
 
-      setState('myInfo', myInfo);
-      Cookies.set('AG3_JWT', AG3_JWT);
       this.hiddenModal();
       this.props.onLogin();
     } catch (e) {
