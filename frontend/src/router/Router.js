@@ -1,5 +1,5 @@
 import RouterContext from './RouterContext';
-import { getPathname, getQuery, loginValidation } from './utils';
+import { getPathname, getQuery, isAllowedRoute } from './utils';
 
 class Router {
   constructor({ target, routes }) {
@@ -14,7 +14,7 @@ class Router {
     const { path, Component, loginRequired } =
       this.matchUrlToRoute(currentPath);
 
-    const next = loginValidation(loginRequired);
+    const next = isAllowedRoute(loginRequired);
     if (!next) return this.replace('/');
 
     // REMOVE: 모든 페이지 바뀌기전까지 임시 라우팅----------
