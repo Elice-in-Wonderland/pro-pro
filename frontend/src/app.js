@@ -14,16 +14,16 @@ class App {
   constructor(target) {
     this.target = target;
     this.routes = [
-      { path: '/', component: MainPage, loginRequired: false },
-      { path: '/study', component: MainPage, loginRequired: false },
-      { path: '/detail/:postId', component: DetailPage, loginRequired: false },
-      { path: '/bookmark', component: BookmarkPage, loginRequired: true },
-      { path: '/write', component: CreatPostPage, loginRequired: true },
-      { path: '/write/:postId', component: EditPostPage },
-      { path: '/profile', component: ProfilePage, loginRequired: true },
-      { path: '/recommend', component: RecommendPage, loginRequired: true },
+      { path: '/', Component: MainPage, loginRequired: false },
+      { path: '/study', Component: MainPage, loginRequired: false },
+      { path: '/detail/:postId', Component: DetailPage, loginRequired: false },
+      { path: '/bookmark', Component: BookmarkPage, loginRequired: true },
+      { path: '/write', Component: CreatPostPage, loginRequired: true },
+      { path: '/write/:postId', Component: EditPostPage, loginRequired: true },
+      { path: '/profile', Component: ProfilePage, loginRequired: true },
+      { path: '/recommend', Component: RecommendPage, loginRequired: true },
+      { path: '/NotFound', Component: NotFoundPage, loginRequired: false },
     ];
-    this.NotFoundPage = NotFoundPage;
     this.render();
   }
 
@@ -32,7 +32,7 @@ class App {
     await getMyInfo();
 
     new Navigation({ container: document.getElementById('header') });
-    new Router(this.target, this.routes, this.NotFoundPage, this.navigation);
+    new Router({ target: this.target, routes: this.routes });
   }
 }
 
