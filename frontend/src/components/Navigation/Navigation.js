@@ -4,6 +4,7 @@ import CustomComponent from '../CustomComponent';
 import NavItem from './NavItem';
 import Logo from '../Logo/Logo';
 import './navigation.scss';
+import RouterContext from '../../router/RouterContext';
 
 export default class Navigation extends CustomComponent {
   init() {
@@ -153,5 +154,6 @@ export default class Navigation extends CustomComponent {
 
   handleLogin() {
     this.setState({ ...this.state, loginState: true });
+    RouterContext.state.replace(RouterContext.state.pathname);
   }
 }

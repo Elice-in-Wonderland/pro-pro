@@ -5,13 +5,12 @@ class Router {
   constructor({ target, routes }) {
     this.target = target;
     this.routes = routes;
-    this.RouterContext = RouterContext;
     this.initRouter();
     this.route();
   }
 
   route() {
-    const currentPath = this.RouterContext.state.pathname.slice(1).split('/');
+    const currentPath = RouterContext.state.pathname.slice(1).split('/');
     const { path, Component, loginRequired } =
       this.matchUrlToRoute(currentPath);
 
