@@ -150,6 +150,6 @@ export default class Navigation extends CustomComponent {
 
   handleLogin() {
     this.setState({ ...this.state, loginState: true });
-    RouterContext.state.replace(RouterContext.state.pathname);
+    RouterContext.state.reload();
   }
 }
