@@ -2,8 +2,8 @@ import RouterContext from './RouterContext';
 import { getPathname, getQuery, isAllowedRoute } from './utils';
 
 class Router {
-  constructor({ target, routes }) {
-    this.target = target;
+  constructor({ container, routes }) {
+    this.container = container;
     this.routes = routes;
     this.initRouter();
     this.route();
@@ -25,12 +25,12 @@ class Router {
       path === '/bookmark' ||
       path === '/profile'
     ) {
-      new Component({ container: this.target });
+      new Component({ container: this.container });
       return;
     }
     // REMOVE: 모든 페이지 바뀌기전까지 임시 라우팅-------------
 
-    new Component(this.target);
+    new Component(this.container);
   }
 
   matchUrlToRoute(currentPath) {

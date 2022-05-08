@@ -11,8 +11,8 @@ import Navigation from './components/Navigation/Navigation';
 import { requestAutoLogin } from './utils/auth';
 
 class App {
-  constructor(target) {
-    this.target = target;
+  constructor({ container }) {
+    this.container = container;
     this.routes = [
       { path: '/', Component: MainPage, loginRequired: false },
       { path: '/study', Component: MainPage, loginRequired: false },
@@ -31,7 +31,7 @@ class App {
     await requestAutoLogin();
 
     new Navigation({ container: document.getElementById('header') });
-    new Router({ target: this.target, routes: this.routes });
+    new Router({ container: this.container, routes: this.routes });
   }
 }
 
