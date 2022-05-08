@@ -31,14 +31,11 @@ export default class Dropdown extends CustomComponent {
   }
 
   setEvent() {
-    const dropdownCotent = this.container.querySelector('.dropdown__content');
-    const dropdown = this.container.querySelector('.dropdown');
-
     this.container.addEventListener('click', event => {
       const { target } = event;
 
       if (
-        dropdownCotent.contains(target) &&
+        target.closest('.dropdown__content') &&
         target.classList.contains('router')
       ) {
         this.hiddendropdown();
@@ -50,8 +47,8 @@ export default class Dropdown extends CustomComponent {
       }
     });
 
-    window.addEventListener('click', e => {
-      if (!dropdown.contains(e.target)) this.hiddendropdown();
+    window.addEventListener('click', ({ target }) => {
+      if (!target.closest('.dropdown')) this.hiddendropdown();
     });
   }
 

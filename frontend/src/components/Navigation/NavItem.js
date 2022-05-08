@@ -30,19 +30,21 @@ export default class NavItem extends CustomComponent {
   }
 
   setEvent() {
-    const dropdownCotent = this.container.querySelector('.dropdown__content');
-    const modalContainer = this.container.querySelector('.login-modal');
-
     this.container.addEventListener('click', event => {
       const { target } = event;
 
       // active/hidden dropdown
       if (target.classList.contains('profile__image')) {
+        const dropdownCotent =
+          this.container.querySelector('.dropdown__content');
+
         dropdownCotent.classList.toggle('dropdown__content--active');
       }
 
       // active modal
       if (target.classList.contains('gnb__button--login')) {
+        const modalContainer = this.container.querySelector('.login-modal');
+
         modalContainer.classList.add('login-modal--active');
         document.body.style.overflow = 'hidden';
       }

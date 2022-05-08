@@ -28,17 +28,13 @@ export default class Navigation extends CustomComponent {
 
   setEvent() {
     this.container.addEventListener('click', ({ target }) => {
-      const hamburger = this.container.querySelector('.hamburger');
-
-      if (hamburger.contains(target)) {
+      if (target.closest('.hamburger')) {
         this.toggleMobileGnb();
       }
     });
 
     window.addEventListener('click', ({ target }) => {
-      const gnb = this.container.querySelector('.gnb');
-
-      if (!gnb.contains(target)) this.hiddenMobileGnb();
+      if (!target.closest('.gnb')) this.hiddenMobileGnb();
     });
   }
 

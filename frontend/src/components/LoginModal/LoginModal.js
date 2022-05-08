@@ -35,15 +35,12 @@ export default class LoginModal extends CustomComponent {
   }
 
   setEvent() {
-    const modalContainer = this.container.querySelector(
-      '.login-modal__content',
-    );
-    const exitBtn = this.container.querySelector('.login-modal__button--close');
-
     this.container.addEventListener('click', ({ target }) => {
-      if (!modalContainer.contains(target)) return this.hiddenModal();
+      if (!target.closest('.login-modal__content')) {
+        return this.hiddenModal();
+      }
 
-      if (exitBtn.contains(target)) {
+      if (target.closest('.login-modal__button--close')) {
         return this.hiddenModal();
       }
     });
