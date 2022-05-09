@@ -116,15 +116,15 @@ class Form extends CustomComponent {
   }
 
   setEvent() {
-    const nicknameInput = this.container.querySelector('.nickname-input');
+    this.container.addEventListener('input', ({ target }) => {
+      if (target.classList.contains('nickname-input')) {
+        this.props.onChangeUserInfo({
+          nickname: target.value,
+        });
+      }
+    });
 
     this.container.addEventListener('submit', this.props.onSubmit);
-
-    nicknameInput.addEventListener('input', event => {
-      this.props.onChangeUserInfo({
-        nickname: event.target.value,
-      });
-    });
   }
 
   handleSigunguUpdate(selectedSido) {
