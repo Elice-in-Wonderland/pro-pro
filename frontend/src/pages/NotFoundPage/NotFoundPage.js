@@ -1,4 +1,4 @@
-import CustomComponent from '../../components/component';
+import CustomComponent from '../../components/CustomComponent';
 import img404 from '../../assets/images/img-404.svg';
 import './notFoundPage.scss';
 
