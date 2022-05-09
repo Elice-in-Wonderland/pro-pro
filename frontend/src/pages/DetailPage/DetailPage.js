@@ -26,6 +26,7 @@ export default class DetailPage extends CustomComponent {
       userId: userState.myInfo ? userState.myInfo._id : null,
       postId: RouterContext.state.params.postId,
       comments: [],
+      replyId: null,
     };
   }
 
@@ -65,8 +66,8 @@ export default class DetailPage extends CustomComponent {
         userType,
         comments,
         userId,
-        postId,
         isMyBookmark,
+        replyId,
       },
     } = this;
 
@@ -103,13 +104,13 @@ export default class DetailPage extends CustomComponent {
       container: createDom('div', {
         className: 'comments',
       }),
-      props: { comments, userType, userId },
+      props: { comments, userType, userId, replyId },
     });
     this.commentForm = new CommentForm({
       container: createDom('form', {
-        className: 'commentForm',
+        className: 'commentForm init',
       }),
-      props: { userType, parentType: 'post', parentId: postId, userId },
+      props: { userType },
     });
   }
 
@@ -188,7 +189,7 @@ export default class DetailPage extends CustomComponent {
         <div class="commentSection">
           <hr />
           <div class="comments"></div>
-          <div class="commentForm"></div>
+          <div class="commentForm init"></div>
         </div>
         <div class="editSection"></div>
       </div>
@@ -209,7 +210,7 @@ export default class DetailPage extends CustomComponent {
       this.comments.container,
     );
     replaceElement(
-      this.container.querySelector('.commentForm'),
+      this.container.querySelector('.commentForm.init'),
       this.commentForm.container,
     );
     replaceElement(
@@ -245,7 +246,7 @@ export default class DetailPage extends CustomComponent {
         this.deleteComment(target);
 
       if (target.classList.contains('commentReply'))
-        this.createCommentForm(target);
+        this.createReplyForm(target);
     });
 
     this.container.addEventListener('submit', event => {
@@ -284,25 +285,21 @@ export default class DetailPage extends CustomComponent {
       });
   };
 
-  // TODO: 답변 기능 추가
-  // createCommentForm = target => {
-  //   const targetComment = target.parentNode.parentNode;
-  //   const { id } = targetComment.dataset;
-  //   this.setState({
-  //     ...this.state,
-  //     replyComment: id,
-  //   });
-  // };
-
-  // deleteCommentForm(event) {
-  //   const replyBtn = event.target;
-  //   const targetComment = replyBtn.parentNode.parentNode;
-  //   const commentForm = targetComment.querySelector('.commentForm');
-  //   replyBtn.removeEventListener('click', this.deleteCommentForm);
-  //   replyBtn.addEventListener('click', this.createCommentForm);
-  //   if (commentForm) commentForm.parentNode.removeChild(commentForm);
-  //   else replyBtn.click();
-  // }
+  createReplyForm = target => {
+    const targetComment = target.parentNode.parentNode;
+    const { id } = targetComment.dataset;
+    if (id === this.state.replyId) {
+      this.setState({
+        ...this.state,
+        replyId: null,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        replyId: id,
+      });
+    }
+  };
 
   deleteComment = target => {
     const targetComment = target.parentNode.parentNode;
