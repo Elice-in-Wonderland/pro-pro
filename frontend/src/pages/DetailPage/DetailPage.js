@@ -109,6 +109,7 @@ export default class DetailPage extends CustomComponent {
     this.commentForm = new CommentForm({
       container: createDom('form', {
         className: 'commentForm init',
+        type: 'comment',
       }),
       props: { userType },
     });
@@ -251,7 +252,8 @@ export default class DetailPage extends CustomComponent {
 
     this.container.addEventListener('submit', event => {
       event.preventDefault();
-      if (event.target.classList.contains('commentForm')) this.addComment();
+      if (event.target.classList.contains('commentForm'))
+        this.addComment(event);
     });
   }
 
@@ -303,49 +305,117 @@ export default class DetailPage extends CustomComponent {
 
   deleteComment = target => {
     const targetComment = target.parentNode.parentNode;
-    const { id } = targetComment.dataset;
-    axiosInstance.delete(`comments/${id}`, {
-      withCredentials: true,
-    });
-    this.setState({
-      ...this.state,
-      comments: [...this.state.comments.filter(comment => comment._id !== id)],
-    });
+    const { id, parent } = targetComment.dataset;
+    if (parent === 'post') {
+      axiosInstance.delete(`comments/${id}`, {
+        withCredentials: true,
+      });
+      this.setState({
+        ...this.state,
+        comments: [
+          ...this.state.comments.filter(comment => comment._id !== id),
+        ],
+      });
+    } else if (parent === 'comment') {
+      const { parentId } = targetComment.dataset;
+      axiosInstance.delete(`comments/${id}`, {
+        withCredentials: true,
+      });
+      const newComment = this.state.comments.find(
+        comment => comment._id === parentId,
+      );
+      newComment.nestedComments = newComment.nestedComments.filter(
+        nestedComment => nestedComment._id !== id,
+      );
+
+      this.setState({
+        ...this.state,
+        comments: [
+          ...this.state.comments.map(comment =>
+            comment._id === parentId ? newComment : comment,
+          ),
+        ],
+      });
+    }
   };
 
-  addComment = () => {
-    const content = this.container.querySelector('.writeComment').value;
-    const { postId } = this.state;
-    this.container.querySelector('.writeComment').value = '';
-    axiosInstance.post(
-      'comments',
-      {
-        content,
-        parentType: 'post',
-        parentId: postId,
+  addComment = event => {
+    const {
+      type,
+      firstChild: { value },
+      parentNode: {
+        dataset: { id },
       },
-      { withCredentials: true },
-    );
-    const { imageURL, nickname, _id } = userState.myInfo;
-    this.setState({
-      ...this.state,
-      comments: [
-        ...this.state.comments,
+    } = event.target;
+
+    if (type === 'comment') {
+      const { postId } = this.state;
+      axiosInstance.post(
+        'comments',
         {
-          nestedComments: [],
+          content: value,
+          parentType: 'post',
+          parentId: postId,
+        },
+        { withCredentials: true },
+      );
+      const { imageURL, nickname, _id } = userState.myInfo;
+      this.setState({
+        ...this.state,
+        comments: [
+          ...this.state.comments,
+          {
+            nestedComments: [],
+            author: {
+              imageURL,
+              nickname,
+            },
+            updatedAt: '지금',
+            _id: value,
+            parentId: postId,
+            content: value,
+            userId: _id,
+            parentType: 'post',
+          },
+        ],
+      });
+    } else if (type === 'reply') {
+      axiosInstance.post(
+        'comments',
+        {
+          content: value,
+          parentType: 'comment',
+          parentId: id,
+        },
+        { withCredentials: true },
+      );
+      const { imageURL, nickname, _id } = userState.myInfo;
+      const newReply = this.state.comments.find(comment => comment._id === id);
+      newReply.nestedComments = [
+        ...newReply.nestedComments,
+        {
           author: {
             imageURL,
             nickname,
           },
           updatedAt: '지금',
-          _id: content,
-          parentId: postId,
-          content,
+          _id: value,
+          parentId: id,
+          content: value,
           userId: _id,
-          parentType: 'post',
+          parentType: 'comment',
         },
-      ],
-    });
+      ];
+      this.setState({
+        ...this.state,
+        comments: [
+          ...this.state.comments.map(comment =>
+            comment._id === id ? newReply : comment,
+          ),
+        ],
+        replyId: null,
+      });
+    }
   };
 
   findUserType(postUserId) {
