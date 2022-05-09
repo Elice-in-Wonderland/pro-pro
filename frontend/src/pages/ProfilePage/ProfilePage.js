@@ -54,12 +54,12 @@ export default class ProfilePage extends CustomComponent {
   }
 
   markup() {
-    return <div class="container"></div>;
+    return <div class="profile-edit"></div>;
   }
 
   renderCallback() {
-    const container = this.container.querySelector('.container');
-    const form = createDom('form', { className: 'form' });
+    const container = this.container.querySelector('.profile-edit');
+    const form = createDom('form', { className: 'form profile-edit__form' });
 
     new Form({
       container: form,

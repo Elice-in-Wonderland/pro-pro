@@ -13,51 +13,58 @@ class Form extends CustomComponent {
   markup() {
     return (
       <fragment>
-        <div class="userImg"></div>
+        <div class="profile-edit__form__item">
+          <div class="profile-edit__form__img-wrapper"></div>
+        </div>
 
-        <div class="field nickname">
-          <label for="nickname">
+        <div class="profile-edit__form__item">
+          <label for="nickname" class="profile-edit__form__label">
             <b>닉네임</b>
           </label>
           <input
-            type="text"
             id="nickname"
-            class="nickname-input"
+            type="text"
+            class="profile-edit__form__input profile-edit__form__input--nickname"
             value={this.props.userInfo.current.nickname || ''}
             placeholder="닉네임을 입력하세요."
           />
         </div>
 
-        <div class="field">
-          <label for="sido">
+        <div class="profile-edit__form__item">
+          <label for="sido" class="profile-edit__form__label">
             <b>지역</b>
           </label>
-          <select class="sido-select" id="sido">
-            <option value="">시/도</option>
-          </select>
-          <select class="sigungu-select" id="sigungu">
-            <option value="">시/군/구</option>
-          </select>
+          <div class="profile-edit__form__select-group">
+            <select class="profile-edit__form__select" id="sido">
+              <option value="">시/도</option>
+            </select>
+            <select class="profile-edit__form__select" id="sigungu">
+              <option value="">시/군/구</option>
+            </select>
+          </div>
         </div>
 
-        <div class="field">
-          <label for="position">
+        <div class="profile-edit__form__item">
+          <label for="position" class="profile-edit__form__label">
             <b>직무</b>
           </label>
-          <select class="position-select" id="position">
+          <select class="profile-edit__form__select" id="position">
             <option value="">직무를 선택하세요</option>
           </select>
         </div>
 
-        <div class="field">
-          <label for="stack">
+        <div class="profile-edit__form__item">
+          <label for="stack" class="profile-edit__form__label">
             <b>관심 기술 태그</b>
           </label>
-          <div class="stack-select" id="stack"></div>
+          <div class="profile-edit__form--layout-grid" id="stack"></div>
         </div>
 
-        <div class="clearfix">
-          <button class="updateBtn">
+        <div class="profile-edit__form__item">
+          <button
+            class="profile-edit__form__btn profile-edit__form__btn--submit"
+            aria-label="프로필 수정"
+          >
             <span>수정 완료</span>
           </button>
         </div>
@@ -66,19 +73,22 @@ class Form extends CustomComponent {
   }
 
   renderCallback() {
-    const userImg = this.container.querySelector('.userImg');
-    const sidoSelect = this.container.querySelector('.sido-select');
-    const positionSelect = this.container.querySelector('.position-select');
-    const stackSelect = this.container.querySelector('.stack-select');
+    const userImg = this.container.querySelector(
+      '.profile-edit__form__img-wrapper',
+    );
+    const sidoSelect = this.container.querySelector('#sido');
+    const positionSelect = this.container.querySelector('#position');
+    const stackSelect = this.container.querySelector('#stack');
 
     if (this.props.userInfo.current.imageURL !== '') {
       const img = createDom('img', {
         src: this.props.userInfo.current.imageURL,
+        className: 'profile-edit__form__img',
         alt: 'profile',
       });
       userImg.appendChild(img);
     } else {
-      userImg.classList.add('profile-skeleton');
+      userImg.classList.add('profile-img-skeleton');
     }
 
     new Selector({
@@ -117,7 +127,7 @@ class Form extends CustomComponent {
 
   setEvent() {
     this.container.addEventListener('input', ({ target }) => {
-      if (target.classList.contains('nickname-input')) {
+      if (target.classList.contains('profile-edit__form__input--nickname')) {
         this.props.onChangeUserInfo({
           nickname: target.value,
         });

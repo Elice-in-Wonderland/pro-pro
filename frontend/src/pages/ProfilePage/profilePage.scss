@@ -1,9 +1,8 @@
-$mobile: 744px;
-$tablet: 1023px;
-$desktop: 1024px;
-$navigation-height: 80px;
+@import '../../styles/utils';
+$nav-desktop-height: 80px;
+$nav-mobile-height: 60px;
 
-.container {
+.profile-edit {
   background-color: var(--white);
   width: 100%;
   min-height: 100vh;
@@ -11,122 +10,118 @@ $navigation-height: 80px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 30px 0;
   user-select: none;
-  margin-top: $navigation-height;
+  margin-top: $nav-desktop-height;
 
-  label {
-    b {
-      color: var(--dark);
-      font-weight: 700;
-      font-size: 24px;
-      line-height: 28.13px;
-    }
+  @include mobile {
+    margin-top: $nav-mobile-height;
   }
 }
 
-.form {
+.profile-edit__form {
   display: flex;
-}
 
-// TODO: class 충돌
-#root {
-  padding-bottom: 0;
-}
-body main .form {
-  margin: 0;
-  padding: 30px;
-}
-body main .form div {
-  margin: 0;
-  
-}
-// TODO: class 충돌
+  &__item {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-bottom: 10px;
+  }
 
-.form .userImg {
-  align-self: center;
-  width: 157px;
-  height: 157px;
-  margin-bottom: 70px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.19);
-  img {
+  &__item + &__item  {
+    padding-top: 10px;
+  }
+
+  &__item:last-child {
+    padding-bottom: 0;
+    padding-top: 30px;
+  }
+
+  &__img-wrapper {
+    align-self: center;
+    width: 157px;
+    height: 157px;
+    margin-bottom: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.19);
+  }
+
+  &__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  flex-shrink: 0;
-}
 
-.form > div > label {
-  width: fit-content;
-  margin: 10px 0;
-}
 
-.field {
-  display: flex;
-  flex-direction: column;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  &__label {
+    color: var(--dark);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28.13px;
+    width: fit-content;
+    margin: 10px 0;
+  }
 
-  &:nth-child(3) {
-    display: inline-block;
-    label {
-      display: block;
+  &__input,
+  &__select {
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    padding: 3px;
+    cursor: pointer;
+    max-width: 150px;
+  }
+
+  &__select-group {
+    display: flex;
+    
+    & > :first-child {
+      margin-right: 10px;
     }
   }
 
-  select,
-  input {
-    margin-top: 5px;
-    border-radius: 5px;
-    border-width: 1px;
+  &__input--nickname {
+    width: 150px;
+    border-radius: 4px;
+    outline: none;
+    box-sizing: border-box;
+    transition: 0.3s;
+    padding: 5px;
+
+    &[type=text]:focus {
+      border-color: dodgerBlue;
+      box-shadow: 0 0 8px 0 dodgerBlue;
+    }
   }
-}
 
-.nickname-input {
-  width: 150px;
-  border: 2px solid #aaa;
-  border-radius: 4px;
-  outline: none;
-  padding: 5px;
-  box-sizing: border-box;
-  transition: 0.3s;
-}
-
-input[type='text']:focus {
-  border-color: dodgerBlue;
-  box-shadow: 0 0 8px 0 dodgerBlue;
-}
-
-.sido-select {
-  width: 80px;
-  margin-right: 5px;
-
-  &:hover {
+  &__btn {
+    border-radius: 10px;
+    border: none;
+    background: none;
+    padding: 10px 15px;
     cursor: pointer;
   }
-}
 
-.sigungu-select {
-  width: 120px;
-  &:hover {
-    cursor: pointer;
+  &__btn--submit {
+    align-self: center;
+    width: 300px;
+    background-color: var(--dark);
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+      0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    color: white;
+
+    &:hover {
+      opacity: 0.9;
+    }
   }
 }
-.position-select {
-  width: 150px;
-  &:hover {
-    cursor: pointer;
-  }
-}
 
-.stack-select {
+.profile-edit__form--layout-grid {
   display: grid;
   gap: 10px;
   column-gap: 30px;
   margin: 15px 0;
-
   grid-template-columns: repeat(4, 1fr);
 
   @media (max-width: $tablet) {
@@ -148,46 +143,12 @@ input[type='text']:focus {
   }
 }
 
-.check-with-label:checked + .label-for-check {
-  color: var(--medium2);
-}
-
-.clearfix {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 30px;
-
-  button {
-    border-radius: 10px;
-    border: none;
-    background: none;
-    padding: 10px 15px;
-    cursor: pointer;
-  }
-
-  .updateBtn {
-    margin-left: 15px;
-    background-color: var(--dark);
-    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
-      0 17px 50px 0 rgba(0, 0, 0, 0.19);
-    color: white;
-
-    &:hover {
-      opacity: 0.9;
-    }
-  }
-
-  .unsubscribeBtn {
-    background-color: var(--gray);
-  }
-}
-
-.profile-skeleton {
+.profile-img-skeleton {
   background: #eee;
   position: relative;
 }
 
-.profile-skeleton::before {
+.profile-img-skeleton::before {
   content: '';
   position: absolute;
   width: 157px;
@@ -211,3 +172,17 @@ input[type='text']:focus {
     transform: skewX(-10deg) translateX(200%);
   }
 }
+
+// TODO: class 충돌
+#root {
+  padding-bottom: 0;
+}
+body main .form {
+  margin: 0;
+  padding: 0;
+}
+body main .form div {
+  margin: 0;
+}
+// TODO: class 충돌
+
