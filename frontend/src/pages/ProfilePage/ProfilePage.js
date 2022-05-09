@@ -48,15 +48,13 @@ export default class ProfilePage extends CustomComponent {
         ...profile,
       });
     } catch (e) {
+      console.log(e);
       new Toast({ content: '프로필 정보 불러오기 실패', type: 'fail' });
     }
   }
 
   markup() {
-    return `
-      <div class="container">
-      </div>
-    `;
+    return <div class="container"></div>;
   }
 
   renderCallback() {

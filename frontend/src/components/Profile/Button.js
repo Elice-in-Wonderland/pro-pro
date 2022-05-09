@@ -2,9 +2,7 @@ import CustomComponent from '../CustomComponent';
 
 export default class Button extends CustomComponent {
   markup() {
-    return `
-      <span>${this.props.buttonText}</span>
-    `;
+    return <span>{this.props.buttonText}</span>;
   }
 
   setEvent() {
