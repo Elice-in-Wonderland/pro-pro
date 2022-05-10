@@ -289,27 +289,21 @@ export default class DetailPage extends CustomComponent {
 
   createReplyForm = target => {
     const targetComment = target.parentNode.parentNode;
+    const { replyId } = this.state;
     const { id } = targetComment.dataset;
-    if (id === this.state.replyId) {
-      this.setState({
-        ...this.state,
-        replyId: null,
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        replyId: id,
-      });
-    }
+    this.setState({
+      ...this.state,
+      replyId: id === replyId ? null : id,
+    });
   };
 
   deleteComment = target => {
     const targetComment = target.parentNode.parentNode;
     const { id, parent } = targetComment.dataset;
+    axiosInstance.delete(`comments/${id}`, {
+      withCredentials: true,
+    });
     if (parent === 'post') {
-      axiosInstance.delete(`comments/${id}`, {
-        withCredentials: true,
-      });
       this.setState({
         ...this.state,
         comments: [
@@ -318,13 +312,10 @@ export default class DetailPage extends CustomComponent {
       });
     } else if (parent === 'comment') {
       const { parentId } = targetComment.dataset;
-      axiosInstance.delete(`comments/${id}`, {
-        withCredentials: true,
-      });
-      const newComment = this.state.comments.find(
+      const changedComment = this.state.comments.find(
         comment => comment._id === parentId,
       );
-      newComment.nestedComments = newComment.nestedComments.filter(
+      changedComment.nestedComments = changedComment.nestedComments.filter(
         nestedComment => nestedComment._id !== id,
       );
 
@@ -332,7 +323,7 @@ export default class DetailPage extends CustomComponent {
         ...this.state,
         comments: [
           ...this.state.comments.map(comment =>
-            comment._id === parentId ? newComment : comment,
+            comment._id === parentId ? changedComment : comment,
           ),
         ],
       });
@@ -347,6 +338,7 @@ export default class DetailPage extends CustomComponent {
         dataset: { id },
       },
     } = event.target;
+    const { imageURL, nickname, _id } = userState.myInfo;
 
     if (type === 'comment') {
       const { postId } = this.state;
@@ -359,7 +351,6 @@ export default class DetailPage extends CustomComponent {
         },
         { withCredentials: true },
       );
-      const { imageURL, nickname, _id } = userState.myInfo;
       this.setState({
         ...this.state,
         comments: [
@@ -389,10 +380,12 @@ export default class DetailPage extends CustomComponent {
         },
         { withCredentials: true },
       );
-      const { imageURL, nickname, _id } = userState.myInfo;
-      const newReply = this.state.comments.find(comment => comment._id === id);
-      newReply.nestedComments = [
-        ...newReply.nestedComments,
+
+      const changedComment = this.state.comments.find(
+        comment => comment._id === id,
+      );
+      changedComment.nestedComments = [
+        ...changedComment.nestedComments,
         {
           author: {
             imageURL,
@@ -410,7 +403,7 @@ export default class DetailPage extends CustomComponent {
         ...this.state,
         comments: [
           ...this.state.comments.map(comment =>
-            comment._id === id ? newReply : comment,
+            comment._id === id ? changedComment : comment,
           ),
         ],
         replyId: null,
