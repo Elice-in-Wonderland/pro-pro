@@ -62,8 +62,6 @@ export default class BookmarkPage extends CustomComponent {
         props: {
           type: 'bookmark',
           post: item,
-          postList: this.state,
-          updateCards: this.updateCards,
         },
       });
       frag.appendChild(cardWrapper);
