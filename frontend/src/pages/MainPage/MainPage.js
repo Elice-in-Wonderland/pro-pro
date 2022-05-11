@@ -59,7 +59,7 @@ export default class MainPage extends CustomComponent {
 
       new MainCard({
         container: cardWrapper,
-        props: { post: el, postList: this.state },
+        props: { post: el },
       });
       fragment.appendChild(cardWrapper);
     });
