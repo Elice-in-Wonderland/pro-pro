@@ -18,16 +18,12 @@ export default class Comments extends CustomComponent {
                   <img src={author.imageURL} width="30px" height="30px" />
                   <h4 class="comment__user-name">{author.nickname}</h4>
                   <h5 class="comment__time">{updatedAt.slice(0, 10)}</h5>
-                  {userType === 'loggedUser' ||
-                  (userType === 'author' && updatedAt !== '지금') ? (
-                    <li class="comment__reply">답변</li>
-                  ) : (
-                    ''
-                  )}
-                  {comment.userId === userId && updatedAt !== '지금' ? (
+                  {(userType === 'loggedUser' || userType === 'author') &&
+                    updatedAt !== '지금' && (
+                      <li class="comment__reply">답변</li>
+                    )}
+                  {comment.userId === userId && updatedAt !== '지금' && (
                     <li class="comment__delete">삭제</li>
-                  ) : (
-                    ''
                   )}
                 </div>
                 <h6 class="comment__content">{content}</h6>
@@ -66,10 +62,8 @@ export default class Comments extends CustomComponent {
           <img src={author.imageURL} width="30px" height="30px" />
           <h4 class="comment__user-name">{author.nickname}</h4>
           <h5 class="comment__time">{updatedAt.slice(0, 10)}</h5>
-          {comment.userId === userId && updatedAt !== '지금' ? (
+          {comment.userId === userId && updatedAt !== '지금' && (
             <li class="comment__delete">삭제</li>
-          ) : (
-            ''
           )}
         </div>
         <h6 class="comment__content">{content}</h6>
