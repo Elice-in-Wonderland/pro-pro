@@ -2,18 +2,14 @@ import axiosInstance from '../../utils/api';
 import MainCard from '../../components/MainCard/MainCard';
 import './bookmarkPage.scss';
 import CustomComponent from '../../components/CustomComponent';
-import { createDom, replaceElement } from '../../utils/dom';
+import { createDom } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
+import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
 
 export default class BookmarkPage extends CustomComponent {
   init() {
     this.state = [];
   }
-
-  setState = nextState => {
-    this.state = nextState;
-    this.cardRender();
-  };
 
   async mounted() {
     try {
@@ -26,6 +22,7 @@ export default class BookmarkPage extends CustomComponent {
         })
         .then(cards => {
           this.setState(cards);
+          this.cardRender();
         });
     } catch (e) {
       new Toast({ content: '북마크 정보 불러오기 실패', type: 'fail' });
@@ -34,56 +31,55 @@ export default class BookmarkPage extends CustomComponent {
 
   markup() {
     return (
-      <div class="bookmark-contents">
-        <section class="bookmark-contents__button">
-          <button type="button" id="bookmark-contents__button--button-element">
-            북마크한 프로젝트/스터디
-          </button>
-        </section>
-        <section class="bookmark-contents__cards">
-          <div class="bookmark-contents__cards--card-elements"></div>
-        </section>
+      <div class="bookmark">
+        <div class="bookmark__title">북마크한 프로젝트/스터디</div>
+        <section class="bookmark__cards"></section>
       </div>
     );
   }
 
-  cardRender() {
-    const cards = this.container.querySelector(
-      '.bookmark-contents__cards--card-elements',
-    );
+  skeletonCardRender() {
+    const cards = this.container.querySelector('.bookmark__cards');
+    const frag = new DocumentFragment();
 
-    const frag = document.createDocumentFragment();
+    Array.from({ length: 6 }).forEach(() => {
+      const skeletonCard = createDom('div', {
+        className: 'card-skeleton',
+      });
+
+      new SkeletonCard({
+        container: skeletonCard,
+      });
+      frag.appendChild(skeletonCard);
+    });
+    cards.appendChild(frag);
+  }
+
+  cardRender() {
+    this.skeletonCardRender();
+    const cards = this.container.querySelector('.bookmark__cards');
+    cards.innerHTML = '';
+
+    const frag = new DocumentFragment();
 
     this.state.forEach(item => {
-      const cardWrapper = createDom('div', {
+      const card = createDom('div', {
         className: 'card-wrapper',
       });
 
       new MainCard({
-        container: cardWrapper,
+        container: card,
         props: {
           type: 'bookmark',
           post: item,
         },
       });
-      frag.appendChild(cardWrapper);
+      frag.appendChild(card);
     });
-    replaceElement(cards, frag);
+    cards.appendChild(frag);
   }
 
-  updateCards = async () => {
-    this.render();
-    await this.mounted();
-    this.setEvent();
-  };
-
-  setEvent() {
-    const bookmarkBtn = this.container.querySelector(
-      '#bookmark-contents__button--button-element',
-    );
-
-    bookmarkBtn.addEventListener('click', () => {
-      this.updateCards();
-    });
+  async renderCallback() {
+    this.skeletonCardRender();
   }
 }
