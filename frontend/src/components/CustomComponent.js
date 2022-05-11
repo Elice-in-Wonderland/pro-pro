@@ -1,3 +1,5 @@
+import { vDomToNode } from '../utils/jsx-runtime';
+
 class CustomComponent {
   constructor({ container, props }) {
     this.container = container;
@@ -19,10 +21,15 @@ class CustomComponent {
   }
 
   render() {
+    const vDOM = this.markup();
+
     // TODO: JSX관련해서 수정되면 제거
-    const newNode = this.markup();
-    if (typeof newNode === 'string') this.container.innerHTML = newNode;
-    else this.container.replaceChildren(newNode);
+    if (typeof vDOM === 'string') this.container.innerHTML = vDOM;
+    else {
+      const fragment = new DocumentFragment();
+      vDomToNode(vDOM, fragment);
+      this.container?.replaceChildren(fragment);
+    }
 
     this.renderCallback();
   }
