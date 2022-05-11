@@ -34,21 +34,23 @@ export default class BookmarkPage extends CustomComponent {
 
   markup() {
     return (
-      <div class="bookmark-page-wrapper">
-        <section class="filter-buttons">
-          <button type="button" id="bookmark-button">
+      <div class="bookmark-contents">
+        <section class="bookmark-contents__button">
+          <button type="button" id="bookmark-contents__button--button-element">
             북마크한 프로젝트/스터디
           </button>
         </section>
-        <section class="cards">
-          <div class="card-elements"></div>
+        <section class="bookmark-contents__cards">
+          <div class="bookmark-contents__cards--card-elements"></div>
         </section>
       </div>
     );
   }
 
   cardRender() {
-    const cards = this.container.querySelector('.card-elements');
+    const cards = this.container.querySelector(
+      '.bookmark-contents__cards--card-elements',
+    );
 
     const frag = document.createDocumentFragment();
 
@@ -76,7 +78,9 @@ export default class BookmarkPage extends CustomComponent {
   };
 
   setEvent() {
-    const bookmarkBtn = this.container.querySelector('#bookmark-button');
+    const bookmarkBtn = this.container.querySelector(
+      '#bookmark-contents__button--button-element',
+    );
 
     bookmarkBtn.addEventListener('click', () => {
       this.updateCards();

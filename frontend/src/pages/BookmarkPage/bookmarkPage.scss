@@ -1,16 +1,16 @@
-.bookmark-page-wrapper {
+.bookmark-contents {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.filter-buttons {
+.bookmark-contents__button {
   display: flex;
   margin-top: 80px;
 }
 
-.filter-buttons button {
+#bookmark-contents__button--button-element {
   width: 247px;
   height: 42px;
   background-color: #f0f0f0;
@@ -22,7 +22,7 @@
   margin: 50px;
 }
 
-.filter-buttons button:hover {
+#bookmark-contents__button--button-element:hover {
   color: #ffffff;
   border: 3px solid #ffffff;
   background-color: rgb(35, 37, 88);
@@ -30,7 +30,7 @@
   transition: transform 0.3s, opacity 0.3s, background-color 0.3s;
 }
 
-.cards {
+.bookmark-contents__cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   flex-direction: row;
@@ -38,26 +38,26 @@
 }
 
 @media screen and (min-width: 744px) and (max-width: 1133px) {
-  .cards {
+  .bookmark-contents__cards {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media screen and (min-width: 375px) and (max-width: 812px) {
-  .filter-buttons {
+  .bookmark-contents__button {
     display: flex;
     flex-direction: column;
   }
-  .filter-buttons button {
+  #bookmark-contents__button--button-element {
     margin-top: 20px;
     margin-bottom: 0px;
   }
 
-  .filter-buttons button:first-child {
+  #bookmark-contents__button--button-element :first-child {
     margin-top: 50px;
   }
 
-  .cards {
+  .bookmark-contents__cards {
     display: flex;
     flex-direction: column;
   }
