@@ -1,7 +1,6 @@
 import CustomComponent from '../../components/CustomComponent';
 import './detailPage.scss';
 import viewIcon from '../../assets/icons/view.svg';
-import javascriptLogo from '../../assets/icons/javascript.svg';
 
 import Stacks from '../../components/Stacks/Stacks';
 import Comments from '../../components/Comments/Comments';
@@ -73,14 +72,14 @@ export default class DetailPage extends CustomComponent {
 
     this.stacks = new Stacks({
       container: createDom('ul', {
-        className: 'stackList',
+        className: 'detail__stack-list',
       }),
       props: { stacks },
     });
 
     this.postBanner = new PostBanner({
       container: createDom('div', {
-        className: `banner ${stacks[0]}`,
+        className: `banner banner--${stacks[0]}`,
       }),
       props: { stacks },
     });
@@ -88,14 +87,14 @@ export default class DetailPage extends CustomComponent {
     if (userType === 'author') {
       this.editButtons = new EditButtons({
         container: createDom('form', {
-          className: 'editBtns',
+          className: 'edit-form',
         }),
       });
     }
 
     this.bookmark = new Bookmark({
       container: createDom('div', {
-        className: 'bookmarkWrapper',
+        className: 'bookmark-wrapper',
       }),
       props: { isMyBookmark, marks },
     });
@@ -108,7 +107,7 @@ export default class DetailPage extends CustomComponent {
     });
     this.commentForm = new CommentForm({
       container: createDom('form', {
-        className: 'commentForm init',
+        className: 'comment-form comment-form--init',
         type: 'comment',
       }),
       props: { userType },
@@ -131,96 +130,96 @@ export default class DetailPage extends CustomComponent {
     } = this.state;
 
     return (
-      <div class="detailContainer">
-        <h2 class="detailTitle">{title}</h2>
-        <div class="userWrapper">
+      <div class="detail">
+        <h2 class="detail__title">{title}</h2>
+        <div class="detail__user-wrapper">
           <img src={imageURL} width="30px" height="30px" />
-          <h4 class="userName">{nickname}</h4>
+          <h4 class="detail__user-name">{nickname}</h4>
         </div>
-        <div class="stacks">
-          <h4 class="stacksTitle">기술스택</h4>
-          <ul class="stacksReplace"></ul>
+        <div class="detail__stacks">
+          <h4 class="detail__stacks-title">기술스택</h4>
+          <ul class="detail__stacks-replace"></ul>
         </div>
-        <main class="hero">
-          <div class="banner">
-            <img class="bannerLogo" src={javascriptLogo} alt="javascript" />
-          </div>
-          <div class="infos">
+        <main class="detail__hero">
+          <div class="detail__banner"></div>
+          <div class="detail__infos">
             <ul>
-              <li class="info">
-                <div class="region">지역</div>
-                <div class="region__description">{address || '온라인'}</div>
+              <li class="detail__info">
+                <div class="detail__region">지역</div>
+                <div class="detail__region-description">
+                  {address || '온라인'}
+                </div>
               </li>
-              <li class="info">
-                <div class="capacity">모집 인원</div>
-                <div class="capacity__description">{capacity}명</div>
+              <li class="detail__info">
+                <div class="detail__capacity">모집 인원</div>
+                <div class="detail__capacity-description">{capacity}명</div>
               </li>
-              <li class="info">
-                <div class="register">모집 기간</div>
-                <div class="registerDescription">
+              <li class="detail__info">
+                <div class="detail__register">모집 기간</div>
+                <div class="detail__register-description">
                   {updatedAt.slice(0, 10)} ~ {registerDeadline.slice(0, 10)}
                 </div>
               </li>
-              <li class="info">
-                <div class="period">프로젝트 수행 기간</div>
-                <div class="periodDescription">
+              <li class="detail__info">
+                <div class="detail__period">프로젝트 수행 기간</div>
+                <div class="detail__period-description">
                   {startDate.slice(0, 10)} ~ {endDate.slice(0, 10)}
                 </div>
               </li>
-              <li class="info">
-                <div class="viewWrapper">
-                  <img class="view" src={viewIcon} />
-                  <span class="viewCount">{views}</span>
+              <li class="detail__info">
+                <div class="detail__view-wrapper">
+                  <img class="detail__view-image" src={viewIcon} />
+                  <span class="detail__view-count">{views}</span>
                 </div>
-                <div class="bookmarkWrapper"></div>
+                <div class="detail__bookmark-wrapper"></div>
               </li>
             </ul>
           </div>
         </main>
-        <div class="descriptionWrapper">
+        <div class="detail__description-wrapper">
           <h3>프로젝트 소개</h3>
-          <p class="postDescription">{content}</p>
+          <p class="detail__post-description">{content}</p>
         </div>
         <hr />
-        <div class="mapWarpper">
+        <div class="detail__map-wrapper">
           <h3>팀 미팅 지역</h3>
-          <h4 class="mapDescription">{address || '온라인'}</h4>
+          <h4 class="detail__map-description">{address || '온라인'}</h4>
           <div id="map"></div>
         </div>
-        <div class="commentSection">
+        <div class="detail__comment-section">
           <hr />
-          <div class="comments"></div>
-          <div class="commentForm init"></div>
+          <div class="detail__comments"></div>
+          <div class="detail__comment-form detail__comment-form--default"></div>
         </div>
-        <div class="editSection"></div>
+        <div class="detail__edit-section"></div>
       </div>
     );
   }
 
   replaceDOM() {
     replaceElement(
-      this.container.querySelector('.stacksReplace'),
+      this.container.querySelector('.detail__stacks-replace'),
       this.stacks.container,
     );
     replaceElement(
-      this.container.querySelector('.banner'),
+      this.container.querySelector('.detail__banner'),
       this.postBanner.container,
     );
     replaceElement(
-      this.container.querySelector('.comments'),
+      this.container.querySelector('.detail__comments'),
       this.comments.container,
     );
     replaceElement(
-      this.container.querySelector('.commentForm.init'),
+      this.container.querySelector('.detail__comment-form--default'),
       this.commentForm.container,
     );
     replaceElement(
-      this.container.querySelector('.bookmarkWrapper'),
+      this.container.querySelector('.detail__bookmark-wrapper'),
       this.bookmark.container,
     );
     if (this.editButtons) {
       replaceElement(
-        this.container.querySelector('.editSection'),
+        this.container.querySelector('.detail__edit-section'),
         this.editButtons.container,
       );
     }
@@ -243,16 +242,16 @@ export default class DetailPage extends CustomComponent {
         else new Toast({ content: '로그인 먼저 해주세요.', type: 'fail' });
       }
 
-      if (target.classList.contains('commentDelete'))
+      if (target.classList.contains('comment__delete'))
         this.deleteComment(target);
 
-      if (target.classList.contains('commentReply'))
+      if (target.classList.contains('comment__reply'))
         this.createReplyForm(target);
     });
 
     this.container.addEventListener('submit', event => {
       event.preventDefault();
-      if (event.target.classList.contains('commentForm'))
+      if (event.target.classList.contains('comment-form'))
         this.addComment(event);
     });
   }

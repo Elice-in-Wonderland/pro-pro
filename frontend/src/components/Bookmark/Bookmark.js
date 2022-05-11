@@ -10,7 +10,7 @@ export default class Bookmark extends CustomComponent {
     return (
       <fragment>
         <img class="bookmark" src={isMyBookmark ? filledMarkIcon : markIcon} />
-        <span class="bookmarkCount">{marks}</span>
+        <span class="bookmark-count">{marks}</span>
       </fragment>
     );
   }

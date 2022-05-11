@@ -1,40 +1,45 @@
-.commentContent {
+.comment__content {
   margin-top: 15px;
   font-weight: 600;
 }
 
-.comment,
-.nestedComment {
+.comment {
   padding: 30px 0px;
   border-bottom: 1px solid rgb(0, 0, 0, 20%);
 }
 
-.comment:last-child,
-.nestedComment:last-child {
+.comment:last-child {
   padding-bottom: 0;
   border-bottom: none;
 }
 
-.nestedComment {
+.comment--nested {
   margin: 0px 30px;
 }
 
-.commentedTime {
+.comment__time {
   opacity: 0.6;
 }
 
-.commentReply {
-  &:hover {
-    cursor: pointer;
-  }
-}
-.commentDelete {
-  &:hover {
-    cursor: pointer;
+.comment__user-wrapper {
+  font-size: 11px;
+  font-weight: bold;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  img {
+    border-radius: 50%;
   }
 }
 
-hr {
-  width: 100%;
-  opacity: 0.4;
+.comment__reply {
+  &:hover {
+    cursor: pointer;
+  }
+}
+.comment__delete {
+  &:hover {
+    cursor: pointer;
+  }
 }

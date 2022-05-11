@@ -1,4 +1,4 @@
-.stacks {
+.detail__stacks {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
@@ -6,7 +6,7 @@
   h4 {
     font-weight: 500;
   }
-  .stackList {
+  .detail__stack-list {
     display: flex;
     flex-wrap: wrap;
     font-size: 16px;
@@ -21,7 +21,7 @@
 }
 
 @media screen and (max-width: 900px) {
-  .stacks {
+  .detail__stacks {
     justify-content: center;
   }
 }

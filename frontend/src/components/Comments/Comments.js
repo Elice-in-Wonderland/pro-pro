@@ -14,27 +14,27 @@ export default class Comments extends CustomComponent {
           return (
             <fragment>
               <div class="comment" data-parent="post" data-id={_id}>
-                <div class="userWrapper">
+                <div class="comment__user-wrapper">
                   <img src={author.imageURL} width="30px" height="30px" />
-                  <h4 class="userName">{author.nickname}</h4>
-                  <h5 class="commentedTime">{updatedAt.slice(0, 10)}</h5>
+                  <h4 class="comment__user-name">{author.nickname}</h4>
+                  <h5 class="comment__time">{updatedAt.slice(0, 10)}</h5>
                   {userType === 'loggedUser' ||
                   (userType === 'author' && updatedAt !== '지금') ? (
-                    <li class="commentReply">답변</li>
+                    <li class="comment__reply">답변</li>
                   ) : (
                     ''
                   )}
                   {comment.userId === userId && updatedAt !== '지금' ? (
-                    <li class="commentDelete">삭제</li>
+                    <li class="comment__delete">삭제</li>
                   ) : (
                     ''
                   )}
                 </div>
-                <h6 class="commentContent">{content}</h6>
+                <h6 class="comment__content">{content}</h6>
                 {replyId === _id
                   ? new CommentForm({
                       container: createDom('form', {
-                        className: 'commentForm',
+                        className: 'comment-form',
                         type: 'reply',
                       }),
                       props: { userType },
@@ -57,26 +57,26 @@ export default class Comments extends CustomComponent {
 
     return (
       <div
-        class="nestedComment"
+        class="comment comment--nested"
         data-parent-id={parentId}
         data-parent="comment"
         data-id={_id}
       >
-        <div class="userWrapper">
+        <div class="comment__user-wrapper">
           <img src={author.imageURL} width="30px" height="30px" />
-          <h4 class="userName">{author.nickname}</h4>
-          <h5 class="commentedTime">{updatedAt.slice(0, 10)}</h5>
+          <h4 class="comment__user-name">{author.nickname}</h4>
+          <h5 class="comment__time">{updatedAt.slice(0, 10)}</h5>
           {comment.userId === userId && updatedAt !== '지금' ? (
-            <li class="commentDelete">삭제</li>
+            <li class="comment__delete">삭제</li>
           ) : (
             ''
           )}
         </div>
-        <h6 class="commentContent">{content}</h6>
+        <h6 class="comment__content">{content}</h6>
         {replyId === _id
           ? new CommentForm({
               container: createDom('form', {
-                className: 'commentForm',
+                className: 'comment-form',
                 type: 'reply',
               }),
               props: { userType },

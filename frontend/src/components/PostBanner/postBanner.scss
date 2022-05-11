@@ -23,60 +23,60 @@
   flex-wrap: wrap;
   gap: 30px;
   padding: 20px;
-  .bannerLogo {
+  .banner__stack {
     width: 25%;
     filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
   }
 }
 
-.cpp {
+.banner--cpp {
   background-color: var(--cpp);
 }
-.django {
+.banner--django {
   background-color: var(--django);
 }
 
-.flutter {
+.banner--flutter {
   background-color: var(--flutter);
 }
 
-.go {
+.banner--go {
   background-color: var(--go);
 }
 
-.java {
+.banner--java {
   background-color: var(--java);
 }
 
-.javascript {
+.banner--javascript {
   background-color: var(--javascript);
 }
 
-.kotlin {
+.banner--kotlin {
   background-color: var(--kotlin);
 }
 
-.nodejs {
+.banner--nodejs {
   background-color: var(--nodejs);
 }
 
-.python {
+.banner--python {
   background-color: var(--python);
 }
 
-.react {
+.banner--react {
   background-color: var(--react);
 }
 
-.spring {
+.banner--spring {
   background-color: var(--spring);
 }
-.swift {
+.banner--swift {
   background-color: var(--swift);
 }
-.typescript {
+.banner--typescript {
   background-color: var(--typescript);
 }
-.vue {
+.banner--vue {
   background-color: var(--vue);
 }

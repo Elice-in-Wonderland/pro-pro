@@ -17,7 +17,7 @@ import swift from '../../assets/icons/swift.svg';
 import typescript from '../../assets/icons/typescript.svg';
 import vue from '../../assets/icons/vue.svg';
 
-const stackLogos = [
+const stackSvg = [
   cpp,
   django,
   flutter,
@@ -37,7 +37,7 @@ const stackLogos = [
 export default class PostBanner extends CustomComponent {
   init() {
     this.state = {
-      stackLogoURLs: [],
+      stackSrc: [],
     };
 
     const { stacks } = this.props;
@@ -45,7 +45,7 @@ export default class PostBanner extends CustomComponent {
     stacks.forEach(stack => {
       for (let i = 0; i < defaultStacks.length; i += 1) {
         if (defaultStacks[i] === stack.toLowerCase()) {
-          this.state.stackLogoURLs.push(stackLogos[i]);
+          this.state.stackSrc.push(stackSvg[i]);
           break;
         }
       }
@@ -53,11 +53,13 @@ export default class PostBanner extends CustomComponent {
   }
 
   markup() {
-    const { stackLogoURLs } = this.state;
+    const { stackSrc } = this.state;
     return (
       <fragment>
-        {stackLogoURLs.map(stack => {
-          return <img class="bannerLogo" src={stack} aria-label="기술스택" />;
+        {stackSrc.map(stack => {
+          return (
+            <img class="banner__stack" src={stack} aria-label="기술스택" />
+          );
         })}
       </fragment>
     );

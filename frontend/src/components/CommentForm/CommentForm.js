@@ -14,10 +14,10 @@ export default class CommentForm extends CustomComponent {
       <fragment>
         <textarea
           placeholder="댓글을 남겨주세요."
-          class="writeComment"
+          class="comment-form__textarea"
           type="text"
         ></textarea>
-        <input class="submitComment" type="submit" value="등록" />
+        <input class="comment-form__btn" type="submit" value="등록" />
       </fragment>
     );
   }
@@ -27,7 +27,7 @@ export default class CommentForm extends CustomComponent {
       <textarea
         readonly
         placeholder="먼저 로그인 해주세요."
-        class="writeComment"
+        class="comment-form__textarea"
         type="text"
       ></textarea>
     );
