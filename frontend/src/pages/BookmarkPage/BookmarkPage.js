@@ -1,5 +1,5 @@
 import axiosInstance from '../../utils/api';
-import MainCard from '../../components/MainCard/MainCard';
+import Card from '../../components/Card/Card';
 import './bookmarkPage.scss';
 import CustomComponent from '../../components/CustomComponent';
 import { createDom } from '../../utils/dom';
@@ -67,7 +67,7 @@ export default class BookmarkPage extends CustomComponent {
         className: 'card-wrapper',
       });
 
-      new MainCard({
+      new Card({
         container: card,
         props: {
           type: 'bookmark',
