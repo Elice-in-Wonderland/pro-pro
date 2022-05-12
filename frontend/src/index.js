@@ -2,4 +2,4 @@ import App from './app';
 import './styles/reset.css';
 import './styles/index.css';
 
-new App(document.getElementById('root'));
+new App({ container: document.getElementById('root') });

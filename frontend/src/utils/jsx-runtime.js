@@ -1,39 +1,65 @@
-function addChild(parent, childNode) {
-  // 아무것도 없을 때
-  if (typeof childNode === 'undefined' || childNode === null) return;
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-unused-expressions */
 
-  // false 일경우 아무것도 안보이게
-  if (typeof childNode === 'boolean') return;
+function jsx(type, attributes, ...children) {
+  const childrenElements = children.reduce((acc, child) => {
+    if (child == null) return acc;
+    if (typeof child === 'boolean') return acc;
 
-  // 배열 형식일 때
-  if (Array.isArray(childNode))
-    return childNode.forEach(c => addChild(parent, c));
+    typeof child === 'object'
+      ? acc.push(child)
+      : acc.push(jsx('TEXT_NODE', { textContent: child }));
 
-  // object 형식일 때 이미 하위에서 node로 만들어진 것
-  if (typeof childNode === 'object') {
-    return parent.appendChild(childNode);
-  }
+    return acc;
+  }, []);
 
-  // string, number
-  parent.appendChild(document.createTextNode(childNode));
+  return {
+    type,
+    attributes,
+    children: childrenElements.flat(),
+  };
 }
 
-function jsx(name, attributes, ...children) {
-  const node =
-    name === 'fragment'
-      ? document.createDocumentFragment()
-      : document.createElement(name);
+export function vDomToNode(vDOM, container, oldDOM) {
+  if (vDOM == null) return;
 
-  if (!(node instanceof DocumentFragment)) {
-    Object.entries(attributes || {}).forEach(([key, value]) => {
-      node.setAttribute(key, value);
-    });
+  originNode(vDOM, container, oldDOM);
+}
+
+function originNode(vDOM, container, oldDOM) {
+  let newNode = null;
+
+  if (vDOM.type === 'TEXT_NODE') {
+    const { textContent } = vDOM.attributes;
+
+    newNode = document.createTextNode(textContent);
+  } else {
+    newNode =
+      vDOM.type === 'fragment'
+        ? document.createDocumentFragment()
+        : document.createElement(vDOM.type);
+
+    if (!(newNode instanceof DocumentFragment)) {
+      updateNode(newNode, vDOM);
+    }
   }
 
-  // 자식 노드들 처리
-  (children || []).forEach(childNode => addChild(node, childNode));
+  vDOM.children.forEach(child => vDomToNode(child, newNode));
 
-  return node;
+  container?.appendChild(newNode);
+}
+
+function updateNode(newNode, vDOM) {
+  Object.entries(vDOM.attributes || {}).forEach(([key, value]) => {
+    if (key.startsWith('on')) {
+      const eventType = key.slice(2).toLocaleLowerCase();
+      newNode.addEventListener(eventType, value);
+
+      return;
+    }
+
+    newNode.setAttribute(key, value);
+  });
 }
 
 export default jsx;

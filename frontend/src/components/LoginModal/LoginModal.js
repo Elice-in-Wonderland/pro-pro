@@ -1,51 +1,53 @@
-import Cookies from 'js-cookie';
 import CustomComponent from '../CustomComponent';
 import './loginModal.scss';
 import proproLogo from '../../assets/images/pro-pro.png';
 import xButton from '../../assets/images/x-button.svg';
-import axiosInstance from '../../utils/api';
 import Toast from '../Toast/Toast';
-import { setState } from '../../utils/store';
 import { parseJwt } from '../../utils/common';
-import { restructingMyInfo } from '../../utils/auth';
+import { requestLogin } from '../../utils/auth';
+
+const DEFAULT_PROFILE =
+  'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png';
 
 export default class LoginModal extends CustomComponent {
   markup() {
-    return `
-      <div class="login-modal-wrapper">
-          <img class="login-exit-btn" src="${xButton}" />
-          <div class="login-container">
-            <div class="login-header">
-              <div class="login-greeting">
-                환영합니다!
+    return (
+      <fragment>
+        <button class={this.props.className} aria-label="로그인버튼">
+          로그인
+        </button>
+        <div class="login-modal">
+          <div class="login-modal__background">
+            <div class="login-modal__content">
+              <button class="login-modal__button login-modal__button--close">
+                <img src={xButton} />
+              </button>
+              <div class="login-modal__title">환영합니다!</div>
+              <img class="login-modal__image" src={proproLogo} />
+              <div class="google-login">
+                <div id="google-login__button"></div>
               </div>
-              <img class="login-image" src="${proproLogo}" />
-            </div>
-            <div class="login-btn-wrapper">
-              <div id="google-login-btn"></div>
             </div>
           </div>
-      </div>
-  `;
+        </div>
+      </fragment>
+    );
   }
 
   setEvent() {
-    const $modalContainer = this.container.querySelector(
-      '.login-modal-wrapper',
-    );
+    this.container.addEventListener('click', ({ target }) => {
+      if (!target.closest('.login-modal__content')) {
+        return this.hiddenModal();
+      }
 
-    this.container.addEventListener('click', e => {
-      if (
-        e.target.classList.contains('login-exit-btn') ||
-        !$modalContainer.contains(e.target)
-      ) {
-        this.hiddenModal();
+      if (target.closest('.login-modal__button--close')) {
+        return this.hiddenModal();
       }
     });
 
-    window.onload = () => {
+    window.addEventListener('load', () => {
       this.initGoogle();
-    };
+    });
   }
 
   initGoogle() {
@@ -54,13 +56,15 @@ export default class LoginModal extends CustomComponent {
       callback: this.handleCredentialResponse.bind(this),
     });
     window.google.accounts.id.renderButton(
-      document.getElementById('google-login-btn'),
+      document.getElementById('google-login__button'),
       { width: '190px' },
     );
   }
 
   hiddenModal() {
-    this.container.classList.add('hidden');
+    const modalContainer = this.container.querySelector('.login-modal');
+
+    modalContainer.classList.remove('login-modal--active');
     document.body.style.overflow = 'scroll';
   }
 
@@ -70,20 +74,12 @@ export default class LoginModal extends CustomComponent {
     const user = {
       snsId,
       snsType: 'google',
-      imageURL:
-        picture ||
-        'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png',
+      imageURL: picture || DEFAULT_PROFILE,
     };
 
     try {
-      const res = await axiosInstance.post('/users', user, {
-        withCredentials: true,
-      });
-      const { AG3_JWT } = res.data.data;
-      const myInfo = restructingMyInfo(res.data.data);
+      await requestLogin(user);
 
-      setState('myInfo', myInfo);
-      Cookies.set('AG3_JWT', AG3_JWT);
       this.hiddenModal();
       this.props.onLogin();
     } catch (e) {
