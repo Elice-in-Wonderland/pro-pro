@@ -1,7 +1,8 @@
 .detail__stacks {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 0.75em;
+  justify-content: center;
   align-items: center;
   h4 {
     font-weight: 500;
@@ -9,19 +10,13 @@
   .detail__stack-list {
     display: flex;
     flex-wrap: wrap;
-    font-size: 16px;
-    gap: 15px;
+    font-size: 0.875em;
+    gap: 0.75em;
     li {
-      padding: 12px 20px 8px;
-      padding-bottom: 14px;
-      border-radius: 30px;
+      padding: 0.75em 1.25em 0.5em;
+      padding-bottom: 0.75em;
+      border-radius: 2em;
       background-color: var(--gray);
     }
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .detail__stacks {
-    justify-content: center;
   }
 }
