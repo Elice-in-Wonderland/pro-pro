@@ -14,7 +14,7 @@ import Loading from '../../components/Loading/Loading';
 import axiosInstance from '../../utils/api';
 import { state as userState } from '../../utils/store';
 import { createMap } from '../../utils/common';
-import { createDom, replaceElement } from '../../utils/dom';
+import { appendRoot, createDom, replaceElement } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
 
 export default class DetailPage extends CustomComponent {
@@ -27,6 +27,19 @@ export default class DetailPage extends CustomComponent {
       comments: [],
       replyId: null,
     };
+    this.$dom = createDom('div', {
+      className: 'detail',
+    });
+    appendRoot(this.container, this.$dom);
+  }
+
+  render() {
+    // TODO: JSX관련해서 수정되면 제거
+    const newNode = this.markup();
+    if (typeof newNode === 'string') this.$dom.innerHTML = newNode;
+    else this.$dom.replaceChildren(newNode);
+
+    this.renderCallback();
   }
 
   renderCallback() {
@@ -107,7 +120,7 @@ export default class DetailPage extends CustomComponent {
     });
     this.commentForm = new CommentForm({
       container: createDom('form', {
-        className: 'comment-form comment-form--init',
+        className: 'comment-form comment-form--default',
         type: 'comment',
       }),
       props: { userType },
@@ -130,7 +143,7 @@ export default class DetailPage extends CustomComponent {
     } = this.state;
 
     return (
-      <div class="detail">
+      <fragment>
         <h2 class="detail__title">{title}</h2>
         <div class="detail__user-wrapper">
           <img src={imageURL} width="30px" height="30px" />
@@ -180,19 +193,18 @@ export default class DetailPage extends CustomComponent {
           <h3>프로젝트 소개</h3>
           <p class="detail__post-description">{content}</p>
         </div>
-        <hr />
         <div class="detail__map-wrapper">
           <h3>팀 미팅 지역</h3>
           <h4 class="detail__map-description">{address || '온라인'}</h4>
           <div id="map"></div>
         </div>
         <div class="detail__comment-section">
-          <hr />
+          <h3>댓글</h3>
           <div class="detail__comments"></div>
           <div class="detail__comment-form detail__comment-form--default"></div>
         </div>
         <div class="detail__edit-section"></div>
-      </div>
+      </fragment>
     );
   }
 
@@ -234,7 +246,7 @@ export default class DetailPage extends CustomComponent {
   }
 
   setEvent() {
-    this.container.addEventListener('click', ({ target }) => {
+    this.$dom.addEventListener('click', ({ target }) => {
       if (target.classList.contains('bookmark')) {
         const { userType, isMyBookmark } = this.state;
         if (userType === 'loggedUser' || userType === 'author')
@@ -249,7 +261,7 @@ export default class DetailPage extends CustomComponent {
         this.createReplyForm(target);
     });
 
-    this.container.addEventListener('submit', event => {
+    this.$dom.addEventListener('submit', event => {
       event.preventDefault();
       if (event.target.classList.contains('comment-form'))
         this.addComment(event);
