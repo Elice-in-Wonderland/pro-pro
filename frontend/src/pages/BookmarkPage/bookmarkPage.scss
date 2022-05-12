@@ -1,63 +1,30 @@
-.bookmark-page-wrapper {
+.bookmark {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.filter-buttons {
-  display: flex;
-  margin-top: 80px;
+.bookmark__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 140px;
 }
 
-.filter-buttons button {
-  width: 247px;
-  height: 42px;
-  background-color: #f0f0f0;
-  border: 0;
-  border-radius: 30px;
-  font-size: 16px;
-  color: #333333;
-  line-height: 22px;
-  margin: 50px;
-}
-
-.filter-buttons button:hover {
-  color: #ffffff;
-  border: 3px solid #ffffff;
-  background-color: rgb(35, 37, 88);
-  transform: scale(1.1);
-  transition: transform 0.3s, opacity 0.3s, background-color 0.3s;
-}
-
-.cards {
+.bookmark__cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  flex-direction: row;
   flex-wrap: wrap;
 }
 
 @media screen and (min-width: 744px) and (max-width: 1133px) {
-  .cards {
+  .bookmark__cards {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media screen and (min-width: 375px) and (max-width: 812px) {
-  .filter-buttons {
-    display: flex;
-    flex-direction: column;
-  }
-  .filter-buttons button {
-    margin-top: 20px;
-    margin-bottom: 0px;
-  }
-
-  .filter-buttons button:first-child {
-    margin-top: 50px;
-  }
-
-  .cards {
+  .bookmark__cards {
     display: flex;
     flex-direction: column;
   }
