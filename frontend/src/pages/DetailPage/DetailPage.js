@@ -1,21 +1,20 @@
 import CustomComponent from '../../components/CustomComponent';
 import './detailPage.scss';
 import viewIcon from '../../assets/icons/view.svg';
-import javascriptLogo from '../../assets/icons/javascript.svg';
 
 import Stacks from '../../components/Stacks/Stacks';
 import Comments from '../../components/Comments/Comments';
 import CommentForm from '../../components/CommentForm/CommentForm';
 import PostBanner from '../../components/PostBanner/PostBanner';
 import EditButtons from '../../components/EditButtons/EditButtons';
+import Bookmark from '../../components/Bookmark/Bookmark';
 
 import RouterContext from '../../router/RouterContext';
 import Loading from '../../components/Loading/Loading';
 import axiosInstance from '../../utils/api';
-import Bookmark from '../../components/Bookmark/Bookmark';
 import { state as userState } from '../../utils/store';
 import { createMap } from '../../utils/common';
-import { createDom, replaceElement } from '../../utils/dom';
+import { appendRoot, createDom, replaceElement } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
 
 export default class DetailPage extends CustomComponent {
@@ -26,13 +25,28 @@ export default class DetailPage extends CustomComponent {
       userId: userState.myInfo ? userState.myInfo._id : null,
       postId: RouterContext.state.params.postId,
       comments: [],
+      replyId: null,
     };
+    this.$dom = createDom('div', {
+      className: 'detail',
+    });
+    appendRoot(this.container, this.$dom);
+  }
+
+  render() {
+    // TODO: JSX관련해서 수정되면 제거
+    const newNode = this.markup();
+    if (typeof newNode === 'string') this.$dom.innerHTML = newNode;
+    else this.$dom.replaceChildren(newNode);
+
+    this.renderCallback();
   }
 
   renderCallback() {
     if (!this.state.isLoading) {
       this.makeComponent();
       this.replaceDOM();
+      this.getMapImg();
     }
   }
 
@@ -64,21 +78,21 @@ export default class DetailPage extends CustomComponent {
         userType,
         comments,
         userId,
-        postId,
         isMyBookmark,
+        replyId,
       },
     } = this;
 
     this.stacks = new Stacks({
       container: createDom('ul', {
-        className: 'stackList',
+        className: 'detail__stack-list',
       }),
       props: { stacks },
     });
 
     this.postBanner = new PostBanner({
       container: createDom('div', {
-        className: `banner ${stacks[0]}`,
+        className: `banner banner--${stacks[0]}`,
       }),
       props: { stacks },
     });
@@ -86,14 +100,14 @@ export default class DetailPage extends CustomComponent {
     if (userType === 'author') {
       this.editButtons = new EditButtons({
         container: createDom('form', {
-          className: 'editBtns',
+          className: 'edit-form',
         }),
       });
     }
 
     this.bookmark = new Bookmark({
       container: createDom('div', {
-        className: 'bookmarkWrapper',
+        className: 'bookmark-wrapper',
       }),
       props: { isMyBookmark, marks },
     });
@@ -102,18 +116,19 @@ export default class DetailPage extends CustomComponent {
       container: createDom('div', {
         className: 'comments',
       }),
-      props: { comments, userType, userId },
+      props: { comments, userType, userId, replyId },
     });
     this.commentForm = new CommentForm({
       container: createDom('form', {
-        className: 'commentForm',
+        className: 'comment-form comment-form--default',
+        type: 'comment',
       }),
-      props: { userType, parentType: 'post', parentId: postId, userId },
+      props: { userType },
     });
   }
 
   markup() {
-    if (this.state.isLoading) return Loading;
+    if (this.state.isLoading) return Loading();
     const {
       author: { imageURL, nickname },
       title,
@@ -127,101 +142,96 @@ export default class DetailPage extends CustomComponent {
       content,
     } = this.state;
 
-    return `
-    <div class="detailContainer">
-      <h2 class="detailTitle">${title}</h2>
-      <div class="userWrapper">
-        <img src=${imageURL} width="30px" height="30px" />
-        <h4 class="userName">${nickname}</h4>
-      </div>
-      <div class="stacks">
-        <h4 class="stacksTitle">기술스택<h4>
-        <ul class="stacksReplace">
-        </ul>
-      </div>
-      <main class="hero">
-        <div class="banner">
-          <img class="bannerLogo" src='${javascriptLogo}' alt="javascript" />
+    return (
+      <fragment>
+        <h2 class="detail__title">{title}</h2>
+        <div class="detail__user-wrapper">
+          <img src={imageURL} width="30px" height="30px" />
+          <h4 class="detail__user-name">{nickname}</h4>
         </div>
-        <div class="infos">
-          <ul>
-            <li class="info">
-              <div class="region">지역</div>
-              <div class="region__description">${address || '온라인'}</div>
-            </li>
-            <li class="info">
-              <div class="capacity">모집 인원</div>
-              <div class="capacity__description">${capacity}명</div>
-            </li>
-            <li class="info">
-              <div class="register">모집 기간</div>
-              <div class="registerDescription">${updatedAt.slice(
-                0,
-                10,
-              )} ~ ${registerDeadline.slice(0, 10)}</div>
-            </li>
-            <li class="info">
-              <div class="period">프로젝트 수행 기간</div>
-              <div class="periodDescription">${startDate.slice(
-                0,
-                10,
-              )} ~ ${endDate.slice(0, 10)}</div>
-            </li>
-            <li class="info">
-              <div class="viewWrapper">
-                <img class="view" src='${viewIcon}' />
-                <span class="viewCount">${views}</span>
-              </div>
-              <div class="bookmarkWrapper"></div>
-            </li>
-          </ul>
+        <div class="detail__stacks">
+          <h4 class="detail__stacks-title">기술스택</h4>
+          <ul class="detail__stacks-replace"></ul>
         </div>
-      </main>
-      <div class="descriptionWrapper">
-      <h3>프로젝트 소개</h3>
-      <p class="postDescription" >${content}</p>
-      </div>
-      <hr>
-      <div class="mapWarpper">
-        <h3>팀 미팅 지역</h3>
-        <h4 class="mapDescription">${address || '온라인'}</h3>
-        <div id="map"></div>
-      </div>
-      <div class="commentSection">
-        <hr />
-        <div class="comments"></div>
-        <div class="commentForm"></div>
-      </div>
-      <div class="editSection"></div>
-    </div>
-    `;
+        <main class="detail__hero">
+          <div class="detail__banner"></div>
+          <div class="detail__infos">
+            <ul>
+              <li class="detail__info">
+                <div class="detail__region">지역</div>
+                <div class="detail__region-description">
+                  {address || '온라인'}
+                </div>
+              </li>
+              <li class="detail__info">
+                <div class="detail__capacity">모집 인원</div>
+                <div class="detail__capacity-description">{capacity}명</div>
+              </li>
+              <li class="detail__info">
+                <div class="detail__register">모집 기간</div>
+                <div class="detail__register-description">
+                  {updatedAt.slice(0, 10)} ~ {registerDeadline.slice(0, 10)}
+                </div>
+              </li>
+              <li class="detail__info">
+                <div class="detail__period">프로젝트 수행 기간</div>
+                <div class="detail__period-description">
+                  {startDate.slice(0, 10)} ~ {endDate.slice(0, 10)}
+                </div>
+              </li>
+              <li class="detail__info">
+                <div class="detail__view-wrapper">
+                  <img class="detail__view-image" src={viewIcon} />
+                  <span class="detail__view-count">{views}</span>
+                </div>
+                <div class="detail__bookmark-wrapper"></div>
+              </li>
+            </ul>
+          </div>
+        </main>
+        <div class="detail__description-wrapper">
+          <h3>프로젝트 소개</h3>
+          <p class="detail__post-description">{content}</p>
+        </div>
+        <div class="detail__map-wrapper">
+          <h3>팀 미팅 지역</h3>
+          <h4 class="detail__map-description">{address || '온라인'}</h4>
+          <div id="map"></div>
+        </div>
+        <div class="detail__comment-section">
+          <h3>댓글</h3>
+          <div class="detail__comments"></div>
+          <div class="detail__comment-form detail__comment-form--default"></div>
+        </div>
+        <div class="detail__edit-section"></div>
+      </fragment>
+    );
   }
 
   replaceDOM() {
-    this.getMapImg();
     replaceElement(
-      this.container.querySelector('.stacksReplace'),
+      this.container.querySelector('.detail__stacks-replace'),
       this.stacks.container,
     );
     replaceElement(
-      this.container.querySelector('.banner'),
+      this.container.querySelector('.detail__banner'),
       this.postBanner.container,
     );
     replaceElement(
-      this.container.querySelector('.comments'),
+      this.container.querySelector('.detail__comments'),
       this.comments.container,
     );
     replaceElement(
-      this.container.querySelector('.commentForm'),
+      this.container.querySelector('.detail__comment-form--default'),
       this.commentForm.container,
     );
     replaceElement(
-      this.container.querySelector('.bookmarkWrapper'),
+      this.container.querySelector('.detail__bookmark-wrapper'),
       this.bookmark.container,
     );
     if (this.editButtons) {
       replaceElement(
-        this.container.querySelector('.editSection'),
+        this.container.querySelector('.detail__edit-section'),
         this.editButtons.container,
       );
     }
@@ -236,7 +246,7 @@ export default class DetailPage extends CustomComponent {
   }
 
   setEvent() {
-    this.container.addEventListener('click', ({ target }) => {
+    this.$dom.addEventListener('click', ({ target }) => {
       if (target.classList.contains('bookmark')) {
         const { userType, isMyBookmark } = this.state;
         if (userType === 'loggedUser' || userType === 'author')
@@ -244,16 +254,17 @@ export default class DetailPage extends CustomComponent {
         else new Toast({ content: '로그인 먼저 해주세요.', type: 'fail' });
       }
 
-      if (target.classList.contains('commentDelete'))
+      if (target.classList.contains('comment__delete'))
         this.deleteComment(target);
 
-      if (target.classList.contains('commentReply'))
-        this.createCommentForm(target);
+      if (target.classList.contains('comment__reply'))
+        this.createReplyForm(target);
     });
 
-    this.container.addEventListener('submit', event => {
+    this.$dom.addEventListener('submit', event => {
       event.preventDefault();
-      if (event.target.classList.contains('commentForm')) this.addComment();
+      if (event.target.classList.contains('comment-form'))
+        this.addComment(event);
     });
   }
 
@@ -287,71 +298,128 @@ export default class DetailPage extends CustomComponent {
       });
   };
 
-  // TODO: 답변 기능 추가
-  // createCommentForm = target => {
-  //   const targetComment = target.parentNode.parentNode;
-  //   const { id } = targetComment.dataset;
-  //   this.setState({
-  //     ...this.state,
-  //     replyComment: id,
-  //   });
-  // };
-
-  // deleteCommentForm(event) {
-  //   const replyBtn = event.target;
-  //   const targetComment = replyBtn.parentNode.parentNode;
-  //   const commentForm = targetComment.querySelector('.commentForm');
-  //   replyBtn.removeEventListener('click', this.deleteCommentForm);
-  //   replyBtn.addEventListener('click', this.createCommentForm);
-  //   if (commentForm) commentForm.parentNode.removeChild(commentForm);
-  //   else replyBtn.click();
-  // }
-
-  deleteComment = target => {
+  createReplyForm = target => {
     const targetComment = target.parentNode.parentNode;
+    const { replyId } = this.state;
     const { id } = targetComment.dataset;
-    axiosInstance.delete(`comments/${id}`, {
-      withCredentials: true,
-    });
     this.setState({
       ...this.state,
-      comments: [...this.state.comments.filter(comment => comment._id !== id)],
+      replyId: id === replyId ? null : id,
     });
   };
 
-  addComment = () => {
-    const content = this.container.querySelector('.writeComment').value;
-    const { postId } = this.state;
-    this.container.querySelector('.writeComment').value = '';
-    axiosInstance.post(
-      'comments',
-      {
-        content,
-        parentType: 'post',
-        parentId: postId,
+  deleteComment = target => {
+    const targetComment = target.parentNode.parentNode;
+    const { id, parent } = targetComment.dataset;
+    axiosInstance.delete(`comments/${id}`, {
+      withCredentials: true,
+    });
+    if (parent === 'post') {
+      this.setState({
+        ...this.state,
+        comments: [
+          ...this.state.comments.filter(comment => comment._id !== id),
+        ],
+      });
+    } else if (parent === 'comment') {
+      const { parentId } = targetComment.dataset;
+      const changedComment = this.state.comments.find(
+        comment => comment._id === parentId,
+      );
+      changedComment.nestedComments = changedComment.nestedComments.filter(
+        nestedComment => nestedComment._id !== id,
+      );
+
+      this.setState({
+        ...this.state,
+        comments: [
+          ...this.state.comments.map(comment =>
+            comment._id === parentId ? changedComment : comment,
+          ),
+        ],
+      });
+    }
+  };
+
+  addComment = event => {
+    const {
+      type,
+      firstChild: { value },
+      parentNode: {
+        dataset: { id },
       },
-      { withCredentials: true },
-    );
+    } = event.target;
     const { imageURL, nickname, _id } = userState.myInfo;
-    this.setState({
-      ...this.state,
-      comments: [
-        ...this.state.comments,
+
+    if (type === 'comment') {
+      const { postId } = this.state;
+      axiosInstance.post(
+        'comments',
         {
-          nestedComments: [],
+          content: value,
+          parentType: 'post',
+          parentId: postId,
+        },
+        { withCredentials: true },
+      );
+      this.setState({
+        ...this.state,
+        comments: [
+          ...this.state.comments,
+          {
+            nestedComments: [],
+            author: {
+              imageURL,
+              nickname,
+            },
+            updatedAt: '지금',
+            _id: value,
+            parentId: postId,
+            content: value,
+            userId: _id,
+            parentType: 'post',
+          },
+        ],
+      });
+    } else if (type === 'reply') {
+      axiosInstance.post(
+        'comments',
+        {
+          content: value,
+          parentType: 'comment',
+          parentId: id,
+        },
+        { withCredentials: true },
+      );
+
+      const changedComment = this.state.comments.find(
+        comment => comment._id === id,
+      );
+      changedComment.nestedComments = [
+        ...changedComment.nestedComments,
+        {
           author: {
             imageURL,
             nickname,
           },
           updatedAt: '지금',
-          _id: content,
-          parentId: postId,
-          content,
+          _id: value,
+          parentId: id,
+          content: value,
           userId: _id,
-          parentType: 'post',
+          parentType: 'comment',
         },
-      ],
-    });
+      ];
+      this.setState({
+        ...this.state,
+        comments: [
+          ...this.state.comments.map(comment =>
+            comment._id === id ? changedComment : comment,
+          ),
+        ],
+        replyId: null,
+      });
+    }
   };
 
   findUserType(postUserId) {

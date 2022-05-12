@@ -1,15 +1,15 @@
-.editBtns {
+.edit-form {
   padding: 0;
   margin: 0;
   flex-direction: row;
   position: absolute;
-  bottom: 25px;
-  right: 60px;
-  gap: 10px;
+  bottom: 1em;
+  right: 2.5em;
+  gap: 0.75em;
 }
 
-.editBtn,
-.deleteBtn {
+.edit-btn,
+.delete-btn {
   padding: 12px 20px 8px;
   border-radius: 30px;
   font-weight: 600;
@@ -18,7 +18,7 @@
   transition: opacity 0.3s, background-color 0.3s;
 }
 
-.editBtn {
+.edit-btn {
   background-color: var(--medium);
   color: var(--gray);
   &:hover {
@@ -27,7 +27,7 @@
     color: var(--medium);
   }
 }
-.deleteBtn {
+.delete-btn {
   &:hover {
     cursor: pointer;
     background-color: var(--dark);

@@ -1,76 +1,82 @@
 import CustomComponent from '../CustomComponent';
+import CommentForm from '../CommentForm/CommentForm';
 import './comments.scss';
+import { createDom } from '../../utils/dom';
 
 export default class Comments extends CustomComponent {
   markup() {
     const { comments } = this.props;
-    return comments
-      .map(comment => {
-        if (comment.nestedComments) {
-          const nestedComments = this.makeNestedComments(
-            comment.nestedComments,
+    return (
+      <fragment>
+        {comments.map(comment => {
+          const { userId, userType, replyId } = this.props;
+          const { _id, author, updatedAt, content, nestedComments } = comment;
+          return (
+            <fragment>
+              <div class="comment" data-parent="post" data-id={_id}>
+                <div class="comment__user-wrapper">
+                  <img src={author.imageURL} width="30px" height="30px" />
+                  <h4 class="comment__user-name">{author.nickname}</h4>
+                  <h5 class="comment__time">{updatedAt.slice(0, 10)}</h5>
+                  {(userType === 'loggedUser' || userType === 'author') &&
+                    updatedAt !== '지금' && (
+                      <li class="comment__reply">답변</li>
+                    )}
+                  {comment.userId === userId && updatedAt !== '지금' && (
+                    <li class="comment__delete">삭제</li>
+                  )}
+                </div>
+                <h6 class="comment__content">{content}</h6>
+                {replyId === _id
+                  ? new CommentForm({
+                      container: createDom('form', {
+                        className: 'comment-form',
+                        type: 'reply',
+                      }),
+                      props: { userType },
+                    }).container
+                  : ''}
+              </div>
+              {nestedComments.map(nestedComment =>
+                this.makeNestedComment(nestedComment, _id),
+              )}
+            </fragment>
           );
-          return this.makeCommentHTML(comment) + nestedComments;
-        }
-        return this.makeCommentHTML(comment);
-      })
-      .join('');
+        })}
+      </fragment>
+    );
   }
 
-  makeCommentHTML(comment) {
-    const { userId } = this.props;
+  makeNestedComment(comment, parentId) {
+    const { userId, replyId, userType } = this.props;
     const { _id, author, updatedAt, content } = comment;
 
-    return `
-    <div class='comment' parentid='${_id}' parent='post' data-id=${_id}>
-        <div class="userWrapper">
-            <img src=${author.imageURL} width="30px" height="30px" />
-            <h4 class="userName">${author.nickname}</h4>
-            <h5 class="commentedTime" >${updatedAt.slice(0, 10)}</h5>
-            ${
-              comment.userId === userId && updatedAt !== '지금'
-                ? '<li class="commentDelete">삭제</li>'
-                : ''
-            }
-            </div>
-        <h6 class="commentContent">${content}</h6>
+    return (
+      <div
+        class="comment comment--nested"
+        data-parent-id={parentId}
+        data-parent="comment"
+        data-id={_id}
+      >
+        <div class="comment__user-wrapper">
+          <img src={author.imageURL} width="30px" height="30px" />
+          <h4 class="comment__user-name">{author.nickname}</h4>
+          <h5 class="comment__time">{updatedAt.slice(0, 10)}</h5>
+          {comment.userId === userId && updatedAt !== '지금' && (
+            <li class="comment__delete">삭제</li>
+          )}
+        </div>
+        <h6 class="comment__content">{content}</h6>
+        {replyId === _id
+          ? new CommentForm({
+              container: createDom('form', {
+                className: 'comment-form',
+                type: 'reply',
+              }),
+              props: { userType },
+            }).container
+          : ''}
       </div>
-      `;
-  }
-
-  makeNestedComments(nestedComments) {
-    let result = '';
-    nestedComments.forEach(nestedComment => {
-      result += this.makeNestedCommentHTML(nestedComment);
-    });
-    return result;
-  }
-
-  makeNestedCommentHTML(comment) {
-    const { userId, parentId } = this.props;
-    const { _id, author, updatedAt, content } = comment;
-
-    return `
-    <div class='nestedComment' parentid='${parentId}' parent='comment' id=${_id}>
-      <div class="userWrapper">
-          <img src=${author.imageURL} width="30px" height="30px" />
-          <h4 class="userName">${author.nickname}</h4>
-          <h5 class="commentedTime" >${updatedAt.slice(0, 10)}</h5>
-          ${
-            comment.userId === userId && updatedAt !== '지금'
-              ? '<li class="commentDelete">삭제</li>'
-              : ''
-          }
-          </div>
-      <h6 class="commentContent">${content}</h6>
-      </div>
-      `;
+    );
   }
 }
-
-// TODO : 답변기능 추가
-// ${
-//   userType === 'loggedUser' || userType === 'author'
-//     ? '<li class="commentReply">답변</li>'
-//     : ''
-// }

@@ -1,9 +1,9 @@
-.bookmarkWrapper {
+.bookmark-wrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5em;
   .bookmark {
-    width: 45px;
+    width: 2em;
     aspect-ratio: 1;
     cursor: pointer;
     transition: 0.1s all linear;
@@ -11,7 +11,7 @@
       transform: scale(1.2);
     }
   }
-  .bookmarkCount {
-    font-size: 22px;
+  .bookmark-count {
+    font-size: 1em;
   }
 }

@@ -7,8 +7,11 @@ import filledMarkIcon from '../../assets/icons/bookmark_filled.svg';
 export default class Bookmark extends CustomComponent {
   markup() {
     const { isMyBookmark, marks } = this.props;
-    return `                
-    <img class="bookmark" src='${isMyBookmark ? filledMarkIcon : markIcon}' />
-    <span class="bookmarkCount">${marks}</span>`;
+    return (
+      <fragment>
+        <img class="bookmark" src={isMyBookmark ? filledMarkIcon : markIcon} />
+        <span class="bookmark-count">{marks}</span>
+      </fragment>
+    );
   }
 }

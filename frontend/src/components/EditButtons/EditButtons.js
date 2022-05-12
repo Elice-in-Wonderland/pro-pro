@@ -11,15 +11,17 @@ export default class EditButtons extends CustomComponent {
   }
 
   setEvent() {
-    addEvent(this.container, 'click', '.editBtn', this.editPost);
-    addEvent(this.container, 'click', '.deleteBtn', this.deletePost);
+    addEvent(this.container, 'click', '.edit-btn', this.editPost);
+    addEvent(this.container, 'click', '.delete-btn', this.deletePost);
   }
 
   markup() {
-    return `
-    <input class="editBtn" type="submit" value="수정" />
-    <input class="deleteBtn" type="submit" value="삭제" />
-    `;
+    return (
+      <fragment>
+        <input class="edit-btn" type="submit" value="수정" />
+        <input class="delete-btn" type="submit" value="삭제" />
+      </fragment>
+    );
   }
 
   deletePost(event) {

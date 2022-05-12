@@ -1,40 +1,36 @@
-.commentContent {
-  margin-top: 15px;
-  font-weight: 600;
-}
-
-.comment,
-.nestedComment {
-  padding: 30px 0px;
+.comment {
+  padding: 1.5em 0px;
   border-bottom: 1px solid rgb(0, 0, 0, 20%);
-}
-
-.comment:last-child,
-.nestedComment:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.nestedComment {
-  margin: 30px;
-}
-
-.commentedTime {
-  opacity: 0.6;
-}
-
-.commentReply {
-  &:hover {
-    cursor: pointer;
+  &:first-child {
+    padding-top: 0;
   }
-}
-.commentDelete {
-  &:hover {
-    cursor: pointer;
+  &:last-child {
+    border-bottom: none;
   }
-}
-
-hr {
-  width: 100%;
-  opacity: 0.4;
+  &__content {
+    margin-top: 0.75em;
+  }
+  &--nested {
+    margin: 0 0 0 2em;
+  }
+  &__time {
+    opacity: 0.6;
+  }
+  &__user-wrapper {
+    font-size: 0.75em;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    img {
+      border-radius: 50%;
+    }
+  }
+  &__reply,
+  &__delete {
+    font-size: 0.875em;
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
