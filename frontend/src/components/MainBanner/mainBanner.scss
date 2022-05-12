@@ -1,61 +1,44 @@
 @import '../../styles/index.css';
 @import '../../styles/utils';
 
-.home-banner {
-  background: url('../../assets/images/background.svg');
-  background-size: 400px;
-  background-repeat: no-repeat;
-  background-position: 90% 150%;
-  height: 400px;
-  background-color: var(--background-blue);
-  padding: 40px;
-  padding-top: 120px;
-  @include mobile {
-    height: 300px;
-    background-size: 200px;
-    background-position: 90% 130%;
-  }
-  .baner-container {
-    .baner-word {
-      margin-left: 5vw;
-      .home-title {
-        display: flex;
-        font-size: 1.5rem;
-        margin-top: 40px;
-        margin-bottom: 40px;
+.banner__content {
+  margin-left: 5vw;
+  .banner__title {
+    display: flex;
+    font-size: 1.5rem;
+    margin-top: 40px;
+    margin-bottom: 40px;
 
-        color: var(--black);
-        @include tablet {
-          display: none;
-        }
-        @include mobile {
-          display: none;
-        }
-      }
-      .small-title {
-        display: none;
-        @include tablet {
-          display: block;
-          font-size: 1.5rem;
-        }
-        @include mobile {
-          display: block;
-          font-size: 1.5rem;
-        }
-      }
-      .home-description {
-        display: flex;
-        font-size: 25px;
-        margin: 8px, 0;
-        color: var(--medium);
-        line-height: 35px;
-        @include tablet {
-          display: none;
-        }
-        @include mobile {
-          display: none;
-        }
-      }
+    color: var(--black);
+    @include tablet {
+      display: none;
+    }
+    @include mobile {
+      display: none;
+    }
+  }
+  .banner__title--mobile {
+    display: none;
+    @include tablet {
+      display: block;
+      font-size: 1.5rem;
+    }
+    @include mobile {
+      display: block;
+      font-size: 1.5rem;
+    }
+  }
+  .banner__description {
+    display: flex;
+    font-size: 25px;
+    margin: 8px, 0;
+    color: var(--medium);
+    line-height: 35px;
+    @include tablet {
+      display: none;
+    }
+    @include mobile {
+      display: none;
     }
   }
 }

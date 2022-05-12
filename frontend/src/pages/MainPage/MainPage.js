@@ -72,7 +72,7 @@ export default class MainPage extends CustomComponent {
   }
 
   bannerRender() {
-    const banner = this.container.querySelector('.home-banner');
+    const banner = this.container.querySelector('.main__banner');
     new MainBanner({ container: banner });
   }
 
