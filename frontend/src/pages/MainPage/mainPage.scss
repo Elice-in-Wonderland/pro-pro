@@ -1,105 +1,115 @@
 @import '../../styles/index.css';
 @import '../../styles/utils';
 
-.main-page-wrapper {
-  #filter-bar {
-    margin-top: 20px;
+.main__banner {
+  background: url('../../assets/images/background.svg');
+  background-size: 400px;
+  background-repeat: no-repeat;
+  background-position: 90% 150%;
+  height: 400px;
+  background-color: var(--background-blue);
+  padding: 40px;
+  padding-top: 120px;
+  @include mobile {
+    height: 300px;
+    background-size: 200px;
+    background-position: 90% 130%;
+  }
+}
+.main__filter {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  button {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     align-items: center;
-    button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #495057;
-      background-color: white;
-      box-shadow: inset 0 0 0 1px #ced4da;
-      border-radius: 30px;
-      padding: 0px 20px;
-      margin: 10px;
-      opacity: 0.6;
-      border: 0;
-      height: 36px;
-      transition: opacity 0.3s, background-color 0.3s;
-      &:hover {
-        opacity: 1;
-        font-weight: 500;
-        border-color: var(--medium);
-        box-shadow: inset 0 0 0 2px var(--medium);
-        color: var(--medium);
-      }
-      .btn-title {
-        font-size: 1rem;
-        line-height: 36px;
-        @include mobile {
-          font-size: 0.8rem;
-          line-height: 20px;
-        }
-      }
-      @include mobile {
-        height: 30px;
-        padding: 0px 15px;
-      }
+    justify-content: center;
+    cursor: pointer;
+    color: #495057;
+    background-color: white;
+    box-shadow: inset 0 0 0 1px #ced4da;
+    border-radius: 30px;
+    padding: 0px 20px;
+    margin: 10px;
+    opacity: 0.6;
+    border: 0;
+    height: 36px;
+    transition: opacity 0.3s, background-color 0.3s;
+    font-size: 1rem;
+    line-height: 36px;
+    @include mobile {
+      font-size: 0.8rem;
+      line-height: 20px;
     }
-    .activated {
+    &:hover {
       opacity: 1;
       font-weight: 500;
       border-color: var(--medium);
       box-shadow: inset 0 0 0 2px var(--medium);
       color: var(--medium);
     }
-    .wrapper {
+
+    @include mobile {
+      height: 30px;
+      padding: 0px 15px;
+    }
+  }
+  .activated {
+    opacity: 1;
+    font-weight: 500;
+    border-color: var(--medium);
+    box-shadow: inset 0 0 0 2px var(--medium);
+    color: var(--medium);
+  }
+
+  .main__search {
+    width: 500px;
+    display: flex;
+    height: 40px;
+    margin: 0 20px;
+    background-color: #ffffff;
+    opacity: 0.6;
+    border: 1px solid #495057;
+    border-radius: 50px;
+    align-items: center;
+    .main__search-input {
+      padding-left: 20px;
+      outline: none;
       width: 100%;
-      max-width: 500px;
-      .search-bar {
-        display: flex;
-        height: 40px;
-        margin: 0 20px;
-        background-color: #ffffff;
-        opacity: 0.6;
-        border: 1px solid #495057;
-        border-radius: 50px;
-        align-items: center;
-        #search-input {
-          padding-left: 20px;
-          outline: none;
-          width: 100%;
-          border-radius: 80px;
-          border: none;
-          font-size: 20px;
-          &:focus {
-            outline: none;
-            box-shadow: 0 0 0px;
-          }
-        }
-        .search-icon {
-          cursor: pointer;
-          width: 35px;
-          height: 35px;
-          padding-right: 10px;
-        }
+      border-radius: 80px;
+      border: none;
+      font-size: 20px;
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0px;
       }
     }
-    @include mobile {
-      & > :nth-child(3) {
-        order: 5;
-        margin-top: 20px;
-      }
-      & > :nth-child(4) {
-        order: 3;
-      }
-      & > :nth-child(5) {
-        order: 4;
-      }
+    .main__search-btn {
+      cursor: pointer;
+      width: 35px;
+      height: 35px;
+      padding-right: 10px;
+    }
+  }
+
+  @include mobile {
+    & > :nth-child(3) {
+      order: 5;
+      margin-top: 20px;
+    }
+    & > :nth-child(4) {
+      order: 3;
+    }
+    & > :nth-child(5) {
+      order: 4;
     }
   }
 }
 
-.card-container {
+.main-cards {
   min-height: 700px;
-
   display: grid;
   padding: 0px 40px;
   width: 100%;
