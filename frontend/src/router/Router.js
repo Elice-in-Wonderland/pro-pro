@@ -23,7 +23,8 @@ class Router {
       path === '/study' ||
       path === '/detail/:postId' ||
       path === '/bookmark' ||
-      path === '/profile'
+      path === '/profile' ||
+      path === '/NotFound'
     ) {
       new Component({ container: this.container });
       return;
@@ -37,18 +38,18 @@ class Router {
     const params = {};
 
     const matchedRoute = this.routes.find(route => {
-      const splitedRoutePath = route.path.split('/').slice(1);
-      const firstPathname = splitedRoutePath[0];
+      const splittedRoutePath = route.path.split('/').slice(1);
+      const firstPathname = splittedRoutePath[0];
 
       // 만약 배열의 끝이면 true
       if (firstPathname === 'NotFound') return true;
 
       // routePath의 갯수가 다르면 false
       // ex) ['/detail', '/:postId'] , ['detail']
-      if (splitedRoutePath.length !== currentPath.length) return false;
+      if (splittedRoutePath.length !== currentPath.length) return false;
       // 중첩 routePath 확인하면서 params 저장
       // ex) path1/:dynamicPath, path1/path2
-      return splitedRoutePath.every((routePath, idx) => {
+      return splittedRoutePath.every((routePath, idx) => {
         if (/^:/.test(routePath)) {
           const propName = routePath.slice(1);
           params[propName] = decodeURIComponent(currentPath[idx]);
