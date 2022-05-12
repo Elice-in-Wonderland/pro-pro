@@ -18,13 +18,13 @@ import './skillStacksFilter.scss';
 
 export default class SkillStacksFilter extends CustomComponent {
   markup() {
-    return <div class="skill-icon"></div>;
+    return <div class="skill__icon"></div>;
   }
 
   renderCallback() {
     const $fragment = document.createDocumentFragment();
-    const skillIcon = this.container.querySelector('.skill-icon');
     const imgsrc = {
+    const skillIcon = this.container.querySelector('.skill__icon');
       cpp,
       django,
       flutter,
