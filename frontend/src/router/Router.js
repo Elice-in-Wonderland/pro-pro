@@ -67,7 +67,7 @@ class Router {
       new Page(this.target);
       return;
     }
-    new this.NotFoundPage(this.target);
+    new this.NotFoundPage({ container: this.target });
   }
 
   push(url) {
