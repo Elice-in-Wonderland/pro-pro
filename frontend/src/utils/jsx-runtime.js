@@ -51,6 +51,13 @@ function originNode(vDOM, container, oldDOM) {
 
 function updateNode(newNode, vDOM) {
   Object.entries(vDOM.attributes || {}).forEach(([key, value]) => {
+    if (key.startsWith('on')) {
+      const eventType = key.slice(2).toLocaleLowerCase();
+      newNode.addEventListener(eventType, value);
+
+      return;
+    }
+
     newNode.setAttribute(key, value);
   });
 }
