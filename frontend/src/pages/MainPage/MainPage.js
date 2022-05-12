@@ -8,10 +8,10 @@ import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
 import SkillStacksFilter from '../../components/SkillStacksFilter/SkillStacksFilter';
 import MainBanner from '../../components/MainBanner/MainBanner';
 import axiosInstance from '../../utils/api';
-import Routercontext from '../../router/RouterContext';
+import RouterContext from '../../router/RouterContext';
 import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
 import {
-  availFiltter,
+  availFilter,
   populateSort,
   recentSort,
   toggleButton,
@@ -20,7 +20,7 @@ import {
 
 export default class MainPage extends CustomComponent {
   init() {
-    this.projectOrStudy = Routercontext.state.pathname;
+    this.projectOrStudy = RouterContext.state.pathname;
 
     this.state = [];
     this.totalData = [];
@@ -67,7 +67,7 @@ export default class MainPage extends CustomComponent {
   };
 
   skillStackRender() {
-    const skillsBar = this.container.querySelector('.skills-bar');
+    const skillsBar = this.container.querySelector('.main__skills');
     new SkillStacksFilter({ container: skillsBar });
   }
 
@@ -144,8 +144,8 @@ export default class MainPage extends CustomComponent {
 
   toggleBasisData = buttonType => {
     if (buttonType === 'avail') {
-      this.basisData = availFiltter(this.totalData);
-      this.setState(this.sortStandard(availFiltter(this.state)));
+      this.basisData = availFilter(this.totalData);
+      this.setState(this.sortStandard(availFilter(this.state)));
       return;
     }
     this.basisData = this.totalData;
@@ -171,10 +171,10 @@ export default class MainPage extends CustomComponent {
 
     const skillStackFilter = () => {
       if (this.filterStacks) {
-        const statelist = this.basisData.filter(el =>
+        const stateList = this.basisData.filter(el =>
           this.filterStacks.every(post => el.stacks.includes(post)),
         );
-        this.setState(this.sortStandard(statelist));
+        this.setState(this.sortStandard(stateList));
       }
     };
 
@@ -222,7 +222,7 @@ export default class MainPage extends CustomComponent {
       skillStackFilter();
     });
 
-    const searchEventhandler = () => {
+    const searchEventHandler = () => {
       removeSkillStackFilter();
       if (!searchInput.value) {
         return;
@@ -240,10 +240,10 @@ export default class MainPage extends CustomComponent {
       searchInput.value = null;
     };
 
-    searchbtn.addEventListener(
+    searchBtn.addEventListener(
       'click',
       debounce(() => {
-        searchEventhandler();
+        searchEventHandler();
       }),
     );
 
@@ -251,7 +251,7 @@ export default class MainPage extends CustomComponent {
       'keydown',
       debounce(e => {
         if (e.key === 'Enter') {
-          searchEventhandler();
+          searchEventHandler();
         }
       }),
     );

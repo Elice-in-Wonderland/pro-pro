@@ -23,8 +23,8 @@ export default class SkillStacksFilter extends CustomComponent {
 
   renderCallback() {
     const $fragment = document.createDocumentFragment();
-    const imgsrc = {
     const skillIcon = this.container.querySelector('.skill__icon');
+    const imgSrc = {
       cpp,
       django,
       flutter,
@@ -41,12 +41,12 @@ export default class SkillStacksFilter extends CustomComponent {
       vue,
     };
 
-    for (const key in imgsrc) {
-      if ({}.hasOwnProperty.call(imgsrc, key)) {
+    for (const key in imgSrc) {
+      if ({}.hasOwnProperty.call(imgSrc, key)) {
         const imageNode = document.createElement('img');
         imageNode.id = key;
         imageNode.alt = key;
-        imageNode.src = imgsrc[key];
+        imageNode.src = imgSrc[key];
         $fragment.appendChild(imageNode);
       }
     }
