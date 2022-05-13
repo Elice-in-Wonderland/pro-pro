@@ -119,7 +119,7 @@ class Form extends CustomComponent {
         defaultOption: '직무를 선택하세요',
         items: defaultPosition,
         selectedItem: this.props.userInfo.current.position,
-        onChange: event => this.handlePostionChange(event),
+        onChange: event => this.handlePositionChange(event),
       },
     });
 
@@ -180,7 +180,7 @@ class Form extends CustomComponent {
     this.handleSigunguUpdate(event.target.value);
   }
 
-  handlePostionChange(event) {
+  handlePositionChange(event) {
     this.props.onChangeUserInfo({
       position: event.target.value,
     });
