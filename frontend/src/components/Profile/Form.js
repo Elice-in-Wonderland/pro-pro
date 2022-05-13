@@ -6,13 +6,18 @@ import {
 } from '../../library/Profile';
 import { createDom } from '../../utils/dom';
 import CustomComponent from '../CustomComponent';
-import Selector from './Selector';
-import Stack from './Stack';
+import SelectorBox from './SelectorBox';
+import StackCheckBoxes from './StackCheckBoxes';
 
 class Form extends CustomComponent {
+  init() {
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleStackChange = this.handleStackChange.bind(this);
+  }
+
   markup() {
     return (
-      <fragment>
+      <form class="form profile-edit__form" onSubmit={this.props.onSubmit}>
         <div class="profile-edit__form__item">
           <div class="profile-edit__form__img-wrapper"></div>
         </div>
@@ -27,6 +32,7 @@ class Form extends CustomComponent {
             class="profile-edit__form__input profile-edit__form__input--nickname"
             value={this.props.userInfo.current.nickname || ''}
             placeholder="닉네임을 입력하세요."
+            onInput={this.handleInputChange}
           />
         </div>
 
@@ -35,12 +41,8 @@ class Form extends CustomComponent {
             <b>지역</b>
           </label>
           <div class="profile-edit__form__select-group">
-            <select class="profile-edit__form__select" id="sido">
-              <option value="">시/도</option>
-            </select>
-            <select class="profile-edit__form__select" id="sigungu">
-              <option value="">시/군/구</option>
-            </select>
+            <div class="selector-container--sido"></div>
+            <div class="selector-container--sigungu"></div>
           </div>
         </div>
 
@@ -48,16 +50,18 @@ class Form extends CustomComponent {
           <label for="position" class="profile-edit__form__label">
             <b>직무</b>
           </label>
-          <select class="profile-edit__form__select" id="position">
-            <option value="">직무를 선택하세요</option>
-          </select>
+          <div class="selector-container--position"></div>
         </div>
 
         <div class="profile-edit__form__item">
           <label for="stack" class="profile-edit__form__label">
             <b>관심 기술 태그</b>
           </label>
-          <div class="profile-edit__form--layout-grid" id="stack"></div>
+          <div
+            id="stack"
+            class="profile-edit__form--layout-grid"
+            onChange={this.handleStackChange}
+          ></div>
         </div>
 
         <div class="profile-edit__form__item">
@@ -68,7 +72,7 @@ class Form extends CustomComponent {
             <span>수정 완료</span>
           </button>
         </div>
-      </fragment>
+      </form>
     );
   }
 
@@ -76,9 +80,15 @@ class Form extends CustomComponent {
     const userImg = this.container.querySelector(
       '.profile-edit__form__img-wrapper',
     );
-    const sidoSelect = this.container.querySelector('#sido');
-    const positionSelect = this.container.querySelector('#position');
-    const stackSelect = this.container.querySelector('#stack');
+    const sidoContainer = this.container.querySelector(
+      '.selector-container--sido',
+    );
+    const positionContainer = this.container.querySelector(
+      '.selector-container--position',
+    );
+    const stackContainer = this.container.querySelector(
+      '.profile-edit__form--layout-grid',
+    );
 
     if (this.props.userInfo.current.imageURL !== '') {
       const img = createDom('img', {
@@ -91,9 +101,10 @@ class Form extends CustomComponent {
       userImg.classList.add('profile-img-skeleton');
     }
 
-    new Selector({
-      container: sidoSelect,
+    new SelectorBox({
+      container: sidoContainer,
       props: {
+        id: 'sido',
         defaultOption: '시/도',
         items: defaultSido,
         selectedItem: this.props.userInfo.current.region.sido,
@@ -101,9 +112,10 @@ class Form extends CustomComponent {
       },
     });
 
-    new Selector({
-      container: positionSelect,
+    new SelectorBox({
+      container: positionContainer,
       props: {
+        id: 'position',
         defaultOption: '직무를 선택하세요',
         items: defaultPosition,
         selectedItem: this.props.userInfo.current.position,
@@ -111,38 +123,33 @@ class Form extends CustomComponent {
       },
     });
 
-    new Stack({
-      container: stackSelect,
+    new StackCheckBoxes({
+      container: stackContainer,
       props: {
         stacks: defaultStacks,
         selectedStacks: new Set(this.props.userInfo.current.stacks),
-        onChange: event => this.handleStackChange(event),
       },
     });
 
-    if (this.props.userInfo.current.region.sido) {
-      this.handleSigunguUpdate(this.props.userInfo.current.region.sido);
+    this.handleSigunguUpdate(this.props.userInfo.current.region.sido);
+  }
+
+  handleInputChange({ target }) {
+    if (target.classList.contains('profile-edit__form__input--nickname')) {
+      this.props.onChangeUserInfo({
+        nickname: target.value,
+      });
     }
   }
 
-  setEvent() {
-    this.container.addEventListener('input', ({ target }) => {
-      if (target.classList.contains('profile-edit__form__input--nickname')) {
-        this.props.onChangeUserInfo({
-          nickname: target.value,
-        });
-      }
-    });
-
-    this.container.addEventListener('submit', this.props.onSubmit);
-  }
-
   handleSigunguUpdate(selectedSido) {
-    const sigunguSelect = this.container.querySelector('#sigungu');
-    const selectedSigungu = defaultSigungu[selectedSido];
-    sigunguSelect.options.length = 1;
+    const sigunguSelect = this.container.querySelector(
+      '.selector-container--sigungu',
+    );
+    const selectedSigungu = selectedSido ? defaultSigungu[selectedSido] : [];
 
-    new Selector({
+    new SelectorBox({
+      id: 'position',
       container: sigunguSelect,
       props: {
         defaultOption: '시/군/구',

@@ -48,7 +48,6 @@ export default class ProfilePage extends CustomComponent {
         ...profile,
       });
     } catch (e) {
-      console.log(e);
       new Toast({ content: '프로필 정보 불러오기 실패', type: 'fail' });
     }
   }
@@ -59,7 +58,7 @@ export default class ProfilePage extends CustomComponent {
 
   renderCallback() {
     const container = this.container.querySelector('.profile-edit');
-    const form = createDom('form', { className: 'form profile-edit__form' });
+    const form = createDom('div', { className: 'form-container' });
 
     new Form({
       container: form,
