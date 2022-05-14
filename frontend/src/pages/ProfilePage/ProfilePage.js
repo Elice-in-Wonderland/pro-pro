@@ -26,9 +26,7 @@ export default class ProfilePage extends CustomComponent {
     try {
       const {
         data: { data },
-      } = await axiosInstance.get('/users', {
-        withCredentials: true,
-      });
+      } = await axiosInstance.get('/users');
 
       const profile = {
         nickname: data.nickname || '',
@@ -86,13 +84,7 @@ export default class ProfilePage extends CustomComponent {
     if (!isFullField) return;
 
     try {
-      await axiosInstance.put(
-        '/users',
-        { ...this.nonReRenderState.current },
-        {
-          withCredentials: true,
-        },
-      );
+      await axiosInstance.put('/users', { ...this.nonReRenderState.current });
       new Toast({ content: '프로필 수정 성공' });
       RouterContext.state.replace('/');
     } catch (error) {
