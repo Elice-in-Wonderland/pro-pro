@@ -2,7 +2,7 @@ import Toast from '../components/Toast/Toast';
 import axiosInstance from './api';
 import { getToken, setState, setToken, state } from './store';
 
-function restructingMyInfo(info) {
+function restructuringUserInfo(info) {
   const { _id, nickname, position, stacks, imageURL, sido, sigungu } = info;
   const myInfo = {
     _id,
@@ -45,7 +45,7 @@ async function requestLogin(user) {
       withCredentials: true,
     });
     const { AG3_JWT } = res.data.data;
-    const myInfo = restructingMyInfo(res.data.data);
+    const myInfo = restructuringUserInfo(res.data.data);
 
     setState('myInfo', myInfo);
     setToken(AG3_JWT);
@@ -54,4 +54,13 @@ async function requestLogin(user) {
   }
 }
 
-export { restructingMyInfo, requestAutoLogin, requestLogin };
+function updateUserInfo(newState) {
+  const nextState = {
+    ...state.myInfo,
+    ...newState,
+  };
+
+  setState('myInfo', nextState);
+}
+
+export { updateUserInfo, requestAutoLogin, requestLogin };

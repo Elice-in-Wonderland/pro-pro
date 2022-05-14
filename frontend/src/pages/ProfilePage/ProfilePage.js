@@ -4,6 +4,7 @@ import RouterContext from '../../router/RouterContext';
 import CustomComponent from '../../components/CustomComponent';
 import { createDom } from '../../utils/dom';
 import Form from '../../components/Profile/Form';
+import { updateUserInfo } from '../../utils/auth';
 import './profilePage.scss';
 
 export default class ProfilePage extends CustomComponent {
@@ -85,6 +86,8 @@ export default class ProfilePage extends CustomComponent {
 
     try {
       await axiosInstance.put('/users', { ...this.nonReRenderState.current });
+
+      updateUserInfo(this.nonReRenderState.current);
       new Toast({ content: '프로필 수정 성공' });
       RouterContext.state.replace('/');
     } catch (error) {
