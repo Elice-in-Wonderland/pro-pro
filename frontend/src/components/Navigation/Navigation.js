@@ -1,23 +1,28 @@
-import { createDom } from '../../utils/dom';
 import CustomComponent from '../CustomComponent';
-import NavItem from './NavItem';
 import Logo from '../Logo/Logo';
-import './navigation.scss';
+import Link from '../Link/Link';
+import Dropdown from '../Dropdown/Dropdown';
+import LoginModal from '../LoginModal/LoginModal';
 import RouterContext from '../../router/RouterContext';
 import { getToken } from '../../utils/store';
+import { createDom } from '../../utils/dom';
+import './navigation.scss';
 
 export default class Navigation extends CustomComponent {
   init() {
     this.state = {
       loginState: !!getToken(),
     };
+
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleHamburgerClick = this.handleHamburgerClick.bind(this);
   }
 
   markup() {
     return (
       <nav class="gnb">
         <ul class="gnb__inner"></ul>
-        <div class="hamburger">
+        <div class="hamburger" onClick={this.handleHamburgerClick}>
           <span class="hamburger__line"></span>
           <span class="hamburger__line"></span>
           <span class="hamburger__line"></span>
@@ -26,37 +31,7 @@ export default class Navigation extends CustomComponent {
     );
   }
 
-  setEvent() {
-    this.container.addEventListener('click', ({ target }) => {
-      if (target.closest('.hamburger')) {
-        this.toggleMobileGnb();
-      }
-    });
-
-    window.addEventListener('click', ({ target }) => {
-      if (!target.closest('.gnb')) this.hiddenMobileGnb();
-    });
-  }
-
-  hiddenMobileGnb() {
-    const hamburger = this.container.querySelector('.hamburger');
-    const navList = this.container.querySelector('.gnb__inner');
-
-    hamburger.classList.remove('hamburger--active');
-    navList.classList.remove('gnb__inner--active');
-  }
-
-  toggleMobileGnb() {
-    const hamburger = this.container.querySelector('.hamburger');
-    const navList = this.container.querySelector('.gnb__inner');
-
-    hamburger.classList.toggle('hamburger--active');
-    navList.classList.toggle('gnb__inner--active');
-  }
-
   renderCallback() {
-    const navList = this.container.querySelector('.gnb__inner');
-    const gnb = this.container.querySelector('.gnb');
     const { loginState } = this.state;
 
     const navItems = loginState
@@ -127,25 +102,84 @@ export default class Navigation extends CustomComponent {
             type: 'modal',
             text: '로그인',
             className: 'gnb__button gnb__button--login',
-            onLogin: this.handleLogin.bind(this),
+            onLogin: this.handleLogin,
           },
         ];
 
-    const logo = createDom('a', {
-      className: 'logo router',
-      href: '/',
-    });
+    this.appendNavItems(navItems);
+    this.appendLogo();
+  }
+
+  appendNavItems(navItems) {
+    const container = this.container.querySelector('.gnb__inner');
     const fragment = new DocumentFragment();
 
     navItems.forEach(item => {
       const li = createDom('li', { className: 'gnb__item' });
-      new NavItem({ container: li, props: item });
+      this.makeNavItem(li, item);
+
       fragment.appendChild(li);
     });
+    container.appendChild(fragment);
+  }
+
+  makeNavItem(container, item) {
+    if (item.type === 'link') {
+      new Link({
+        container,
+        props: item,
+      });
+    } else if (item.type === 'modal') {
+      new LoginModal({
+        container,
+        props: item,
+      });
+    } else if (item.type === 'profile') {
+      new Dropdown({
+        container,
+        props: item,
+      });
+    }
+  }
+
+  appendLogo() {
+    const container = this.container.querySelector('.gnb');
+    const logo = createDom('a', {
+      className: 'logo router',
+      href: '/',
+    });
+
     new Logo({ container: logo });
 
-    gnb.prepend(logo);
-    navList.appendChild(fragment);
+    container.prepend(logo);
+  }
+
+  setEvent() {
+    window.addEventListener('click', ({ target }) => {
+      const isOutsideGnb = !target.closest('.gnb');
+
+      if (isOutsideGnb) this.hiddenMobileGnb();
+    });
+  }
+
+  handleHamburgerClick() {
+    this.toggleMobileGnb();
+  }
+
+  hiddenMobileGnb() {
+    const hamburger = this.container.querySelector('.hamburger');
+    const navList = this.container.querySelector('.gnb__inner');
+
+    hamburger.classList.remove('hamburger--active');
+    navList.classList.remove('gnb__inner--active');
+  }
+
+  toggleMobileGnb() {
+    const hamburger = this.container.querySelector('.hamburger');
+    const navList = this.container.querySelector('.gnb__inner');
+
+    hamburger.classList.toggle('hamburger--active');
+    navList.classList.toggle('gnb__inner--active');
   }
 
   handleLogin() {
