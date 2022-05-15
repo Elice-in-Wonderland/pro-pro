@@ -2,12 +2,10 @@ import CustomComponent from '../CustomComponent';
 import Toast from '../Toast/Toast';
 import { parseJwt } from '../../utils/common';
 import { requestLogin } from '../../utils/auth';
+import { defaultProfileImage } from '../../library/Profile';
 import proproLogo from '../../assets/images/pro-pro.png';
 import xButton from '../../assets/images/x-button.svg';
 import './loginModal.scss';
-
-const DEFAULT_PROFILE_IMAGE =
-  'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png';
 
 export default class LoginModal extends CustomComponent {
   init() {
@@ -84,7 +82,7 @@ export default class LoginModal extends CustomComponent {
     const user = {
       snsId,
       snsType: 'google',
-      imageURL: picture || DEFAULT_PROFILE_IMAGE,
+      imageURL: picture || defaultProfileImage,
     };
 
     try {

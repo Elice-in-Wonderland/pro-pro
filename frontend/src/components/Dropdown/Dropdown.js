@@ -1,10 +1,8 @@
 import CustomComponent from '../CustomComponent';
 import RouterContext from '../../router/RouterContext';
 import { state, removeState, removeToken } from '../../utils/store';
+import { defaultProfileImage } from '../../library/Profile';
 import './dropdown.scss';
-
-const DEFAULT_PROFILE_IMAGE =
-  'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png';
 
 export default class Dropdown extends CustomComponent {
   init() {
@@ -17,7 +15,7 @@ export default class Dropdown extends CustomComponent {
       <div class="dropdown">
         <div class="profile" onClick={this.toggleDropdown}>
           <img
-            src={state.myInfo?.imageURL || DEFAULT_PROFILE_IMAGE}
+            src={state.myInfo?.imageURL || defaultProfileImage}
             alt="profile"
             class="profile__image"
           />
