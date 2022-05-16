@@ -107,8 +107,7 @@ export default class DetailPage extends CustomComponent {
     });
     this.commentForm = new CommentForm({
       container: createDom('form', {
-        className: 'comment-form comment-form--default',
-        type: 'comment',
+        className: 'comment-form comment-form--comment',
       }),
       props: { userType },
     });
@@ -192,7 +191,7 @@ export default class DetailPage extends CustomComponent {
         <div class="detail__comment-section">
           <h3>댓글</h3>
           <div class="detail__comments"></div>
-          <div class="detail__comment-form detail__comment-form--default"></div>
+          <div class="detail__comment-form detail__comment-form--comment"></div>
         </div>
         <div class="detail__edit-section"></div>
       </div>
@@ -213,7 +212,7 @@ export default class DetailPage extends CustomComponent {
       this.comments.container,
     );
     replaceElement(
-      this.container.querySelector('.detail__comment-form--default'),
+      this.container.querySelector('.detail__comment-form--comment'),
       this.commentForm.container,
     );
     replaceElement(
@@ -331,15 +330,14 @@ export default class DetailPage extends CustomComponent {
 
   addComment = event => {
     const {
-      type,
+      classList,
       firstChild: { value },
       parentNode: {
         dataset: { id },
       },
     } = event.target;
     const { imageURL, nickname, _id } = userState.myInfo;
-
-    if (type === 'comment') {
+    if (classList[1] === 'comment-form--comment') {
       const { postId } = this.state;
       axiosInstance.post(
         'comments',
@@ -369,7 +367,7 @@ export default class DetailPage extends CustomComponent {
           },
         ],
       });
-    } else if (type === 'reply') {
+    } else if (classList[1] === 'comment-form--reply') {
       axiosInstance.post(
         'comments',
         {
