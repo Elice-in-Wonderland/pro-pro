@@ -16,6 +16,7 @@ import { state as userState } from '../../utils/store';
 import { createMap } from '../../utils/common';
 import { createDom, replaceElement } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
+import WebRequestController from '../../router/WebRequestController';
 
 export default class DetailPage extends CustomComponent {
   init() {
@@ -41,20 +42,22 @@ export default class DetailPage extends CustomComponent {
     this.getPostInfo();
   }
 
-  getPostInfo() {
-    axiosInstance
-      .get(`/posts/${this.state.postId}`)
-      .then(res => {
-        return res.data.data;
-      })
-      .then(postInfo => {
-        this.setState({
-          ...this.state,
-          ...postInfo,
-          isLoading: false,
-          userType: this.findUserType(postInfo.author._id),
-        });
+  async getPostInfo() {
+    try {
+      const {
+        data: { data },
+      } = await axiosInstance(`/posts/${this.state.postId}`, {
+        signal: WebRequestController.getController()?.signal,
       });
+      this.setState({
+        ...this.state,
+        ...data,
+        isLoading: false,
+        userType: this.findUserType(data.author._id),
+      });
+    } catch (e) {
+      console.log('요청이 취소되었습니다.');
+    }
   }
 
   makeComponent() {
