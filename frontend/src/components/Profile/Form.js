@@ -1,10 +1,10 @@
+import { createDom } from '@utils/dom';
 import {
   defaultPosition,
   defaultSido,
   defaultSigungu,
   defaultStacks,
 } from '../../library/Profile';
-import { createDom } from '../../utils/dom';
 import CustomComponent from '../CustomComponent';
 import SelectorBox from './SelectorBox';
 import StackCheckBoxes from './StackCheckBoxes';

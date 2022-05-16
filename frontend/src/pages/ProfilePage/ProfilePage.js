@@ -1,10 +1,10 @@
-import axiosInstance from '../../utils/api';
+import axiosInstance from '@utils/api';
+import { createDom } from '@utils/dom';
+import { updateUserInfo } from '@utils/auth';
 import Toast from '../../components/Toast/Toast';
 import RouterContext from '../../router/RouterContext';
 import CustomComponent from '../../components/CustomComponent';
-import { createDom } from '../../utils/dom';
 import Form from '../../components/Profile/Form';
-import { updateUserInfo } from '../../utils/auth';
 import './profilePage.scss';
 
 export default class ProfilePage extends CustomComponent {
