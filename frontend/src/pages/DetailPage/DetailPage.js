@@ -337,74 +337,77 @@ export default class DetailPage extends CustomComponent {
       },
     } = event.target;
     const { imageURL, nickname, _id } = userState.myInfo;
-    if (classList[1] === 'comment-form--comment') {
-      const { postId } = this.state;
-      axiosInstance.post(
-        'comments',
-        {
-          content: value,
-          parentType: 'post',
-          parentId: postId,
-        },
-        { withCredentials: true },
-      );
-      this.setState({
-        ...this.state,
-        comments: [
-          ...this.state.comments,
+
+    if (value) {
+      if (classList[1] === 'comment-form--comment') {
+        const { postId } = this.state;
+        axiosInstance.post(
+          'comments',
           {
-            nestedComments: [],
+            content: value,
+            parentType: 'post',
+            parentId: postId,
+          },
+          { withCredentials: true },
+        );
+        this.setState({
+          ...this.state,
+          comments: [
+            ...this.state.comments,
+            {
+              nestedComments: [],
+              author: {
+                imageURL,
+                nickname,
+              },
+              updatedAt: '지금',
+              _id: value,
+              parentId: postId,
+              content: value,
+              userId: _id,
+              parentType: 'post',
+            },
+          ],
+        });
+      } else if (classList[1] === 'comment-form--reply') {
+        axiosInstance.post(
+          'comments',
+          {
+            content: value,
+            parentType: 'comment',
+            parentId: id,
+          },
+          { withCredentials: true },
+        );
+
+        const changedComment = this.state.comments.find(
+          comment => comment._id === id,
+        );
+        changedComment.nestedComments = [
+          ...changedComment.nestedComments,
+          {
             author: {
               imageURL,
               nickname,
             },
             updatedAt: '지금',
             _id: value,
-            parentId: postId,
+            parentId: id,
             content: value,
             userId: _id,
-            parentType: 'post',
+            parentType: 'comment',
           },
-        ],
-      });
-    } else if (classList[1] === 'comment-form--reply') {
-      axiosInstance.post(
-        'comments',
-        {
-          content: value,
-          parentType: 'comment',
-          parentId: id,
-        },
-        { withCredentials: true },
-      );
-
-      const changedComment = this.state.comments.find(
-        comment => comment._id === id,
-      );
-      changedComment.nestedComments = [
-        ...changedComment.nestedComments,
-        {
-          author: {
-            imageURL,
-            nickname,
-          },
-          updatedAt: '지금',
-          _id: value,
-          parentId: id,
-          content: value,
-          userId: _id,
-          parentType: 'comment',
-        },
-      ];
-      this.setState({
-        ...this.state,
-        comments: [
-          ...this.state.comments.map(comment =>
-            comment._id === id ? changedComment : comment,
-          ),
-        ],
-        replyId: null,
-      });
+        ];
+        this.setState({
+          ...this.state,
+          comments: [
+            ...this.state.comments.map(comment =>
+              comment._id === id ? changedComment : comment,
+            ),
+          ],
+          replyId: null,
+        });
+      }
     }
   };
 
