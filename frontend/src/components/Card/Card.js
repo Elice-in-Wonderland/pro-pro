@@ -6,7 +6,7 @@ import './Card.scss';
 import RouterContext from '../../router/RouterContext';
 import { shortSido } from '../../library/MainPage/index';
 import { createDom, replaceElement } from '../../utils/dom';
-export default class MainCard extends CustomComponent {
+export default class Card extends CustomComponent {
   init() {
     this.state = {
       type: this.props.type,
