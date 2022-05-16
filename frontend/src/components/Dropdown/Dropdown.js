@@ -1,6 +1,6 @@
+import { state, removeState, removeToken } from '@utils/store';
 import CustomComponent from '../CustomComponent';
 import RouterContext from '../../router/RouterContext';
-import { state, removeState, removeToken } from '../../utils/store';
 import { defaultProfileImage } from '../../library/Profile';
 import './dropdown.scss';
 

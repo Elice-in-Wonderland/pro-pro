@@ -1,10 +1,10 @@
+import proproLogo from '@assets/images/pro-pro.png';
+import xButton from '@assets/images/x-button.svg';
+import { parseJwt } from '@utils/common';
+import { requestLogin } from '@utils/auth';
 import CustomComponent from '../CustomComponent';
 import Toast from '../Toast/Toast';
-import { parseJwt } from '../../utils/common';
-import { requestLogin } from '../../utils/auth';
 import { defaultProfileImage } from '../../library/Profile';
-import proproLogo from '../../assets/images/pro-pro.png';
-import xButton from '../../assets/images/x-button.svg';
 import './loginModal.scss';
 
 export default class LoginModal extends CustomComponent {

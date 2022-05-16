@@ -1,11 +1,11 @@
+import { getToken } from '@utils/store';
+import { createDom } from '@utils/dom';
 import CustomComponent from '../CustomComponent';
 import Logo from '../Logo/Logo';
 import Link from '../Link/Link';
 import Dropdown from '../Dropdown/Dropdown';
 import LoginModal from '../LoginModal/LoginModal';
 import RouterContext from '../../router/RouterContext';
-import { getToken } from '../../utils/store';
-import { createDom } from '../../utils/dom';
 import './navigation.scss';
 
 export default class Navigation extends CustomComponent {
