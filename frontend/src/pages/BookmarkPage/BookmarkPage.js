@@ -40,7 +40,6 @@ export default class BookmarkPage extends CustomComponent {
 
   cardRender() {
     const cards = this.container.querySelector('.bookmark__cards');
-    cards.innerHTML = '';
 
     const frag = new DocumentFragment();
 

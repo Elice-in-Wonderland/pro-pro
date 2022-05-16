@@ -1,8 +1,7 @@
-.recommendNotFound {
-  position: relative;
-  .no-result {
+.recommendNoResult {
+  .recommendNoResult__contents {
     text-align: center;
-    .no-result-img {
+    .recommendNoResult__contents img {
       margin-top: 10vh;
       width: 100%;
       display: flex;
