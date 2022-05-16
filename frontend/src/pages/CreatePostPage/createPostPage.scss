@@ -1,360 +1,79 @@
-$white: #ffffff;
-$gray: #f9f9f9;
-$black: #000000;
-$light: #def0fb;
-$bright: #afd9f1;
-$medium: #515caa;
-$medium2: #4b9cce;
-$dark: #24274a;
-
-@mixin inputBox() {
-  border: 1px solid #c4c4c4;
-  border-radius: 5px;
-}
-body {
-  background-color: $gray;
-  box-sizing: border-box;
-  form {
+.write {
+  max-width: 1080px;
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  &__form {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    margin: 0 2em;
+  }
+  &__category {
+    margin: 1em 0.5em;
+  }
+  &__category--2x {
+    grid-column: span 2;
+  }
+  &__category--btns {
     display: flex;
-    flex-direction: column;
-    border-radius: 20px;
-    background-color: $white;
-    margin: 50px 100px;
-    padding-top: 30px;
-    div {
-      margin: 50px 0 50px 50px;
-      h3 {
-        font-size: 20px;
-        margin-bottom: 20px;
-      }
-      p {
-        font-size: 16px;
-      }
-    }
-    .Category {
-      P {
-        display: flex;
-        align-items: center;
-        line-height: 50px;
-        input {
-          display: none;
-        }
-        span {
-          display: inline-block;
-          width: 15px;
-          height: 15px;
-          color: transparent;
-          border: 1px solid black;
-          border-radius: 50%;
-          text-align: center;
-          line-height: 12px;
-          margin-right: 10px;
-          font-size: 12px;
-        }
-        label {
-          margin-right: 250px;
-        }
-        input:checked + span {
-          color: $medium2;
-          background-color: white;
-          border: 1px solid $medium2;
-        }
-        input:checked + span + label {
-          color: $medium2;
-        }
-      }
-    }
-    .Title {
-      input {
-        width: 90%;
-        height: 25px;
-        @include inputBox();
-        padding-left: 10px;
-      }
-    }
-    .Region {
-      p {
-        .addressResult {
-          width: 310px;
-          height: 25px;
-          @include inputBox();
-          margin-right: 20px;
-          padding-left: 10px;
-        }
-        .addressSearch,
-        .online {
-          width: 80px;
-          height: 25px;
-          @include inputBox();
-        }
-        .addressSearch {
-          margin-right: 20px;
-        }
-      }
-    }
-    .Period {
-      p {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        label {
-          margin-right: 40px;
-          margin-bottom: 10px;
-          color: $medium2;
-          font-size: 14px;
-          font-weight: bold;
-          select {
-            width: 80px;
-            height: 25px;
-            @include inputBox();
-            margin-right: 20px;
-          }
-          input {
-            display: none;
-          }
-        }
-      }
-    }
-    .Capacity {
-      input {
-        border: none;
-        background-color: $white;
-        font-size: 14px;
-        font-weight: bold;
-      }
-      input:nth-child(2) {
-        width: 24px;
-        height: 24px;
-        @include inputBox();
-        border-radius: 50%;
-        text-align: center;
-      }
-      input:last-child {
-        color: $medium2;
-      }
-    }
-    .RegisterDeadline {
-      p {
-        select {
-          width: 80px;
-          height: 25px;
-          @include inputBox();
-          margin-right: 20px;
-        }
-        input {
-          display: none;
-        }
-      }
-    }
-    .Stacks {
-      p {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        line-height: 50px;
-        input {
-          display: none;
-        }
-        span {
-          display: inline-block;
-          width: 15px;
-          height: 15px;
-          color: transparent;
-          @include inputBox();
-          text-align: center;
-          line-height: 15px;
-          margin-right: 10px;
-          font-size: 12px;
-        }
-        label {
-          width: calc(25% - 30px);
-          height: 50px;
-        }
-        input:checked + span {
-          color: white;
-          background-color: $medium2;
-        }
-        input:checked + span + label {
-          color: $medium2;
-        }
-      }
-    }
-    .Content {
-      textarea {
-        @include inputBox();
-        resize: none;
-        width: 90%;
-        padding: 20px;
-      }
-    }
-    .Btns {
-      text-align: right;
-      padding-right: 10%;
-      input {
-        border: 1px solid #c4c4c4;
-        border-radius: 15px;
-        width: 120px;
-        height: 52px;
-        background-color: $white;
-        font-size: 16px;
-        font-weight: bold;
-        transition: color 200ms, background-color 200ms;
-        cursor: pointer;
-        margin-left: 40px;
-      }
-      :hover {
-        color: $white;
-        background-color: $dark;
-      }
-    }
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
   }
-}
-@media (max-width: 834px) {
-  body {
-    form {
-      .Stacks {
-        p {
-          label {
-            width: calc(33% - 30px);
-          }
-        }
-      }
-    }
+  &__date--start-date {
+    margin-bottom: 0.5em;
+  }
+  &__textarea {
+    border: 1px solid rgb(196, 196, 196);
+    padding: 1em;
+    border-radius: 0.25em;
+    width: 100%;
+    height: 50vh;
+  }
+  &__title {
+    font-size: 1.25em;
+    margin-bottom: 1em;
+  }
+  &__sub-title {
+    font-size: 0.875em;
+    margin-bottom: 0.25em;
+  }
+  &__select {
+    border: 1px solid rgb(196, 196, 196);
+    height: 2em;
+    border-radius: 12px;
+    width: 100%;
+    padding: 0px 10px;
+  }
+  &__btn {
+    height: 25px;
+    border-radius: 0.25em;
+    border: 1px solid rgb(196, 196, 196);
+  }
+  &__input {
+    border: 1px solid rgb(196, 196, 196);
+    height: 2em;
+    border-radius: 12px;
+    width: 100%;
+    padding: 0px 10px;
+  }
+  &__input-wrapper {
+    display: grid;
+    grid-template-columns: 6fr 1fr 1fr;
+    gap: 0.25em;
+    align-items: center;
+  }
+  &__stacks {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 744px) {
-  body {
-    form {
-      .Category {
-        P {
-          label {
-            margin-right: 25%;
-          }
-        }
-      }
-      .Region {
-        p {
-          .addressResult {
-            width: 50%;
-            height: 25px;
-            @include inputBox();
-            margin-right: 20px;
-            padding-left: 10px;
-          }
-        }
-      }
-      .Period {
-        p {
-          label {
-            margin-right: 0;
-            select {
-              width: 23%;
-              margin-right: 0;
-            }
-          }
-        }
-      }
-      .RegisterDeadline {
-        p {
-          select {
-            width: 23%;
-            margin-right: 0;
-          }
-        }
-      }
-      .Btns {
-        text-align: center;
-        padding-right: 0;
-        margin-left: 0;
-        transform: translateX(-10px);
-        input {
-          margin-left: 10px;
-        }
-      }
+@media (max-width: 780px) {
+  .write {
+    &__form {
+      display: flex;
+      flex-direction: column;
     }
   }
-}
-
-@media (max-width: 375px) {
-  body {
-    form {
-      margin: 50px 20px 0 20px;
-      div {
-        margin: 30px 0 20px 20px;
-        h3 {
-          font-size: 16px;
-          margin-bottom: 20px;
-        }
-        p {
-          font-size: 12px;
-        }
-      }
-      .Category {
-        P {
-          label:first-child {
-            margin-right: 80px;
-          }
-        }
-      }
-      .Region {
-        select {
-          width: 70px;
-          height: 25px;
-          @include inputBox();
-          margin-right: 20px;
-          font-size: 10px;
-        }
-      }
-      .Period {
-        p {
-          label {
-            margin-right: 40px;
-            margin-bottom: 10px;
-            color: $medium;
-            font-size: 10px;
-            font-weight: bold;
-            select {
-              width: 60px;
-              height: 25px;
-              @include inputBox();
-              margin-right: 10px;
-            }
-            input {
-              display: none;
-            }
-          }
-        }
-      }
-      .RegisterDeadline {
-        p {
-          select {
-            width: 70px;
-            font-size: 10px;
-          }
-        }
-      }
-      .Btns {
-        text-align: center;
-        padding-right: 0;
-        margin-left: 0;
-        transform: translateX(-20px);
-        input {
-          border: 1px solid #c4c4c4;
-          border-radius: 15px;
-          width: 100px;
-          height: 42px;
-          background-color: $white;
-          font-size: 12px;
-          font-weight: bold;
-          transition: color 200ms, background-color 200ms;
-          cursor: pointer;
-        }
-      }
-    }
-  }
-}
-
-textarea {
-  resize: none;
 }
