@@ -8,6 +8,7 @@ import {
 import CustomComponent from '../CustomComponent';
 import SelectorBox from './SelectorBox';
 import StackCheckBoxes from './StackCheckBoxes';
+import './form.scss';
 
 class Form extends CustomComponent {
   init() {

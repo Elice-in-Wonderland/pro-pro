@@ -2,45 +2,53 @@
 
 .dropdown {
   position: relative;
+
   width: 100%;
 }
 
 .profile {
   position: relative;
+
   width: 50px;
   height: 50px;
 }
 
 .profile__image {
-  cursor: pointer;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border-radius: 50%;
+
+  object-fit: cover;
+  cursor: pointer;
 }
 
 .dropdown__content::before {
-  content: '';
   position: absolute;
   z-index: 0;
   top: -5px;
   right: 20px;
+
   width: 10px;
   height: 10px;
+
   background: var(--dark);
+
   transform: rotate(45deg);
+  content: '';
 }
 .dropdown__content {
   position: absolute;
   top: 70px;
   right: 0px;
-  width: 110px;
-  padding: 10px 10px;
-  background-color: var(--dark);
-  border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+
   visibility: hidden;
   opacity: 0;
+  width: 110px;
+  padding: 10px 10px;
+  border-radius: 15px;
+
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+  background-color: var(--dark);
 }
 
 .dropdown__content--active {
@@ -56,12 +64,13 @@
 }
 
 .dropdown__link {
+  color: var(--white);
+
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
-  color: var(--white);
-  cursor: pointer;
 
+  cursor: pointer;
   &:hover {
     opacity: 0.3;
   }
@@ -77,15 +86,17 @@
   }
 
   .dropdown__content {
-    visibility: visible;
-    opacity: 1;
     position: relative;
     top: 0;
+
+    visibility: visible;
+    opacity: 1;
     width: 100%;
   }
 
   .dropdown__link {
     width: 100%;
+    
     text-align: center;
   }
 }
