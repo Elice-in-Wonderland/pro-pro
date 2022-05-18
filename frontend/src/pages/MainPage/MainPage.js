@@ -42,17 +42,20 @@ export default class MainPage extends CustomComponent {
     cardContainer.innerHTML = '';
     const fragment = document.createDocumentFragment();
 
-    store.getState().post.forEach(el => {
-      const cardWrapper = createDom('div', {
-        className: 'card-wrapper',
-      });
+    store
+      .getState()
+      .sortStandard(store.getState().post)
+      .forEach(el => {
+        const cardWrapper = createDom('div', {
+          className: 'card-wrapper',
+        });
 
-      new MainCard({
-        container: cardWrapper,
-        props: { post: el },
+        new MainCard({
+          container: cardWrapper,
+          props: { post: el },
+        });
+        fragment.appendChild(cardWrapper);
       });
-      fragment.appendChild(cardWrapper);
-    });
     cardContainer.appendChild(fragment);
   }
 
