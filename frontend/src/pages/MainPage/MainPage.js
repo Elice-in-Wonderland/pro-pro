@@ -10,7 +10,7 @@ import MainFilterBar from '../../components/MainFilterBar/MainFilterBar';
 import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
 import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
-import { setPost, setTotal, setBasis, store } from './store';
+import { setPost, setTotal, setBasis, store } from '../../store/reducer';
 import { observe } from '../../store/observe';
 import { vDomToNode } from '../../utils/jsx-runtime';
 

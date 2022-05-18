@@ -14,7 +14,7 @@ import {
   setBasis,
   setFilter,
   store,
-} from '../../pages/MainPage/store';
+} from '../../store/reducer';
 
 export default class MainFilterBar extends CustomComponent {
   skillStackRender() {
