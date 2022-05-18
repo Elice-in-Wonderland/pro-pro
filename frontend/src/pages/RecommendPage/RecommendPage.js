@@ -28,21 +28,21 @@ export default class RecommendPage extends CustomComponent {
     if (this.state.isLoading) return Loading();
     return (
       <div class="recommend">
-        <section class="recommend-comment">
+        <section class="recommend__comment">
           <p>프로필에서 본인의 지역과 관심 기술을 설정하세요.</p>
           <p>여러분께 맞춤형 프로젝트와 스터디를 추천해드려요.</p>
         </section>
-        <section class="cards"></section>
+        <section class="recommend__cards"></section>
       </div>
     );
   }
 
   cardRender() {
-    const cards = this.container.querySelector('.cards');
+    const cards = this.container.querySelector('.recommend__cards');
 
     if (!this.state.cards.length) {
-      cards.classList.add('recommendNoResult');
-      cards.classList.remove('cards');
+      cards.classList.add('recomment__no-result-contents');
+      cards.classList.remove('recommend__cards');
       const recommendNoResult = new RecommendNoResult({ container: cards });
       replaceElement(cards, recommendNoResult.container);
       return;

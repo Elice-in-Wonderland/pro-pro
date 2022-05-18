@@ -5,9 +5,9 @@ import noResult from '../../assets/images/no-result-img.svg';
 export default class RecommendNoResult extends CustomComponent {
   markup() {
     return (
-      <div class="recommendNoResult">
-        <div class="recommendNoResult__contents">
-          <img src={noResult} alt="no result image" class="no-result-img" />
+      <div class="recommend-no-result">
+        <div class="recommend-no-result__contents">
+          <img src={noResult} alt="no result image" />
           <p>
             추천 결과가 없습니다.
             <br />

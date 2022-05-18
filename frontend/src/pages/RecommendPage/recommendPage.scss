@@ -5,59 +5,46 @@
   justify-content: center;
 }
 
-.recommend-comment {
+.recommend__comment {
   font-size: 20px;
   font-weight: bold;
   text-align: center;
   margin-top: 140px;
 }
 
-.cards {
+.recommend__cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   flex-direction: row;
   flex-wrap: wrap;
+
+  p {
+    margin-bottom: 20px;
+  }
 }
 
-.recommendNoResult {
+.recomment__no-result-contents {
   margin-top: 40px;
 }
 
-.recommend-comment p {
-  margin-bottom: 20px;
-}
-
 @media screen and (min-width: 744px) and (max-width: 1133px) {
-  .cards {
+  .recommend__cards {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media screen and (min-width: 375px) and (max-width: 812px) {
-  .filter-buttons {
-    display: flex;
-    flex-direction: column;
-  }
-  .filter-buttons button {
-    margin-top: 20px;
-    margin-bottom: 0px;
-  }
-
-  .filter-buttons button:first-child {
-    margin-top: 50px;
-  }
-
-  .cards {
+  .recommend__cards {
     display: flex;
     flex-direction: column;
   }
 
-  .recommend-comment {
+  .recommend__comment {
     font-size: 15px;
     text-align: center;
-  }
 
-  .recommend-comment p:first-child {
-    margin-top: 55px;
+    p:first-child {
+      margin-top: 55px;
+    }
   }
 }
