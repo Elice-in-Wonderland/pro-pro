@@ -14,7 +14,7 @@ module.exports = merge(common, {
       },
     ],
   },
-  devtool: 'source-map',
+  // devtool: 'source-map', // 실제 배포시에는 제거 (디버깅용)
   optimization: {
     minimizer: ['...', new CssMinimizerPlugin()],
   },
