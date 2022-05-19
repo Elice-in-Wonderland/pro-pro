@@ -31,7 +31,8 @@ class Router {
       path === '/bookmark' ||
       path === '/profile' ||
       path === '/NotFound' ||
-      path === '/write'
+      path === '/write'    ||
+      path === '/recommend'
     ) {
       new Component({ container: this.container });
       return;

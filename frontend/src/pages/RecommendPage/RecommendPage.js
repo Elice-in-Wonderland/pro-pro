@@ -1,28 +1,17 @@
 import axiosInstance from '../../utils/api';
-import Component from '../../components/component';
+import CustomComponent from '../../components/CustomComponent';
 import Card from '../../components/Card/Card';
-import RecommendNotFound from '../../components/RecommendNoResult/RecommendNoResult';
+import RecommendNoResult from '../../components/RecommendNoResult/RecommendNoResult';
 import './recommendPage.scss';
+import { createDom, replaceElement } from '../../utils/dom';
+import Loading from '../../components/Loading/Loading';
 
-export default class RecommendPage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.$dom = this.createDom('div', { className: 'recommend-page-wrapper' });
-
-    this.updateCards();
-
-    this.appendRoot(props, this.$dom);
+export default class RecommendPage extends CustomComponent {
+  init() {
+    this.state = { isLoading: true, cards: [] };
   }
 
-  updateCards = async () => {
-    await this.getData();
-    this.render();
-    this.createCard();
-    this.addEvent();
-  };
-
-  getData = async () => {
+  async mounted() {
     await axiosInstance
       .get('/posts/recommendation/me', {
         withCredentials: true,
@@ -31,59 +20,53 @@ export default class RecommendPage extends Component {
         return res.data.data;
       })
       .then(cards => {
-        this.state = cards;
+        this.setState({ ...this.state, isLoading: false, cards });
       });
-  };
+  }
 
-  render = () => {
-    this.$dom.innerHTML = `
-      <section class="filter-buttons">
-        <button type="button" id="recommend-button">추천</button>
-      </section>
-      <section class="recommend-comment">
-        <p>프로필에서 본인의 지역과 관심 기술을 설정하세요.</p>
-        <p>여러분께 맞춤형 프로젝트와 스터디를 추천해드려요.</p>
-      </section>
-      <section class="cards">
-        <div class="card-elements"></div>
-      </section>
-    `;
-  };
+  markup() {
+    if (this.state.isLoading) return Loading();
+    return (
+      <div class="recommend">
+        <section class="recommend__comment">
+          <p>프로필에서 본인의 지역과 관심 기술을 설정하세요.</p>
+          <p>여러분께 맞춤형 프로젝트와 스터디를 추천해드려요.</p>
+        </section>
+        <section class="recommend__cards"></section>
+      </div>
+    );
+  }
 
-  createCard = () => {
-    const cards = this.$dom.querySelector('.card-elements');
+  cardRender() {
+    const cards = this.container.querySelector('.recommend__cards');
 
-    const $createFrag = document.createDocumentFragment();
-
-    this.cardList = this.state.map(item => {
-      const newCard = new Card({
-        type: 'recommend',
-        post: item,
-        postList: this.state,
-        updateCards: this.updateCards,
-      });
-      return newCard.$dom;
-    });
-
-    if (!this.cardList.length) {
-      const cardSection = this.$dom.querySelector('.cards');
-      cardSection.classList.add('recommendNotFoundContainer');
-      cardSection.classList.remove('cards');
-      const recommendNotFound = new RecommendNotFound();
-      this.replaceElement(cards, recommendNotFound.$dom);
-    } else {
-      this.cardList.forEach(item => {
-        $createFrag.appendChild(item);
-      });
-      this.replaceElement(cards, $createFrag);
+    if (!this.state.cards.length) {
+      cards.classList.add('recomment__no-result-contents');
+      cards.classList.remove('recommend__cards');
+      const recommendNoResult = new RecommendNoResult({ container: cards });
+      replaceElement(cards, recommendNoResult.container);
+      return;
     }
-  };
 
-  addEvent = () => {
-    const recommendBtn = this.$dom.querySelector('#recommend-button');
+    const frag = new DocumentFragment();
 
-    recommendBtn.addEventListener('click', () => {
-      this.updateCards();
+    this.state.cards.forEach(item => {
+      const card = createDom('div', {
+        className: 'card-wrapper',
+      });
+      new Card({
+        container: card,
+        props: {
+          type: 'recommend',
+          post: item,
+        },
+      });
+      frag.appendChild(card);
     });
-  };
+    cards.appendChild(frag);
+  }
+
+  renderCallback() {
+    if (!this.state.isLoading) this.cardRender();
+  }
 }
