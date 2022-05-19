@@ -1,12 +1,12 @@
-.recommendNotFound {
-  position: relative;
-  .no-result {
+.recommend-no-result {
+  .recommend-no-result__contents {
     text-align: center;
-    .no-result-img {
-      margin-top: 10vh;
-      width: 100%;
-      display: flex;
+
+    img {
+      margin-top: 9vh;
+      width: 70%;
     }
+
     p {
       color: gray;
       font-size: 1.2rem;

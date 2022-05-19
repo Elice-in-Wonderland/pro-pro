@@ -1,4 +1,4 @@
-.card-wrapper {
+.card {
   display: flex;
   flex-direction: column;
   background-color: var(--white);
@@ -7,12 +7,6 @@
   margin: 60px;
   border-radius: 12px;
   filter: drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.25));
-}
-.card-wrap {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
 
   .banner {
     flex-basis: 50%;
@@ -23,7 +17,8 @@
     overflow: hidden;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
-    .bannerLogo {
+
+    .banner__stack {
       width: 42px;
       height: 42px;
       border-radius: 4px;
@@ -32,11 +27,11 @@
   }
 }
 
-.card-body {
+.card__body {
   height: 50%;
 }
 
-.card-title {
+.card__body__title {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 16px;
@@ -51,69 +46,50 @@
   word-wrap: break-word;
 }
 
-.card-info-wrapper {
+.card__body__info {
   display: grid;
   grid-template-columns: 52% 48%;
   align-items: center;
   // padding-bottom: 10px;
 }
 
-.card-info-detail {
+.card__body__info__content__detail {
   width: 100px;
   height: 34px;
   border-radius: 30px;
   background-color: #f0f0f0;
   margin-top: 15px;
   margin-left: 15px;
+
+  .card__body__info__content__detail__text {
+    text-align: center;
+    transform: translateY(70%);
+    font-size: 14px;
+  }
 }
 
-.text {
-  text-align: center;
-  transform: translateY(70%);
-  font-size: 14px;
-}
-
-.card-info-number {
+.card__body__info__number {
   display: grid;
   grid-template-columns: 50% 50%;
   margin-top: 63px;
   margin-right: 20px;
+
+  .card__body__info__number__detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+
+    img {
+      padding-right: 8px;
+      width: 30px;
+      height: 30px;
+    }
+  }
 }
 
-.card-info-number-detail {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-}
-
-.card-info-number-detail img {
-  padding-right: 8px;
-  width: 30px;
-  height: 30px;
-}
-
-.bookmark-btn,
-.bookmark-btn-main {
-  width: 30px;
-  height: 30px;
-  background-color: transparent;
-  border: 0;
-}
-
-.card-wrapper:hover {
+.card:hover {
   transform: scale(1.05);
   transition: transform 0.2s, opacity 0.2s, background-color 0.2s;
-  cursor: pointer;
-}
-
-.bookmark-btn:hover {
-  // transform: scale(1.3);
-  // transition: transform 0.3s, opacity 0.3s, background-color 0.3s;
-  cursor: pointer;
-}
-
-.bookmark-btn-main:hover {
-  transform: scale(1);
   cursor: pointer;
 }

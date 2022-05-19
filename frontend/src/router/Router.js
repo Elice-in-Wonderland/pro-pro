@@ -24,7 +24,8 @@ class Router {
       path === '/detail/:postId' ||
       path === '/bookmark' ||
       path === '/profile' ||
-      path === '/NotFound'
+      path === '/NotFound' ||
+      path === '/recommend'
     ) {
       new Component({ container: this.container });
       return;

@@ -1,14 +1,14 @@
 import axiosInstance from '../../utils/api';
-import MainCard from '../../components/MainCard/MainCard';
+import Card from '../../components/Card/Card';
 import './bookmarkPage.scss';
 import CustomComponent from '../../components/CustomComponent';
 import { createDom } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
-import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
+import Loading from '../../components/Loading/Loading';
 
 export default class BookmarkPage extends CustomComponent {
   init() {
-    this.state = [];
+    this.state = { isLoading: true, cards: [] };
   }
 
   async mounted() {
@@ -21,8 +21,7 @@ export default class BookmarkPage extends CustomComponent {
           return res.data.data;
         })
         .then(cards => {
-          this.setState(cards);
-          this.cardRender();
+          this.setState({ ...this.state, isLoading: false, cards });
         });
     } catch (e) {
       new Toast({ content: '북마크 정보 불러오기 실패', type: 'fail' });
@@ -30,6 +29,7 @@ export default class BookmarkPage extends CustomComponent {
   }
 
   markup() {
+    if (this.state.isLoading) return Loading();
     return (
       <div class="bookmark">
         <div class="bookmark__title">북마크한 프로젝트/스터디</div>
@@ -38,36 +38,17 @@ export default class BookmarkPage extends CustomComponent {
     );
   }
 
-  skeletonCardRender() {
-    const cards = this.container.querySelector('.bookmark__cards');
-    const frag = new DocumentFragment();
-
-    Array.from({ length: 6 }).forEach(() => {
-      const skeletonCard = createDom('div', {
-        className: 'card-skeleton',
-      });
-
-      new SkeletonCard({
-        container: skeletonCard,
-      });
-      frag.appendChild(skeletonCard);
-    });
-    cards.appendChild(frag);
-  }
-
   cardRender() {
-    this.skeletonCardRender();
     const cards = this.container.querySelector('.bookmark__cards');
-    cards.innerHTML = '';
 
     const frag = new DocumentFragment();
 
-    this.state.forEach(item => {
+    this.state.cards.forEach(item => {
       const card = createDom('div', {
         className: 'card-wrapper',
       });
 
-      new MainCard({
+      new Card({
         container: card,
         props: {
           type: 'bookmark',
@@ -79,7 +60,7 @@ export default class BookmarkPage extends CustomComponent {
     cards.appendChild(frag);
   }
 
-  async renderCallback() {
-    this.skeletonCardRender();
+  renderCallback() {
+    if (!this.state.isLoading) this.cardRender();
   }
 }

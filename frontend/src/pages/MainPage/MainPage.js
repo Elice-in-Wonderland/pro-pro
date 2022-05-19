@@ -2,7 +2,7 @@
 import CustomComponent from '../../components/CustomComponent';
 import './mainPage.scss';
 import { createDom } from '../../utils/dom';
-import MainCard from '../../components/MainCard/MainCard';
+import Card from '../../components/Card/Card';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
 import SkillStacksFilter from '../../components/SkillStacksFilter/SkillStacksFilter';
 import MainBanner from '../../components/MainBanner/MainBanner';
@@ -50,7 +50,7 @@ export default class MainPage extends CustomComponent {
           className: 'card-wrapper',
         });
 
-        new MainCard({
+        new Card({
           container: cardWrapper,
           props: { post: el },
         });
