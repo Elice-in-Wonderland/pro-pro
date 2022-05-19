@@ -35,21 +35,23 @@ function throttle(callback, wait = 1000) {
 }
 
 function addressSearch(address) {
-  const geocoder = new window.kakao.maps.services.Geocoder();
-
   return new Promise((resolve, reject) => {
-    geocoder.addressSearch(address, (result, status) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const region = {
-          lat: result[0].y,
-          lng: result[0].x,
-          address,
-          sido: result[0].road_address.region_1depth_name,
-        };
-        resolve(region);
-      } else {
-        reject(status);
-      }
+    window.kakao.maps.load(function () {
+      const geocoder = new window.kakao.maps.services.Geocoder();
+
+      geocoder.addressSearch(address, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const region = {
+            lat: result[0].y,
+            lng: result[0].x,
+            address,
+            sido: result[0].road_address.region_1depth_name,
+          };
+          resolve(region);
+        } else {
+          reject(status);
+        }
+      });
     });
   });
 }
@@ -111,7 +113,6 @@ export {
 // postcodeSearch.addEventListener('click', async () => {
 //   try {
 //     const region = await createPostCode();
-//     console.log(region);
 //     createMap(mapContainer, region);
 //   } catch (e) {
 //     console.log(e);
