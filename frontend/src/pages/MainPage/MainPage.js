@@ -1,22 +1,32 @@
 // import Component from '../../components/component';
 import CustomComponent from '../../components/CustomComponent';
 import './mainPage.scss';
+import searchIcon from '../../assets/icons/search-icon.svg';
 import { createDom } from '../../utils/dom';
 import MainCard from '../../components/MainCard/MainCard';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
 import SkillStacksFilter from '../../components/SkillStacksFilter/SkillStacksFilter';
 import MainBanner from '../../components/MainBanner/MainBanner';
-import MainFilterBar from '../../components/MainFilterBar/MainFilterBar';
 import axiosInstance from '../../utils/api';
 import RouterContext from '../../router/RouterContext';
 import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
-import { setPost, setTotal, setBasis, store } from '../../store/reducer';
-import { observe } from '../../store/observe';
-import { vDomToNode } from '../../utils/jsx-runtime';
+import {
+  availFilter,
+  populateSort,
+  recentSort,
+  toggleButton,
+  debounce,
+} from '../../utils/filter';
 
 export default class MainPage extends CustomComponent {
   init() {
     this.projectOrStudy = RouterContext.state.pathname;
+
+    this.state = [];
+    this.totalData = [];
+    this.filterStacks = [];
+    this.basisData = [];
+    this.sortStandard = recentSort;
   }
 
   skeletonCardRender() {
@@ -37,27 +47,24 @@ export default class MainPage extends CustomComponent {
     cardContainer.appendChild(fragment);
   }
 
-  cardRender() {
+  cardRender = () => {
     const cardContainer = this.container.querySelector('.main-cards');
     cardContainer.innerHTML = '';
     const fragment = document.createDocumentFragment();
 
-    store
-      .getState()
-      .sortStandard(store.getState().post)
-      .forEach(el => {
-        const cardWrapper = createDom('div', {
-          className: 'card-wrapper',
-        });
-
-        new MainCard({
-          container: cardWrapper,
-          props: { post: el },
-        });
-        fragment.appendChild(cardWrapper);
+    this.state.forEach(el => {
+      const cardWrapper = createDom('div', {
+        className: 'card-wrapper',
       });
+
+      new MainCard({
+        container: cardWrapper,
+        props: { post: el },
+      });
+      fragment.appendChild(cardWrapper);
+    });
     cardContainer.appendChild(fragment);
-  }
+  };
 
   skillStackRender() {
     const skillsBar = this.container.querySelector('.main__skills');
@@ -74,10 +81,10 @@ export default class MainPage extends CustomComponent {
     new SearchNotFound({ container: cardContainer });
   };
 
-  MainFilterBar() {
-    const filterBar = this.container.querySelector('.main__filter-bar');
-    new MainFilterBar({ container: filterBar });
-  }
+  setState = nextState => {
+    this.state = nextState;
+    this.cardRender();
+  };
 
   async mounted() {
     if (this.projectOrStudy === '/study') {
@@ -88,9 +95,6 @@ export default class MainPage extends CustomComponent {
       });
       this.totalData = data;
       this.basisData = data;
-      store.dispatch(setTotal(data));
-      store.dispatch(setBasis(data));
-      store.dispatch(setPost(store.getState().sortStandard(data)));
     }
     if (this.projectOrStudy === '/') {
       const {
@@ -100,11 +104,8 @@ export default class MainPage extends CustomComponent {
       });
       this.totalData = data;
       this.basisData = data;
-
-      store.dispatch(setTotal(data));
-      store.dispatch(setBasis(data));
-      store.dispatch(setPost(store.getState().sortStandard(data)));
     }
+    this.setState(recentSort(this.totalData));
   }
 
   markup() {
@@ -112,7 +113,24 @@ export default class MainPage extends CustomComponent {
       <div class="main">
         <section class="main__banner"></section>
         <section class="main__skills"></section>
-        <section class="main__filter-bar"></section>
+        <section class="main__filter">
+          <button type="button" class="main__filter-recent activated">
+            최신순
+          </button>
+          <button type="button" class="main__filter-populate">
+            인기순
+          </button>
+          <div class="main__search">
+            <input aria-label="검색" type="text" class="main__search-input" />
+            <img src={searchIcon} alt="search image" class="main__search-btn" />
+          </div>
+          <button type="button" class="main__filter-entire activated">
+            전체 글
+          </button>
+          <button type="button" class="main__filter-avail">
+            모집중인 글
+          </button>
+        </section>
         <section class="main-cards"></section>
       </div>
     );
@@ -121,25 +139,121 @@ export default class MainPage extends CustomComponent {
   renderCallback() {
     this.bannerRender();
     this.skeletonCardRender();
-    this.MainFilterBar();
-
-    if (store.getState().post.length !== 0) this.cardRender();
+    this.skillStackRender();
   }
 
-  render() {
-    observe(() => {
-      const vDOM = this.markup();
+  toggleBasisData = buttonType => {
+    if (buttonType === 'avail') {
+      this.basisData = availFilter(this.totalData);
+      this.setState(this.sortStandard(availFilter(this.state)));
+      return;
+    }
+    this.basisData = this.totalData;
+    this.setState(this.sortStandard(this.totalData));
+  };
 
-      // TODO: JSX관련해서 수정되면 제거
-      if (typeof vDOM === 'string') this.container.innerHTML = vDOM;
-      else {
-        const fragment = new DocumentFragment();
-        vDomToNode(vDOM, fragment);
-        this.container?.replaceChildren(fragment);
+  toggleBasisSort = sortType => {
+    if (sortType === 'recent') {
+      this.sortStandard = recentSort;
+      return;
+    }
+    this.sortStandard = populateSort;
+  };
+
+  setEvent() {
+    const skillIcon = this.container.querySelector('.skill__icon');
+    const avail = this.container.querySelector('.main__filter-avail');
+    const entirePost = this.container.querySelector('.main__filter-entire');
+    const recent = this.container.querySelector('.main__filter-recent');
+    const populate = this.container.querySelector('.main__filter-populate');
+    const searchInput = this.container.querySelector('.main__search-input');
+    const searchBtn = this.container.querySelector('.main__search-btn');
+
+    const skillStackFilter = () => {
+      if (this.filterStacks) {
+        const stateList = this.basisData.filter(el =>
+          this.filterStacks.every(post => el.stacks.includes(post)),
+        );
+        this.setState(this.sortStandard(stateList));
       }
+    };
 
-      this.renderCallback();
-      this.setEvent();
+    const removeSkillStackFilter = () => {
+      this.filterStacks = [];
+      skillIcon.childNodes.forEach(imgNode =>
+        imgNode.classList.remove('activateBtn'),
+      );
+    };
+
+    skillIcon.addEventListener('click', e => {
+      if (e.target?.nodeName !== 'IMG') return;
+      if (this.filterStacks.includes(e.target.id)) {
+        this.filterStacks.splice(this.filterStacks.indexOf(e.target.id), 1);
+        e.target.classList.remove('activateBtn');
+        skillStackFilter();
+        return;
+      }
+      this.filterStacks.push(e.target.id);
+      e.target.classList.add('activateBtn');
+      skillStackFilter();
     });
+
+    populate.addEventListener('click', () => {
+      toggleButton(populate, recent);
+      this.toggleBasisSort('populate');
+      this.setState(populateSort(this.state));
+    });
+
+    recent.addEventListener('click', () => {
+      toggleButton(recent, populate);
+      this.toggleBasisSort('recent');
+      this.setState(recentSort(this.state));
+    });
+
+    entirePost.addEventListener('click', () => {
+      toggleButton(entirePost, avail);
+      this.toggleBasisData('entire');
+      skillStackFilter();
+    });
+
+    avail.addEventListener('click', () => {
+      toggleButton(avail, entirePost);
+      this.toggleBasisData('avail');
+      skillStackFilter();
+    });
+
+    const searchEventHandler = () => {
+      removeSkillStackFilter();
+      if (!searchInput.value) {
+        return;
+      }
+      const searchList = this.basisData.filter(character => {
+        return character.title.includes(searchInput.value);
+      });
+      if (searchList.length === 0) {
+        this.setState([]);
+        searchInput.value = null;
+        this.searchNoResultRender();
+        return;
+      }
+      this.setState(searchList);
+      searchInput.value = null;
+    };
+
+    searchBtn.addEventListener(
+      'click',
+      debounce(() => {
+        searchEventHandler();
+      }),
+    );
+
+    searchInput.addEventListener(
+      'keydown',
+      debounce(e => {
+        if (e.key === 'Enter') {
+          searchEventHandler();
+        }
+      }),
+    );
   }
 }
