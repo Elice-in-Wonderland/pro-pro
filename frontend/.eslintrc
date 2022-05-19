@@ -24,5 +24,12 @@
     "no-restricted-globals": ["off"],
     "consistent-return": ["off", { "treatUndefinedAsUnspecified": true }],
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
+  },
+  "settings": {
+    "import/resolver": {
+        "webpack": {
+          "config": "webpack.common.js"
+        }
+    }
   }
 }

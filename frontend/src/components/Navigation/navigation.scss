@@ -1,13 +1,14 @@
 @import '../../styles/utils';
 
 @mixin gnb__item--text {
+  color: var(--medium);
+
+  text-decoration: none;
+  line-height: 40px;
   font-size: 15px;
   font-weight: bold;
-  text-decoration: none;
-  color: var(--medium);
+  
   cursor: pointer;
-  line-height: 40px;
-
   &:hover {
     opacity: 0.3;
   }
@@ -15,16 +16,19 @@
 
 .gnb {
   position: absolute;
+  z-index: 999;
   top: 0;
-  background-color: var(--white);
-  height: 80px;
-  width: 100vw;
+
   display: flex;
   justify-content: space-between;
-  padding: 0 5%;
   align-items: center;
+  width: 100vw;
+  height: 80px;
+  padding: 0 5%;
+
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
-  z-index: 999;
+  background-color: var(--white);
+
   @include mobile {
     height: 60px;
   }
@@ -47,31 +51,36 @@
 }
 
 .gnb__button {
-  background: none;
-  border: none;
-  outline:none;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  outline:none;
+  border: none;
+
+  background: none;
 }
 
 .gnb__button--login {
   @include gnb__item--text;
   padding-top: 2.5px;
+
   font-size: 16px;
   font-weight: 500;
 }
 
 .hamburger {
   display: none;
+
   cursor: pointer;
 }
 
 .hamburger__line {
   display: block;
-  margin: 5px 0;
   width: 23px;
   height: 3px;
+  margin: 5px 0;
+
   background-color: var(--medium);
+
   transition: all 0.3s ease-in-out;
 }
 
@@ -81,30 +90,33 @@
   }
 
   .hamburger--active .hamburger__line:nth-child(1) {
-      transform: translateY(8px) rotate(45deg);
+    transform: translateY(8px) rotate(45deg);
   }
   .hamburger--active .hamburger__line:nth-child(2) {
     opacity: 0;
   }
   .hamburger--active .hamburger__line:nth-child(3) {
-      transform: translateY(-8px) rotate(-45deg);
+    transform: translateY(-8px) rotate(-45deg);
   }
 
   .gnb__inner {
-      position: absolute;
-      flex-direction: column;
-      top: 60px;
-      left: -100%;
-      width: 100%;
-      background-color: var(--white);
-      border-top: 0.5px solid var(--medium);
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
-      box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    position: absolute;
+    top: 60px;
+    left: -100%;
+
+    flex-direction: column;
+    width: 100%;
+    border-top: 0.5px solid var(--medium);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    background-color: var(--white);
   }
 
   .gnb__link, .gnb__button {
     width: 100%;
+    
     text-align: center;
   }
 

@@ -1,23 +1,26 @@
-import { state, removeState, removeToken } from '../../utils/store';
-import RouterContext from '../../router/RouterContext';
+import { state, removeState, removeToken } from '@utils/store';
 import CustomComponent from '../CustomComponent';
+import RouterContext from '../../router/RouterContext';
+import { defaultProfileImage } from '../../library/Profile';
 import './dropdown.scss';
 
-const DEFAULT_PROFILE =
-  'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png';
-
 export default class Dropdown extends CustomComponent {
+  init() {
+    this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.handleDropdownContent = this.handleDropdownContent.bind(this);
+  }
+
   markup() {
     return (
       <div class="dropdown">
-        <div class="profile">
+        <div class="profile" onClick={this.toggleDropdown}>
           <img
-            src={state.myInfo?.imageURL || DEFAULT_PROFILE}
+            src={state.myInfo?.imageURL || defaultProfileImage}
             alt="profile"
             class="profile__image"
           />
         </div>
-        <ul class="dropdown__content">
+        <ul class="dropdown__content" onClick={this.handleDropdownContent}>
           {this.props.list.map(li => (
             <li class="dropdown__item">
               <a href={li.href} class={li.className}>
@@ -31,30 +34,33 @@ export default class Dropdown extends CustomComponent {
   }
 
   setEvent() {
-    this.container.addEventListener('click', event => {
-      const { target } = event;
-
-      if (
-        target.closest('.dropdown__content') &&
-        target.classList.contains('router')
-      ) {
-        this.hiddendropdown();
-      }
-
-      if (target.classList.contains('logout')) {
-        event.preventDefault();
-        this.handleLogout();
-      }
-    });
-
     window.addEventListener('click', ({ target }) => {
-      if (!target.closest('.dropdown')) this.hiddendropdown();
+      const isOutsideDropdown = !target.closest('.dropdown');
+      if (isOutsideDropdown) this.hiddenDropdown();
     });
   }
 
-  hiddendropdown() {
-    const dropdownCotent = this.container.querySelector('.dropdown__content');
-    dropdownCotent.classList.remove('dropdown__content--active');
+  handleDropdownContent(event) {
+    const { target } = event;
+    const isClickLink = target.classList.contains('router');
+    const isClickLogout = target.classList.contains('logout');
+
+    if (isClickLink) this.hiddenDropdown();
+
+    if (isClickLogout) {
+      event.preventDefault();
+      this.handleLogout();
+    }
+  }
+
+  toggleDropdown() {
+    const dropdownContent = this.container.querySelector('.dropdown__content');
+    dropdownContent.classList.toggle('dropdown__content--active');
+  }
+
+  hiddenDropdown() {
+    const dropdownContent = this.container.querySelector('.dropdown__content');
+    dropdownContent.classList.remove('dropdown__content--active');
   }
 
   handleLogout() {

@@ -1,3 +1,6 @@
+const defaultProfileImage =
+  'https://user-images.githubusercontent.com/68373235/146498583-71b583f6-04d7-43be-b790-bbb264a95390.png';
+
 const defaultSigungu = {
   강원: [
     '강릉시',
@@ -274,4 +277,10 @@ const defaultStacks = [
   'vue',
 ];
 
-export { defaultSigungu, defaultSido, defaultPosition, defaultStacks };
+export {
+  defaultProfileImage,
+  defaultSigungu,
+  defaultSido,
+  defaultPosition,
+  defaultStacks,
+};

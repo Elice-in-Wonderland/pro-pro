@@ -1,8 +1,9 @@
-import axiosInstance from '../../utils/api';
+import axiosInstance from '@utils/api';
+import { createDom } from '@utils/dom';
+import { updateUserInfo } from '@utils/auth';
 import Toast from '../../components/Toast/Toast';
 import RouterContext from '../../router/RouterContext';
 import CustomComponent from '../../components/CustomComponent';
-import { createDom } from '../../utils/dom';
 import Form from '../../components/Profile/Form';
 import './profilePage.scss';
 
@@ -26,9 +27,7 @@ export default class ProfilePage extends CustomComponent {
     try {
       const {
         data: { data },
-      } = await axiosInstance.get('/users', {
-        withCredentials: true,
-      });
+      } = await axiosInstance.get('/users');
 
       const profile = {
         nickname: data.nickname || '',
@@ -48,7 +47,6 @@ export default class ProfilePage extends CustomComponent {
         ...profile,
       });
     } catch (e) {
-      console.log(e);
       new Toast({ content: '프로필 정보 불러오기 실패', type: 'fail' });
     }
   }
@@ -59,7 +57,7 @@ export default class ProfilePage extends CustomComponent {
 
   renderCallback() {
     const container = this.container.querySelector('.profile-edit');
-    const form = createDom('form', { className: 'form profile-edit__form' });
+    const form = createDom('div', { className: 'form-container' });
 
     new Form({
       container: form,
@@ -87,13 +85,9 @@ export default class ProfilePage extends CustomComponent {
     if (!isFullField) return;
 
     try {
-      await axiosInstance.put(
-        '/users',
-        { ...this.nonReRenderState.current },
-        {
-          withCredentials: true,
-        },
-      );
+      await axiosInstance.put('/users', { ...this.nonReRenderState.current });
+
+      updateUserInfo(this.nonReRenderState.current);
       new Toast({ content: '프로필 수정 성공' });
       RouterContext.state.replace('/');
     } catch (error) {
