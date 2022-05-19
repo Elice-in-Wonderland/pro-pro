@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 function padding(value) {
   return `00${value}`.slice(-2);
 }
@@ -92,6 +94,10 @@ function createMap($container, region) {
   });
 }
 
+function isCanceledRequest(error) {
+  return axios.isCancel(error);
+}
+
 export {
   padding,
   parseJwt,
@@ -100,6 +106,7 @@ export {
   createPostCode,
   addressSearch,
   createMap,
+  isCanceledRequest,
 };
 
 /* <div style="margin-top:100px;">
