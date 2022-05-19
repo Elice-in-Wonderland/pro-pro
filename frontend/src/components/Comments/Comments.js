@@ -26,7 +26,7 @@ export default class Comments extends CustomComponent {
                 </div>
                 <h6 class="comment__content">{content}</h6>
                 {replyId === _id && (
-                  <form class="comment-form comment-form--reply" type="reply">
+                  <form class="comment-form comment-form--reply">
                     <textarea
                       placeholder="댓글을 남겨주세요."
                       class="comment-form__textarea"
