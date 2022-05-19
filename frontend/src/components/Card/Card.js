@@ -15,12 +15,13 @@ export default class Card extends CustomComponent {
   }
 
   makeSido(address) {
-    if (address.split(' ')[0] === '온라인') {
+    const shortAddress = address.split(' ')[0];
+    if (shortAddress === '온라인') {
       return '온라인';
-    } else if (address.split(' ')[0] === '세종특별자치시') {
-      return `${shortSido[address.split(' ')[0]]}`;
-    } else if (address.split(' ')[0] === '제주특별자치도') {
-      return `${shortSido[address.split(' ')[0]]} ${
+    } else if (shortAddress === '세종특별자치시') {
+      return `${shortSido[shortAddress]}`;
+    } else if (shortAddress === '제주특별자치도') {
+      return `${shortSido[shortAddress]} ${
         this.state.post.address.split(' ')[1]
       }`;
     }
