@@ -1,7 +1,5 @@
 import CustomComponent from '../CustomComponent';
-import CommentForm from '../CommentForm/CommentForm';
 import './comments.scss';
-import { createDom } from '../../utils/dom';
 
 export default class Comments extends CustomComponent {
   markup() {
@@ -27,15 +25,20 @@ export default class Comments extends CustomComponent {
                   )}
                 </div>
                 <h6 class="comment__content">{content}</h6>
-                {replyId === _id
-                  ? new CommentForm({
-                      container: createDom('form', {
-                        className: 'comment-form',
-                        type: 'reply',
-                      }),
-                      props: { userType },
-                    }).container
-                  : ''}
+                {replyId === _id && (
+                  <form class="comment-form comment-form--reply">
+                    <textarea
+                      placeholder="댓글을 남겨주세요."
+                      class="comment-form__textarea"
+                      type="text"
+                    ></textarea>
+                    <input
+                      class="comment-form__btn"
+                      type="submit"
+                      value="등록"
+                    />
+                  </form>
+                )}
               </div>
               {nestedComments.map(nestedComment =>
                 this.makeNestedComment(nestedComment, _id),
@@ -48,7 +51,7 @@ export default class Comments extends CustomComponent {
   }
 
   makeNestedComment(comment, parentId) {
-    const { userId, replyId, userType } = this.props;
+    const { userId } = this.props;
     const { _id, author, updatedAt, content } = comment;
 
     return (
@@ -67,15 +70,6 @@ export default class Comments extends CustomComponent {
           )}
         </div>
         <h6 class="comment__content">{content}</h6>
-        {replyId === _id
-          ? new CommentForm({
-              container: createDom('form', {
-                className: 'comment-form',
-                type: 'reply',
-              }),
-              props: { userType },
-            }).container
-          : ''}
       </div>
     );
   }

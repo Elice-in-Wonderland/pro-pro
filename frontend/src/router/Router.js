@@ -1,3 +1,4 @@
+import WebRequestController from './WebRequestController';
 import RouterContext from './RouterContext';
 import { getPathname, getQuery, isAllowedRoute } from './utils';
 
@@ -17,6 +18,11 @@ class Router {
     const next = isAllowedRoute(loginRequired);
     if (!next) return this.replace('/');
 
+    if (WebRequestController) {
+      WebRequestController.getController().abort();
+      WebRequestController.resetController();
+    }
+
     // REMOVE: 모든 페이지 바뀌기전까지 임시 라우팅----------
     if (
       path === '/' ||
@@ -25,6 +31,7 @@ class Router {
       path === '/bookmark' ||
       path === '/profile' ||
       path === '/NotFound' ||
+      path === '/write'    ||
       path === '/recommend'
     ) {
       new Component({ container: this.container });

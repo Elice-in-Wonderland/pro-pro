@@ -14,8 +14,9 @@ import Loading from '../../components/Loading/Loading';
 import axiosInstance from '../../utils/api';
 import { state as userState } from '../../utils/store';
 import { createMap } from '../../utils/common';
-import { appendRoot, createDom, replaceElement } from '../../utils/dom';
+import { createDom, replaceElement } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
+import WebRequestController from '../../router/WebRequestController';
 
 export default class DetailPage extends CustomComponent {
   init() {
@@ -27,47 +28,35 @@ export default class DetailPage extends CustomComponent {
       comments: [],
       replyId: null,
     };
-    this.$dom = createDom('div', {
-      className: 'detail',
-    });
-    appendRoot(this.container, this.$dom);
-  }
-
-  render() {
-    // TODO: JSX관련해서 수정되면 제거
-    const newNode = this.markup();
-    if (typeof newNode === 'string') this.$dom.innerHTML = newNode;
-    else this.$dom.replaceChildren(newNode);
-
-    this.renderCallback();
   }
 
   renderCallback() {
-    if (!this.state.isLoading) {
-      this.makeComponent();
-      this.replaceDOM();
-      this.getMapImg();
-    }
+    if (this.state.isLoading) return;
+    this.makeComponent();
+    this.replaceDOM();
+    this.getMapImg();
   }
 
   mounted() {
     this.getPostInfo();
   }
 
-  getPostInfo() {
-    axiosInstance
-      .get(`/posts/${this.state.postId}`)
-      .then(res => {
-        return res.data.data;
-      })
-      .then(postInfo => {
-        this.setState({
-          ...this.state,
-          ...postInfo,
-          isLoading: false,
-          userType: this.findUserType(postInfo.author._id),
-        });
+  async getPostInfo() {
+    try {
+      const {
+        data: { data },
+      } = await axiosInstance(`/posts/${this.state.postId}`, {
+        signal: WebRequestController.getController()?.signal,
       });
+      this.setState({
+        ...this.state,
+        ...data,
+        isLoading: false,
+        userType: this.findUserType(data.author._id),
+      });
+    } catch (e) {
+      console.log('요청이 취소되었습니다.');
+    }
   }
 
   makeComponent() {
@@ -120,8 +109,7 @@ export default class DetailPage extends CustomComponent {
     });
     this.commentForm = new CommentForm({
       container: createDom('form', {
-        className: 'comment-form comment-form--default',
-        type: 'comment',
+        className: 'comment-form comment-form--comment',
       }),
       props: { userType },
     });
@@ -143,7 +131,11 @@ export default class DetailPage extends CustomComponent {
     } = this.state;
 
     return (
-      <fragment>
+      <div
+        class="detail"
+        onClick={this.clickHandler.bind(this)}
+        onSubmit={this.submitHandler.bind(this)}
+      >
         <h2 class="detail__title">{title}</h2>
         <div class="detail__user-wrapper">
           <img src={imageURL} width="30px" height="30px" />
@@ -201,10 +193,10 @@ export default class DetailPage extends CustomComponent {
         <div class="detail__comment-section">
           <h3>댓글</h3>
           <div class="detail__comments"></div>
-          <div class="detail__comment-form detail__comment-form--default"></div>
+          <div class="detail__comment-form detail__comment-form--comment"></div>
         </div>
         <div class="detail__edit-section"></div>
-      </fragment>
+      </div>
     );
   }
 
@@ -222,7 +214,7 @@ export default class DetailPage extends CustomComponent {
       this.comments.container,
     );
     replaceElement(
-      this.container.querySelector('.detail__comment-form--default'),
+      this.container.querySelector('.detail__comment-form--comment'),
       this.commentForm.container,
     );
     replaceElement(
@@ -245,27 +237,24 @@ export default class DetailPage extends CustomComponent {
     else createMap(mapContainer, coordinates);
   }
 
-  setEvent() {
-    this.$dom.addEventListener('click', ({ target }) => {
-      if (target.classList.contains('bookmark')) {
-        const { userType, isMyBookmark } = this.state;
-        if (userType === 'loggedUser' || userType === 'author')
-          return isMyBookmark ? this.deleteBookmark() : this.addBookmark();
-        else new Toast({ content: '로그인 먼저 해주세요.', type: 'fail' });
-      }
+  clickHandler({ target }) {
+    if (target.classList.contains('bookmark')) {
+      const { userType, isMyBookmark } = this.state;
+      if (userType === 'loggedUser' || userType === 'author')
+        return isMyBookmark ? this.deleteBookmark() : this.addBookmark();
+      else new Toast({ content: '로그인 먼저 해주세요.', type: 'fail' });
+    }
 
-      if (target.classList.contains('comment__delete'))
-        this.deleteComment(target);
+    if (target.classList.contains('comment__delete'))
+      this.deleteComment(target);
 
-      if (target.classList.contains('comment__reply'))
-        this.createReplyForm(target);
-    });
+    if (target.classList.contains('comment__reply'))
+      this.createReplyForm(target);
+  }
 
-    this.$dom.addEventListener('submit', event => {
-      event.preventDefault();
-      if (event.target.classList.contains('comment-form'))
-        this.addComment(event);
-    });
+  submitHandler(event) {
+    event.preventDefault();
+    if (event.target.classList.contains('comment-form')) this.addComment(event);
   }
 
   deleteBookmark = async () => {
@@ -343,15 +332,16 @@ export default class DetailPage extends CustomComponent {
 
   addComment = event => {
     const {
-      type,
+      classList,
       firstChild: { value },
       parentNode: {
         dataset: { id },
       },
     } = event.target;
     const { imageURL, nickname, _id } = userState.myInfo;
+    if (!value) return;
 
-    if (type === 'comment') {
+    if (classList[1] === 'comment-form--comment') {
       const { postId } = this.state;
       axiosInstance.post(
         'comments',
@@ -381,7 +371,7 @@ export default class DetailPage extends CustomComponent {
           },
         ],
       });
-    } else if (type === 'reply') {
+    } else if (classList[1] === 'comment-form--reply') {
       axiosInstance.post(
         'comments',
         {
