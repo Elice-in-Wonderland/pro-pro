@@ -121,7 +121,7 @@ export default class EditPostPage extends CustomComponent {
       content,
     } = this.state;
     return (
-      <div class="write">
+      <div class="write" onClick={this.clickHandler.bind(this)}>
         <div class="write__form">
           <div class="write__category">
             <h3 class="write__title">유형 선택</h3>
@@ -176,8 +176,18 @@ export default class EditPostPage extends CustomComponent {
                 value={capacity}
                 maxLength="2/"
               ></input>
-              <input class="write__btn" id="minus" type="button" value="-" />
-              <input class="write__btn" id="plus" type="button" value="+" />
+              <input
+                class="write__btn write__btn--minus"
+                id="minus"
+                type="button"
+                value="-"
+              />
+              <input
+                class="write__btn write__btn--plus"
+                id="plus"
+                type="button"
+                value="+"
+              />
             </div>
           </div>
           <div class="write__category">
@@ -224,13 +234,13 @@ export default class EditPostPage extends CustomComponent {
           </div>
           <div class="write__category write__category--2x write__category--btns">
             <input
-              class="write__btn"
+              class="write__btn write__btn--cancel"
               type="button"
               value="취 소"
               id="cancelBtn"
             />
             <input
-              class="write__btn"
+              class="write__btn write__btn--edit"
               type="button"
               value="등 록"
               id="sendBtn"
@@ -241,40 +251,34 @@ export default class EditPostPage extends CustomComponent {
     );
   }
 
-  setEvent() {
-    if (this.state.isLoading) return;
-    // 수행 인원 증감 이벤트
-    const minusBtn = document.querySelector('#minus');
-    const plusBtn = document.querySelector('#plus');
-    const count = document.querySelector('#count');
-    const addressSearch = document.querySelector('.address-search');
-    const online = document.querySelector('.online');
-    const addressResult = document.querySelector('.address-result');
-
-    minusBtn.addEventListener('click', () => {
+  async clickHandler({ target }) {
+    if (target.classList.contains('write__btn--minus')) {
+      const count = document.querySelector('#count');
       if (count.value !== '1' && !count.value.includes('-')) {
         count.value = Number(count.value) - 1;
       }
-    });
-    plusBtn.addEventListener('click', () => {
+    }
+
+    if (target.classList.contains('write__btn--plus')) {
+      const count = document.querySelector('#count');
       if (count.value !== '99') {
         count.value = Number(count.value) + 1;
       }
-    });
+    }
 
-    // 지역
-    addressSearch.addEventListener('click', async () => {
+    if (target.classList.contains('address-search')) {
       try {
+        const addressResult = document.querySelector('.address-result');
         const region = await createPostCode();
         this.region = region;
         addressResult.value = region.address;
       } catch (e) {
         console.log(e);
       }
-    });
+    }
 
-    // 온라인
-    online.addEventListener('click', async () => {
+    if (target.classList.contains('online')) {
+      const addressResult = document.querySelector('.address-result');
       this.region = {
         lat: '',
         lng: '',
@@ -282,13 +286,14 @@ export default class EditPostPage extends CustomComponent {
         sido: '',
       };
       addressResult.value = '';
-    });
+    }
 
-    document.querySelector('#cancelBtn').addEventListener('click', () => {
-      RouterContext.state.push('/');
-    });
+    if (target.classList.contains('write__btn--cancel')) {
+      const { postId } = RouterContext.state.params;
+      RouterContext.state.push(`/detail/${postId}`);
+    }
 
-    document.querySelector('#sendBtn').addEventListener('click', async () => {
+    if (target.classList.contains('write__btn--edit')) {
       const category =
         document.querySelector('.write__select--category').options[
           document.querySelector('.write__select--category').selectedIndex
@@ -323,23 +328,23 @@ export default class EditPostPage extends CustomComponent {
       };
       if (this.checkform(formData) !== false) {
         try {
-          await axiosInstance.put('/posts', formData, {
+          const { postId } = RouterContext.state.params;
+          await axiosInstance.put(`/posts/${postId}`, formData, {
             withCredentials: true,
           });
           new Toast({
-            content: '게시물이 성공적으로 등록되었습니다',
+            content: '게시물이 성공적으로 수정됬습니다.',
             type: 'success',
           });
-          RouterContext.state.replace('/');
+          RouterContext.state.replace(`/detail/${postId}`);
         } catch (error) {
           console.log(error);
           new Toast({
-            content:
-              '게시물이 정상적으로 등록되지 않았습니다. 관리자에게 문의하세요',
+            content: '게시물이 정상적으로 등록되지 않았습니다.',
             type: 'fail',
           });
         }
       }
-    });
+    }
   }
 }
