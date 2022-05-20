@@ -1,22 +1,22 @@
-import CustomComponent from '../../components/CustomComponent';
+import { createMap } from '@utils/common';
+import axiosInstance from '@utils/api';
+import { state as userState } from '@utils/store';
+import { createDom, replaceElement } from '@utils/dom';
+import viewIcon from '@assets/icons/view.svg';
+import CustomComponent from '@/components/CustomComponent';
 import './detailPage.scss';
-import viewIcon from '../../assets/icons/view.svg';
 
-import Stacks from '../../components/Stacks/Stacks';
-import Comments from '../../components/Comments/Comments';
-import CommentForm from '../../components/CommentForm/CommentForm';
-import PostBanner from '../../components/PostBanner/PostBanner';
-import EditButtons from '../../components/EditButtons/EditButtons';
-import Bookmark from '../../components/Bookmark/Bookmark';
+import Stacks from '@/components/Stacks/Stacks';
+import Comments from '@/components/Comments/Comments';
+import CommentForm from '@/components/CommentForm/CommentForm';
+import PostBanner from '@/components/PostBanner/PostBanner';
+import EditButtons from '@/components/EditButtons/EditButtons';
+import Bookmark from '@/components/Bookmark/Bookmark';
 
-import RouterContext from '../../router/RouterContext';
-import Loading from '../../components/Loading/Loading';
-import axiosInstance from '../../utils/api';
-import { state as userState } from '../../utils/store';
-import { createMap } from '../../utils/common';
-import { createDom, replaceElement } from '../../utils/dom';
-import Toast from '../../components/Toast/Toast';
-import WebRequestController from '../../router/WebRequestController';
+import RouterContext from '@/router/RouterContext';
+import Loading from '@/components/Loading/Loading';
+import Toast from '@/components/Toast/Toast';
+import WebRequestController from '@/router/WebRequestController';
 
 export default class DetailPage extends CustomComponent {
   init() {
