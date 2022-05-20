@@ -75,7 +75,7 @@ export default class MainFilterBar extends CustomComponent {
             <input aria-label="검색" type="text" class="main__search-input" />
             <img src={searchIcon} alt="search image" class="main__search-btn" />
           </div>
-          <article class="main__filter-avail">
+          <article class="main__filter-basis">
             <button type="button" class="main__filter-entire activated">
               전체 글
             </button>
