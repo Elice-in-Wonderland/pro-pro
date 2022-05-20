@@ -139,10 +139,12 @@ export default class MainFilterBar extends CustomComponent {
 
     populate.addEventListener('click', () => {
       store.dispatch(setSort(populateSort));
+      store.dispatch(setPost(populateSort([...store.getState().post])));
     });
 
     recent.addEventListener('click', () => {
       store.dispatch(setSort(recentSort));
+      store.dispatch(setPost(recentSort([...store.getState().post])));
     });
 
     entirePost.addEventListener('click', () => {
