@@ -15,10 +15,11 @@ import {
   setFilter,
   store,
 } from '../../store/reducer';
+import './MainFilter.scss';
 
 export default class MainFilterBar extends CustomComponent {
   skillStackRender() {
-    const skillsBar = this.container.querySelector('.main__skills');
+    const skillsBar = this.container.querySelector('.main__filter-skills');
     new SkillStacksFilter({ container: skillsBar });
   }
 
@@ -59,24 +60,29 @@ export default class MainFilterBar extends CustomComponent {
   markup() {
     return (
       <div>
-        <section class="main__skills"></section>
-        <section class="main__filter">
-          <button type="button" class="main__filter-recent">
-            최신순
-          </button>
-          <button type="button" class="main__filter-populate">
-            인기순
-          </button>
+        <section class="main__filter-skills"></section>
+        <section class="main__filter-btn">
+          <article class="main__filter-sort">
+            <button type="button" class="main__filter-recent">
+              최신순
+            </button>
+            <button type="button" class="main__filter-populate">
+              인기순
+            </button>
+          </article>
+
           <div class="main__search">
             <input aria-label="검색" type="text" class="main__search-input" />
             <img src={searchIcon} alt="search image" class="main__search-btn" />
           </div>
-          <button type="button" class="main__filter-entire activated">
-            전체 글
-          </button>
-          <button type="button" class="main__filter-avail">
-            모집중인 글
-          </button>
+          <article class="main__filter-avail">
+            <button type="button" class="main__filter-entire activated">
+              전체 글
+            </button>
+            <button type="button" class="main__filter-avail">
+              모집중인 글
+            </button>
+          </article>
         </section>
       </div>
     );
