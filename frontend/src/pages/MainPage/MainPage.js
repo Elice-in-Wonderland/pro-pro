@@ -75,7 +75,7 @@ export default class MainPage extends CustomComponent {
   };
 
   MainFilterBar() {
-    const filterBar = this.container.querySelector('.main__filter-bar');
+    const filterBar = this.container.querySelector('.main__filter');
     new MainFilterBar({ container: filterBar });
   }
 
@@ -111,8 +111,7 @@ export default class MainPage extends CustomComponent {
     return (
       <div class="main">
         <section class="main__banner"></section>
-        <section class="main__skills"></section>
-        <section class="main__filter-bar"></section>
+        <section class="main__filter"></section>
         <section class="main-cards"></section>
       </div>
     );
