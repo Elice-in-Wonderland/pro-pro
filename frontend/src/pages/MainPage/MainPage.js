@@ -4,7 +4,6 @@ import './mainPage.scss';
 import { createDom } from '../../utils/dom';
 import Card from '../../components/Card/Card';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
-import SkillStacksFilter from '../../components/SkillStacksFilter/SkillStacksFilter';
 import MainBanner from '../../components/MainBanner/MainBanner';
 import MainFilterBar from '../../components/MainFilterBar/MainFilterBar';
 import axiosInstance from '../../utils/api';
@@ -57,11 +56,6 @@ export default class MainPage extends CustomComponent {
         fragment.appendChild(cardWrapper);
       });
     cardContainer.appendChild(fragment);
-  }
-
-  skillStackRender() {
-    const skillsBar = this.container.querySelector('.main__skills');
-    new SkillStacksFilter({ container: skillsBar });
   }
 
   bannerRender() {
