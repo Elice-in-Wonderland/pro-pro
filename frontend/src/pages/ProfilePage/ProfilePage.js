@@ -52,7 +52,12 @@ export default class ProfilePage extends CustomComponent {
       });
     } catch (e) {
       if (isCanceledRequest(e)) return;
+
       new Toast({ content: '프로필 정보 불러오기 실패', type: 'fail' });
+      this.setState({
+        ...this.state,
+        isLoadFailed: true,
+      });
     }
   }
 
@@ -68,6 +73,7 @@ export default class ProfilePage extends CustomComponent {
       container: form,
       props: {
         userInfo: this.nonReRenderState,
+        isLoadFailed: this.state?.isLoadFailed,
         onChangeUserInfo: this.handleChangeUserInfo.bind(this),
         onSubmit: this.handleSubmit.bind(this),
       },
