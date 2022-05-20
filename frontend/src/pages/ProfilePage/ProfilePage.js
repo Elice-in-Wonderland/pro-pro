@@ -6,6 +6,8 @@ import RouterContext from '../../router/RouterContext';
 import CustomComponent from '../../components/CustomComponent';
 import Form from '../../components/Profile/Form';
 import './profilePage.scss';
+import WebRequestController from '../../router/WebRequestController';
+import { isCanceledRequest } from '../../utils/common';
 
 export default class ProfilePage extends CustomComponent {
   init() {
@@ -27,7 +29,9 @@ export default class ProfilePage extends CustomComponent {
     try {
       const {
         data: { data },
-      } = await axiosInstance.get('/users');
+      } = await axiosInstance.get('/users', {
+        signal: WebRequestController.getController()?.signal,
+      });
 
       const profile = {
         nickname: data.nickname || '',
@@ -47,6 +51,7 @@ export default class ProfilePage extends CustomComponent {
         ...profile,
       });
     } catch (e) {
+      if (isCanceledRequest(e)) return;
       new Toast({ content: '프로필 정보 불러오기 실패', type: 'fail' });
     }
   }
