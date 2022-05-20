@@ -1,207 +1,79 @@
-import Component from '../../components/component';
+import CustomComponent from '../../components/CustomComponent';
 import './editPostPage.scss';
 import { defaultStacks } from '../../library/Profile/index';
 import axiosInstance from '../../utils/api';
 import { createPostCode } from '../../utils/common';
+import WebRequestController from '../../router/WebRequestController';
 
 import Loading from '../../components/Loading/Loading';
 import RouterContext from '../../router/RouterContext';
 import Toast from '../../components/Toast/Toast';
 
-export default class EditPostPage extends Component {
-  constructor(props) {
-    super(props);
-    const { postId } = RouterContext.state.params;
-    this.$dom = this.createDom('div', {
-      className: 'EditPostPage',
-    });
-    this.appendRoot(this.props, this.$dom);
-    this.loading();
-    axiosInstance
-      .get(`/posts/${postId}`)
-      .then(res => {
-        return res.data.data;
-      })
-      .then(postDetailData => {
-        this.setState(postDetailData, postId);
-      });
+export default class EditPostPage extends CustomComponent {
+  init() {
+    this.state = {
+      isLoading: true,
+    };
+    this.region = {};
   }
 
-  loading = () => {
-    this.$dom.innerHTML = Loading;
-  };
+  mounted() {
+    this.getPostInfo();
+  }
 
-  setState = (postDetailData, postId) => {
-    this.state = {
-      postId,
-      title: postDetailData.title || '',
-      location: postDetailData.location.coordinates || '',
-      createdAt: this.splitDateFormat(postDetailData.createdAt) || [0, 0, 0],
-      endDate: this.splitDateFormat(postDetailData.endDate) || [0, 0, 0],
-      registerDeadline: this.splitDateFormat(
-        postDetailData.registerDeadline,
-      ) || [0, 0, 0],
-      startDate: this.splitDateFormat(postDetailData.startDate) || [0, 0, 0],
-      capacity: postDetailData.capacity || '',
-      stacks: postDetailData.stacks || '',
-      content: postDetailData.content || '',
-      address: postDetailData.address || '',
-      category: postDetailData.category || '',
-    };
-    this.region = {
-      lat: postDetailData.location.coordinates[0],
-      lng: postDetailData.location.coordinates[1],
-      address: postDetailData.address,
-      sido: postDetailData.sido,
-    };
-
-    this.render();
-    this.addEvent();
-  };
-
-  splitDateFormat = dateFormat => {
-    const result = dateFormat
-      .slice(0, 10)
-      .split('-')
-      .map(date => {
-        return parseInt(date);
+  async getPostInfo() {
+    const { postId } = RouterContext.state.params;
+    try {
+      const {
+        data: { data },
+      } = await axiosInstance(`/posts/${postId}`, {
+        signal: WebRequestController.getController()?.signal,
       });
-    return result;
-  };
+      console.log(data);
+      this.setState({
+        ...this.state,
+        isLoading: false,
+        ...data,
+      });
+      this.region = {
+        lat: data.location.coordinates[0],
+        lng: data.location.coordinates[1],
+        address: data.address,
+        sido: data.sido,
+      };
+    } catch (e) {
+      console.log('요청이 취소되었습니다.');
+    }
+  }
 
   // 스택 추가
   appendStack() {
-    const stacks = document.querySelector('.Stacks p');
+    const stacks = document.querySelector('.write__stacks');
     stacks.innerHTML = defaultStacks
       .map(stack => {
-        return `<input ${
-          this.state.stacks.find(originStack => originStack === stack)
-            ? 'checked'
-            : ''
-        } type='checkbox' name='stacks' value=${stack} id=${stack}><span>✔︎</span><label for=${stack}>${
-          stack === 'cpp' ? 'c++' : stack
-        }</label>`;
+        return `<div>
+          <input
+            class="write__stack"
+            type="checkbox"
+            name="stacks"
+            value=${stack}
+            id=${stack}
+            ${
+              this.state.stacks.find(stateStack => stateStack === stack)
+                ? 'checked'
+                : ''
+            }
+          >
+            <label for=${stack}>${stack === 'cpp' ? 'c++' : stack}</label>
+          </input>
+        </div>`;
       })
       .join('');
   }
 
-  // 시작일 추가
-  appendStartDate() {
-    const { startDateYear, startDateMonth, startDateDate } = document.forms[0];
-    this.defaultDate(startDateYear, startDateMonth, startDateDate);
-    document.forms[0].startDateYear.value = this.state.startDate[0];
-    document.forms[0].startDateMonth.value = this.state.startDate[1];
-    document.forms[0].startDateDate.value = this.state.startDate[2];
-    this.transferData([
-      startDateYear,
-      startDateMonth,
-      startDateDate,
-      document.forms[0].startDate,
-    ]);
-  }
-
-  // 종료일 추가
-  appendEndDate() {
-    const { endDateYear, endDateMonth, endDateDate } = document.forms[0];
-
-    this.defaultDate(endDateYear, endDateMonth, endDateDate);
-    document.forms[0].endDateYear.value = this.state.endDate[0];
-    document.forms[0].endDateMonth.value = this.state.endDate[1];
-    document.forms[0].endDateDate.value = this.state.endDate[2];
-
-    this.transferData([
-      endDateYear,
-      endDateMonth,
-      endDateDate,
-      document.forms[0].endDate,
-    ]);
-  }
-
-  // 마감일 추가
-  appendRegisterDeadline() {
-    const {
-      registerDeadlineYear,
-      registerDeadlineMonth,
-      registerDeadlineDate,
-    } = document.forms[0];
-
-    this.defaultDate(
-      registerDeadlineYear,
-      registerDeadlineMonth,
-      registerDeadlineDate,
-    );
-    document.forms[0].registerDeadlineYear.value =
-      this.state.registerDeadline[0];
-    document.forms[0].registerDeadlineMonth.value =
-      this.state.registerDeadline[1];
-    document.forms[0].registerDeadlineDate.value =
-      this.state.registerDeadline[2];
-    this.transferData([
-      registerDeadlineYear,
-      registerDeadlineMonth,
-      registerDeadlineDate,
-      document.forms[0].registerDeadline,
-    ]);
-  }
-
-  // 기본 날짜 표시
-  defaultDate(dfYear, dfMonth, dfDate) {
-    let yearStart = new Date().getFullYear();
-    const yearEnd = yearStart + 3;
-    let years = '';
-    let months = '';
-    let dates = '';
-    while (yearStart <= yearEnd) {
-      years += `<option value=${yearStart}>${yearStart}</option>`;
-      yearStart++;
-    }
-    dfYear.innerHTML = years;
-
-    let month = 1;
-    while (month <= 12) {
-      months += `<option value=${month}>${month}</option>`;
-      month++;
-    }
-    dfMonth.innerHTML = months;
-
-    let date = 1;
-    while (date <= 31) {
-      dates += `<option value=${date}>${date}</option>`;
-      date++;
-    }
-    dfDate.innerHTML = dates;
-  }
-
-  // 년월에 따른 날짜갯수 변경
-  dateAppendRemove([year, month, date]) {
-    const days = new Date(Number(year.value), Number(month.value), 0).getDate();
-    const printed = date.children.length;
-
-    if (printed > days) {
-      while (date.children.length > days) {
-        date.removeChild(date.lastElementChild);
-      }
-    }
-    if (printed < days) {
-      let addPrinted = printed + 1;
-      while (date.children.length < days) {
-        const dateOption = this.createDom('option', { value: addPrinted });
-        dateOption.innerText = addPrinted;
-        date.appendChild(dateOption);
-        addPrinted++;
-      }
-    }
-  }
-
-  // 서버 전송을 위한 date폼에 data입력
-  transferData([year, month, date, data]) {
-    let dataMonth = month.value;
-    dataMonth = dataMonth.length !== 1 ? dataMonth : `0${dataMonth}`;
-
-    let dataDate = date.value;
-    dataDate = dataDate.length !== 1 ? dataDate : `0${dataDate}`;
-
-    data.value = `${year.value}-${dataMonth}-${dataDate}`;
+  renderCallback() {
+    if (this.state.isLoading) return;
+    this.appendStack();
   }
 
   // form validation
@@ -236,133 +108,177 @@ export default class EditPostPage extends Component {
     }
   }
 
-  render = () => {
-    this.$dom.innerHTML = `
-    <form>
-        <div class='Category'>
-            <h3>유형 선택</h3>
-            <p>
-              <input ${
-                this.state.category === 'project' ? 'checked' : ''
-              } type="radio" name="category" value="project" id="project" >
-              <span>●</span>
-              <label for="project">PROJECT</label>
-              <input ${
-                this.state.category === 'study' ? 'checked' : ''
-              } type="radio" name="category" value="study" id="study">
-              <span>●</span>
-              <label for="study">STUDY</label>
-            </p>
+  markup() {
+    if (this.state.isLoading) return Loading();
+    const {
+      category,
+      address,
+      registerDeadline,
+      capacity,
+      startDate,
+      endDate,
+      title,
+      content,
+    } = this.state;
+    return (
+      <div class="write" onClick={this.clickHandler.bind(this)}>
+        <div class="write__form">
+          <div class="write__category">
+            <h3 class="write__title">유형 선택</h3>
+            <select class="write__select write__select--category" type="select">
+              {category === 'study' ? (
+                <fragment>
+                  <option selected>스터디</option>
+                  <option>프로젝트</option>
+                </fragment>
+              ) : (
+                <fragment>
+                  <option selected>프로젝트</option>
+                  <option>스터디</option>
+                </fragment>
+              )}
+            </select>
+          </div>
+          <div class="write__category">
+            <h3 class="write__title">지역</h3>
+            <div class="write__input-wrapper">
+              <input
+                type="text"
+                class="write__input address-result"
+                value={address}
+                readonly
+              />
+              <input
+                type="button"
+                class="write__btn address-search"
+                value="주소검색"
+              />
+              <input type="button" class="write__btn online" value="온라인" />
+            </div>
+          </div>
+          <div class="write__category">
+            <h3 class="write__title">모집 마감일</h3>
+            <input
+              class="write__input write__date--register-end-date"
+              type="date"
+              name="registerDeadline"
+              value={registerDeadline.slice(0, 10)}
+            />
+          </div>
+          <div class="write__category">
+            <h3 class="write__title">수행 인원</h3>
+            <div class="write__input-wrapper">
+              <input
+                class="write__input write__input--capacity"
+                id="count"
+                type="text"
+                name="capacity"
+                value={capacity}
+                maxLength="2/"
+              ></input>
+              <input
+                class="write__btn write__btn--minus"
+                id="minus"
+                type="button"
+                value="-"
+              />
+              <input
+                class="write__btn write__btn--plus"
+                id="plus"
+                type="button"
+                value="+"
+              />
+            </div>
+          </div>
+          <div class="write__category">
+            <h3 class="write__title">수행 기간</h3>
+            <h4 class="write__sub-title">시작일</h4>
+            <input
+              class="write__input write__date--start-date"
+              type="date"
+              name="startDate"
+              value={startDate.slice(0, 10)}
+            />
+            <h4 class="write__sub-title">종료일</h4>
+            <input
+              class="write__input write__date--end-date"
+              type="date"
+              name="endDate"
+              value={endDate.slice(0, 10)}
+            />
+          </div>
+          <div class="write__category">
+            <h3 class="write__title">기술 스택 및 협업 툴</h3>
+            <div class="write__stacks"></div>
+          </div>
+          <div class="write__category write__category--2x">
+            <h3 class="write__title">제목</h3>
+            <input
+              class="write__input write__input--title"
+              type="text"
+              name="title"
+              maxLength="50"
+              placeholder="제목을 입력하세요"
+              value={title}
+            />
+          </div>
+          <div class="write__category write__category--2x">
+            <h3 class="write__title">내용</h3>
+            <textarea
+              class="write__textarea"
+              name="content"
+              placeholder="내용을 입력하세요"
+            >
+              {content}
+            </textarea>
+          </div>
+          <div class="write__category write__category--2x write__category--btns">
+            <input
+              class="write__btn write__btn--cancel"
+              type="button"
+              value="취 소"
+              id="cancelBtn"
+            />
+            <input
+              class="write__btn write__btn--edit"
+              type="button"
+              value="등 록"
+              id="sendBtn"
+            />
+          </div>
         </div>
-        <div class='Title'>
-            <h3>제목</h3>
-            <p>
-                <input value='${
-                  this.state.title
-                }' type="text" name="title" maxlength='50'>
-            </p>
-        </div>
-        <div class='Region'>
-            <h3>지역</h3>
-            <p>
-              <input type="text" class='addressResult' readonly value='${
-                this.state.address
-              }'>
-              <input type="button" class='addressSearch' value="주소검색">
-              <input type="button" class='online' value="온라인"><br>
-            </p>
-        </div>
-        <div class='Period'>
-            <h3>수행 기간</h3>
-            <p>
-                <label id="periodFrom">FROM&nbsp&nbsp
-                  <select value='2022' name="startDateYear"></select>
-                  <select name="startDateMonth"></select>
-                  <select name="startDateDate"></select>
-                  <input type="date" name="startDate">
-                </label>
-                <label id="periodTo">TO&nbsp&nbsp
-                  <select name="endDateYear"></select>
-                  <select name="endDateMonth"></select>
-                  <select name="endDateDate"></select>
-                  <input type="date" name="endDate">
-                </label>
-            </p>
-        </div>
-        <div class='Capacity'>
-            <h3>수행 인원</h3>
-            <p>
-                <input id="minus" type="button" value="-">
-                <input id="count" type="text" name="capacity" value=${
-                  this.state.capacity
-                } maxlength='2'></input>
-                <input id="plus" type="button" value="+">
-            </p>
-        </div>
-        <div class='RegisterDeadline'>
-            <h3>모집 마감일</h3>
-            <p id="registerDeadline">
-                <select name="registerDeadlineYear"></select>
-                <select name="registerDeadlineMonth"></select>
-                <select name="registerDeadlineDate"></select>
-                <input type="date" name="registerDeadline">
-            </p>
-        </div>
-        <div class='Stacks'>
-            <h3>기술 스택 및 협업 툴</h3>
-            <p>
-            </p>
-        </div>
-        <div class="Content">
-            <textarea name="content"cols="86" rows="15" placeholder="내용을 입력하세요">${
-              this.state.content
-            }</textarea>
-        </div>
-        <div class="Btns">
-            <input type="button" value="취 소" id="cancelBtn">
-            <input type="button" value="수 정" id="sendBtn">
-        </div>
-    </form>
-    `;
-    this.appendStack();
-    this.appendStartDate();
-    this.appendEndDate();
-    this.appendRegisterDeadline();
-  };
+      </div>
+    );
+  }
 
-  addEvent = () => {
-    // 수행 인원 증감 이벤트
-    const minusBtn = document.querySelector('#minus');
-    const plusBtn = document.querySelector('#plus');
-    const count = document.querySelector('#count');
-    const addressSearch = document.querySelector('.addressSearch');
-    const online = document.querySelector('.online');
-    const addressResult = document.querySelector('.addressResult');
-
-    minusBtn.addEventListener('click', () => {
-      if (count.value !== '1') {
+  async clickHandler({ target }) {
+    if (target.classList.contains('write__btn--minus')) {
+      const count = document.querySelector('#count');
+      if (count.value !== '1' && !count.value.includes('-')) {
         count.value = Number(count.value) - 1;
       }
-    });
-    plusBtn.addEventListener('click', () => {
+    }
+
+    if (target.classList.contains('write__btn--plus')) {
+      const count = document.querySelector('#count');
       if (count.value !== '99') {
         count.value = Number(count.value) + 1;
       }
-    });
+    }
 
-    // 지역
-    addressSearch.addEventListener('click', async () => {
+    if (target.classList.contains('address-search')) {
       try {
+        const addressResult = document.querySelector('.address-result');
         const region = await createPostCode();
         this.region = region;
         addressResult.value = region.address;
       } catch (e) {
         console.log(e);
       }
-    });
+    }
 
-    // 온라인
-    online.addEventListener('click', async () => {
+    if (target.classList.contains('online')) {
+      const addressResult = document.querySelector('.address-result');
       this.region = {
         lat: '',
         lng: '',
@@ -370,85 +286,65 @@ export default class EditPostPage extends Component {
         sido: '',
       };
       addressResult.value = '';
-    });
+    }
 
-    // 년월에 따른 일 변경, 서버 전송을 위한 date폼 data변경
-    const periodFrom = document.querySelector('#periodFrom');
-    const periodTo = document.querySelector('#periodTo');
-    const registerDeadline = document.querySelector('#registerDeadline');
+    if (target.classList.contains('write__btn--cancel')) {
+      const { postId } = RouterContext.state.params;
+      RouterContext.state.push(`/detail/${postId}`);
+    }
 
-    // 사작일
-    periodFrom.addEventListener('change', () => {
-      this.dateAppendRemove(periodFrom.querySelectorAll('select'));
-      this.transferData(periodFrom.children);
-    });
-
-    // 종료일
-    periodTo.addEventListener('change', () => {
-      this.dateAppendRemove(periodTo.querySelectorAll('select'));
-      this.transferData(periodTo.children);
-    });
-
-    // 마감일
-    registerDeadline.addEventListener('change', () => {
-      this.dateAppendRemove(registerDeadline.querySelectorAll('select'));
-      this.transferData(registerDeadline.children);
-    });
-
-    document
-      .querySelector('#cancelBtn')
-      .addEventListener('click', this.editCancelHandler);
-
-    document
-      .querySelector('#sendBtn')
-      .addEventListener('click', this.editPutHandler);
-  };
-
-  editCancelHandler = () => {
-    RouterContext.state.replace(`/detail/${this.state.postId}`);
-    new Toast({
-      content: '취소하였습니다.',
-      type: 'success',
-    });
-  };
-
-  editPutHandler = () => {
-    const formData = {
-      category: Array.from(
-        document.querySelectorAll('input[type="radio"]'),
-      ).filter(category => category.checked === true)[0].value,
-      title: document.forms[0].title.value,
-      content: document.forms[0].content.value,
-      stacks: Array.from(document.forms[0].stacks)
+    if (target.classList.contains('write__btn--edit')) {
+      const category =
+        document.querySelector('.write__select--category').options[
+          document.querySelector('.write__select--category').selectedIndex
+        ].text === '프로젝트'
+          ? 'project'
+          : 'study';
+      const title = document.querySelector('.write__input--title').value;
+      const content = document.querySelector('.write__textarea').value;
+      const stacks = Array.from(document.querySelectorAll('.write__stack'))
         .filter(stack => stack.checked === true)
-        .map(stack => stack.value),
-      capacity: Number(document.forms[0].capacity.value),
-      region: this.region,
-      executionPeriod: [
-        document.forms[0].startDate.value,
-        document.forms[0].endDate.value,
-      ],
-      registerDeadline: document.forms[0].registerDeadline.value,
-    };
-    if (this.checkform(formData) !== false) {
-      try {
-        axiosInstance
-          .put(`/posts/${this.state.postId}`, formData, {
+        .map(stack => stack.value);
+      const capacity = Number(
+        document.querySelector('.write__input--capacity').value,
+      );
+      const executionPeriod = [
+        document.querySelector('.write__date--start-date').value,
+        document.querySelector('.write__date--end-date').value,
+      ];
+      const registerDeadline = document.querySelector(
+        '.write__date--register-end-date',
+      ).value;
+
+      const formData = {
+        category,
+        title,
+        content,
+        stacks,
+        capacity,
+        region: this.region,
+        executionPeriod,
+        registerDeadline,
+      };
+      if (this.checkform(formData) !== false) {
+        try {
+          const { postId } = RouterContext.state.params;
+          await axiosInstance.put(`/posts/${postId}`, formData, {
             withCredentials: true,
-          })
-          .then(
-            res => RouterContext.state.replace(`/detail/${this.state.postId}`),
-            new Toast({
-              content: '게시글이 수정 되었습니다.',
-              type: 'success',
-            }),
-          );
-      } catch (error) {
-        new Toast({
-          content: '정상적으로 등록되지 않았습니다. 다시 시도해주세요.',
-          type: 'fail',
-        });
+          });
+          new Toast({
+            content: '게시물이 성공적으로 수정됬습니다.',
+            type: 'success',
+          });
+          RouterContext.state.replace(`/detail/${postId}`);
+        } catch (error) {
+          console.log(error);
+          new Toast({
+            content: '게시물이 정상적으로 등록되지 않았습니다.',
+            type: 'fail',
+          });
+        }
       }
     }
-  };
+  }
 }
