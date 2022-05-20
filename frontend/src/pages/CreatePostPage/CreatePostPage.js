@@ -1,10 +1,10 @@
-import CustomComponent from '../../components/CustomComponent';
+import axiosInstance from '@utils/api';
+import { createPostCode } from '@utils/common';
+import CustomComponent from '@/components/CustomComponent';
 import './createPostPage.scss';
-import { defaultStacks } from '../../library/Profile/index';
-import axiosInstance from '../../utils/api';
-import { createPostCode } from '../../utils/common';
-import RouterContext from '../../router/RouterContext';
-import Toast from '../../components/Toast/Toast';
+import { defaultStacks } from '@/library/Profile/index';
+import RouterContext from '@/router/RouterContext';
+import Toast from '@/components/Toast/Toast';
 
 export default class CreatePostPage extends CustomComponent {
   // form validation

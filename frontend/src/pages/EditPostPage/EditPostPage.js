@@ -1,13 +1,13 @@
-import CustomComponent from '../../components/CustomComponent';
+import axiosInstance from '@utils/api';
+import { createPostCode } from '@utils/common';
+import CustomComponent from '@/components/CustomComponent';
 import './editPostPage.scss';
-import { defaultStacks } from '../../library/Profile/index';
-import axiosInstance from '../../utils/api';
-import { createPostCode } from '../../utils/common';
-import WebRequestController from '../../router/WebRequestController';
+import { defaultStacks } from '@/library/Profile/index';
+import WebRequestController from '@/router/WebRequestController';
 
-import Loading from '../../components/Loading/Loading';
-import RouterContext from '../../router/RouterContext';
-import Toast from '../../components/Toast/Toast';
+import Loading from '@/components/Loading/Loading';
+import RouterContext from '@/router/RouterContext';
+import Toast from '@/components/Toast/Toast';
 
 export default class EditPostPage extends CustomComponent {
   init() {
@@ -170,7 +170,6 @@ export default class EditPostPage extends CustomComponent {
             <div class="write__input-wrapper">
               <input
                 class="write__input write__input--capacity"
-                id="count"
                 type="text"
                 name="capacity"
                 value={capacity}
@@ -178,13 +177,11 @@ export default class EditPostPage extends CustomComponent {
               ></input>
               <input
                 class="write__btn write__btn--minus"
-                id="minus"
                 type="button"
                 value="-"
               />
               <input
                 class="write__btn write__btn--plus"
-                id="plus"
                 type="button"
                 value="+"
               />
@@ -237,13 +234,11 @@ export default class EditPostPage extends CustomComponent {
               class="write__btn write__btn--cancel"
               type="button"
               value="취 소"
-              id="cancelBtn"
             />
             <input
               class="write__btn write__btn--edit"
               type="button"
               value="등 록"
-              id="sendBtn"
             />
           </div>
         </div>
@@ -253,14 +248,14 @@ export default class EditPostPage extends CustomComponent {
 
   async clickHandler({ target }) {
     if (target.classList.contains('write__btn--minus')) {
-      const count = document.querySelector('#count');
+      const count = document.querySelector('.write__input--capacity');
       if (count.value !== '1' && !count.value.includes('-')) {
         count.value = Number(count.value) - 1;
       }
     }
 
     if (target.classList.contains('write__btn--plus')) {
-      const count = document.querySelector('#count');
+      const count = document.querySelector('.write__input--capacity');
       if (count.value !== '99') {
         count.value = Number(count.value) + 1;
       }

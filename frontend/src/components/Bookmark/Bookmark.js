@@ -1,8 +1,8 @@
-import CustomComponent from '../CustomComponent';
 import './bookmark.scss';
 
-import markIcon from '../../assets/icons/bookmark.svg';
-import filledMarkIcon from '../../assets/icons/bookmark_filled.svg';
+import markIcon from '@assets/icons/bookmark.svg';
+import filledMarkIcon from '@assets/icons/bookmark_filled.svg';
+import CustomComponent from '../CustomComponent';
 
 export default class Bookmark extends CustomComponent {
   markup() {
