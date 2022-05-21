@@ -12,6 +12,7 @@ import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
 import { setPost, setTotal, setBasis, store } from '../../store/reducer';
 import { observe } from '../../store/observe';
 import { vDomToNode } from '../../utils/jsx-runtime';
+import WebRequestController from '../../router/WebRequestController';
 
 export default class MainPage extends CustomComponent {
   init() {
@@ -71,30 +72,41 @@ export default class MainPage extends CustomComponent {
   }
 
   async mounted() {
-    if (this.projectOrStudy === '/study') {
-      const {
-        data: { data },
-      } = await axiosInstance.get('/posts?category=study&page=1&perPage=30', {
-        withCredentials: true,
-      });
-      this.totalData = data;
-      this.basisData = data;
-      store.dispatch(setTotal(data));
-      store.dispatch(setBasis(data));
-      store.dispatch(setPost(store.getState().sortStandard(data)));
+    try {
+      if (this.projectOrStudy === '/study') {
+        const {
+          data: { data },
+        } = await axiosInstance.get('/posts?category=study&page=1&perPage=30', {
+          signal: WebRequestController.getController()?.signal,
+        });
+        this.totalData = data;
+        this.basisData = data;
+        store.dispatch(setTotal(data));
+        store.dispatch(setBasis(data));
+        store.dispatch(setPost(store.getState().sortStandard(data)));
+      }
+    } catch (e) {
+      console.log('요청이 취소되었습니다.');
     }
-    if (this.projectOrStudy === '/') {
-      const {
-        data: { data },
-      } = await axiosInstance.get('/posts?category=project&page=1&perPage=30', {
-        withCredentials: true,
-      });
-      this.totalData = data;
-      this.basisData = data;
+    try {
+      if (this.projectOrStudy === '/') {
+        const {
+          data: { data },
+        } = await axiosInstance.get(
+          '/posts?category=project&page=1&perPage=30',
+          {
+            withCredentials: true,
+          },
+        );
+        this.totalData = data;
+        this.basisData = data;
 
-      store.dispatch(setTotal(data));
-      store.dispatch(setBasis(data));
-      store.dispatch(setPost(store.getState().sortStandard(data)));
+        store.dispatch(setTotal(data));
+        store.dispatch(setBasis(data));
+        store.dispatch(setPost(store.getState().sortStandard(data)));
+      }
+    } catch (e) {
+      console.log('요청이 취소되었습니다.');
     }
   }
 
