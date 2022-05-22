@@ -17,6 +17,7 @@ import WebRequestController from '../../router/WebRequestController';
 export default class MainPage extends CustomComponent {
   init() {
     this.projectOrStudy = RouterContext.state.pathname;
+    this.loading = false;
   }
 
   skeletonCardRender() {
@@ -72,6 +73,8 @@ export default class MainPage extends CustomComponent {
   }
 
   async mounted() {
+    this.loading = true;
+
     try {
       if (this.projectOrStudy === '/study') {
         const {
@@ -104,6 +107,7 @@ export default class MainPage extends CustomComponent {
         store.dispatch(setTotal(data));
         store.dispatch(setBasis(data));
         store.dispatch(setPost(store.getState().sortStandard(data)));
+        this.loading = false;
       }
     } catch (e) {
       console.log('요청이 취소되었습니다.');
@@ -124,8 +128,8 @@ export default class MainPage extends CustomComponent {
     this.bannerRender();
     this.skeletonCardRender();
     this.MainFilterBar();
-
-    if (store.getState().post.length !== 0) this.cardRender();
+    console.log(this.loading);
+    if (store.getState().post.length !== 0 && !this.loading) this.cardRender();
   }
 
   render() {
