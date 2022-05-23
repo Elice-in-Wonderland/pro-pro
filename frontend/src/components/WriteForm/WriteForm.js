@@ -1,6 +1,7 @@
 import axiosInstance from '@utils/api';
 import { createPostCode } from '@utils/common';
 import checkForm from '@utils/validation';
+import { marked } from 'marked';
 import CustomComponent from '@/components/CustomComponent';
 import Toast from '@/components/Toast/Toast';
 import RouterContext from '@/router/RouterContext';
@@ -130,13 +131,20 @@ export default class WriteForm extends CustomComponent {
         </div>
         <div class="write__category write__category--2x">
           <h3 class="write__title">내용</h3>
-          <textarea
-            class="write__textarea"
-            name="content"
-            placeholder="내용을 입력하세요"
-          >
-            {content || ''}
-          </textarea>
+          <div class="write__markdown-wrapper">
+            <textarea
+              class="write__markdown write__markdown--input"
+              name="content"
+              placeholder="내용을 입력하세요"
+              onKeyUp={this.handleMarkdown}
+            >
+              {content || ''}
+            </textarea>
+            <section
+              class="write__markdown markdown-body write__markdown--output"
+              name="content"
+            ></section>
+          </div>
         </div>
         <div class="write__category write__category--2x write__category--btns">
           <input
@@ -151,6 +159,12 @@ export default class WriteForm extends CustomComponent {
           />
         </div>
       </div>
+    );
+  }
+
+  handleMarkdown() {
+    document.querySelector('.write__markdown--output').innerHTML = marked.parse(
+      document.querySelector('.write__markdown--input').value,
     );
   }
 
@@ -222,8 +236,7 @@ export default class WriteForm extends CustomComponent {
     }
 
     if (target.classList.contains('write__btn--cancel')) {
-      const { postId } = RouterContext.state.params;
-      RouterContext.state.push(`/detail/${postId}`);
+      RouterContext.state.push('/');
     }
 
     if (target.classList.contains('write__btn--edit')) {
@@ -234,7 +247,9 @@ export default class WriteForm extends CustomComponent {
           ? 'project'
           : 'study';
       const title = document.querySelector('.write__input--title').value;
-      const content = document.querySelector('.write__textarea').value;
+      const content = document.querySelector(
+        '.write__markdown--output',
+      ).innerHTML;
       const stacks = Array.from(document.querySelectorAll('.write__stack'))
         .filter(stack => stack.checked === true)
         .map(stack => stack.value);
