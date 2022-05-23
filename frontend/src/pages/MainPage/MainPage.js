@@ -17,7 +17,7 @@ import WebRequestController from '../../router/WebRequestController';
 export default class MainPage extends CustomComponent {
   init() {
     this.projectOrStudy = RouterContext.state.pathname;
-    this.loading = false;
+    this.state = { isLoading: true };
   }
 
   skeletonCardRender() {
@@ -62,10 +62,10 @@ export default class MainPage extends CustomComponent {
     new MainBanner({ container: banner });
   }
 
-  searchNoResultRender = () => {
-    const cardContainer = this.container.querySelector('.card-container');
+  searchNoResultRender() {
+    const cardContainer = this.container.querySelector('.main-cards');
     new SearchNotFound({ container: cardContainer });
-  };
+  }
 
   MainFilterBar() {
     const filterBar = this.container.querySelector('.main__filter');
@@ -73,7 +73,6 @@ export default class MainPage extends CustomComponent {
   }
 
   async mounted() {
-    this.loading = true;
 
     try {
       if (this.projectOrStudy === '/study') {
@@ -87,6 +86,7 @@ export default class MainPage extends CustomComponent {
         store.dispatch(setTotal(data));
         store.dispatch(setBasis(data));
         store.dispatch(setPost(store.getState().sortStandard(data)));
+        this.state = { ...this.state, isLoading: false };
       }
     } catch (e) {
       console.log('요청이 취소되었습니다.');
@@ -107,7 +107,7 @@ export default class MainPage extends CustomComponent {
         store.dispatch(setTotal(data));
         store.dispatch(setBasis(data));
         store.dispatch(setPost(store.getState().sortStandard(data)));
-        this.loading = false;
+        this.state = { ...this.state, isLoading: false };
       }
     } catch (e) {
       console.log('요청이 취소되었습니다.');
@@ -125,11 +125,18 @@ export default class MainPage extends CustomComponent {
   }
 
   renderCallback() {
-    this.bannerRender();
-    this.skeletonCardRender();
     this.MainFilterBar();
-    console.log(this.loading);
-    if (store.getState().post.length !== 0 && !this.loading) this.cardRender();
+
+    this.bannerRender();
+    if (this.state.isLoading) {
+      this.skeletonCardRender();
+    }
+    if (store.getState().post.length !== 0 && !this.state.isLoading) {
+      this.cardRender();
+    }
+    if (store.getState().post.length === 0 && !this.state.isLoading) {
+      this.searchNoResultRender();
+    }
   }
 
   render() {
