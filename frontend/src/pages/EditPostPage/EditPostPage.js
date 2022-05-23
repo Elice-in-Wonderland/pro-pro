@@ -1,5 +1,6 @@
 import axiosInstance from '@utils/api';
 import { createPostCode } from '@utils/common';
+import checkForm from '@utils/validation';
 import CustomComponent from '@/components/CustomComponent';
 import './editPostPage.scss';
 import { defaultStacks } from '@/library/Profile/index';
@@ -76,38 +77,6 @@ export default class EditPostPage extends CustomComponent {
     this.appendStack();
   }
 
-  // form validation
-  checkform(formData) {
-    if (formData.title.trim() === '') {
-      new Toast({
-        content: '제목을 입력하세요',
-        type: 'fail',
-      });
-      return false;
-    }
-    if (formData.executionPeriod[0] > formData.executionPeriod[1]) {
-      new Toast({
-        content: '수행 기간을 확인하세요',
-        type: 'fail',
-      });
-      return false;
-    }
-    if (formData.stacks.length === 0) {
-      new Toast({
-        content: '하나 이상의 기술 스택을 선택하세요',
-        type: 'fail',
-      });
-      return false;
-    }
-    if (formData.content.trim() === '') {
-      new Toast({
-        content: '내용을 입력하세요',
-        type: 'fail',
-      });
-      return false;
-    }
-  }
-
   markup() {
     if (this.state.isLoading) return Loading();
     const {
@@ -145,7 +114,7 @@ export default class EditPostPage extends CustomComponent {
               <input
                 type="text"
                 class="write__input address-result"
-                value={address}
+                value={address || ''}
                 readonly
               />
               <input
@@ -321,7 +290,7 @@ export default class EditPostPage extends CustomComponent {
         executionPeriod,
         registerDeadline,
       };
-      if (this.checkform(formData) !== false) {
+      if (checkForm(formData) !== false) {
         try {
           const { postId } = RouterContext.state.params;
           await axiosInstance.put(`/posts/${postId}`, formData, {
