@@ -127,7 +127,6 @@ export default class DetailPage extends CustomComponent {
       updatedAt,
       registerDeadline,
       views,
-      content,
     } = this.state;
 
     return (
@@ -183,7 +182,7 @@ export default class DetailPage extends CustomComponent {
         </main>
         <div class="detail__description-wrapper">
           <h3>프로젝트 소개</h3>
-          <p class="detail__post-description">{content}</p>
+          <div class="detail__post-description markdown-body"></div>
         </div>
         <div class="detail__map-wrapper">
           <h3>팀 미팅 지역</h3>
@@ -227,6 +226,8 @@ export default class DetailPage extends CustomComponent {
         this.editButtons.container,
       );
     }
+    this.container.querySelector('.detail__post-description').innerHTML =
+      this.state.content;
   }
 
   getMapImg() {
