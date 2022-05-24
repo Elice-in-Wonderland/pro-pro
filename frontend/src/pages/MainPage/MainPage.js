@@ -81,8 +81,6 @@ export default class MainPage extends CustomComponent {
         } = await axiosInstance.get('/posts?category=study&page=1&perPage=30', {
           signal: WebRequestController.getController()?.signal,
         });
-        this.totalData = data;
-        this.basisData = data;
         store.dispatch(setTotal(data));
         store.dispatch(setBasis(data));
         store.dispatch(setPost(store.getState().sortStandard(data)));
@@ -101,9 +99,6 @@ export default class MainPage extends CustomComponent {
             withCredentials: true,
           },
         );
-        this.totalData = data;
-        this.basisData = data;
-
         store.dispatch(setTotal(data));
         store.dispatch(setBasis(data));
         store.dispatch(setPost(store.getState().sortStandard(data)));
