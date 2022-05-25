@@ -118,6 +118,10 @@ export default class MainFilterBar extends CustomComponent {
       }
     };
 
+    const removeSkillStackFilter = () => {
+      store.dispatch(setFilter([]));
+    };
+
     skillIcon.addEventListener('click', e => {
       if (e.target?.nodeName !== 'IMG') return;
       const filterStack = store.getState().filterStacks;
@@ -168,6 +172,8 @@ export default class MainFilterBar extends CustomComponent {
     });
 
     const searchEventHandler = () => {
+      removeSkillStackFilter();
+
       if (!searchInput.value) {
         return;
       }
