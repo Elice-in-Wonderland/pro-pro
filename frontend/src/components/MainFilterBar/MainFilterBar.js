@@ -177,13 +177,12 @@ export default class MainFilterBar extends CustomComponent {
       if (!searchInput.value) {
         return;
       }
-      const searchList = store.getState().post.filter(character => {
+      const searchList = store.getState().basisData.filter(character => {
         return character.title.includes(searchInput.value);
       });
       if (searchList.length === 0) {
         store.dispatch(setPost([]));
         searchInput.value = null;
-        this.searchNoResultRender();
         return;
       }
       store.dispatch(setPost(searchList));
