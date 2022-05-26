@@ -1,9 +1,9 @@
-import CustomComponent from '../CustomComponent';
 import './editButtons.scss';
-import axiosInstance from '../../utils/api';
-import RouterContext from '../../router/RouterContext';
+import axiosInstance from '@utils/api';
+import { addEvent } from '@utils/dom';
+import CustomComponent from '../CustomComponent';
+import RouterContext from '@/router/RouterContext';
 import Toast from '../Toast/Toast';
-import { addEvent } from '../../utils/dom';
 
 export default class EditButtons extends CustomComponent {
   renderCallback() {

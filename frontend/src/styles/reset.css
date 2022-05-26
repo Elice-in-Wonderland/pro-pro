@@ -108,9 +108,9 @@ section {
 body {
   line-height: 1;
 }
-ol,
-ul,
-li {
+ol:not(.markdown-body ol),
+ul:not(.markdown-body ul),
+li:not(.markdown-body li) {
   list-style: none;
 }
 blockquote,

@@ -12,8 +12,7 @@ class Router {
 
   route() {
     const currentPath = RouterContext.state.pathname.slice(1).split('/');
-    const { path, Component, loginRequired } =
-      this.matchUrlToRoute(currentPath);
+    const { Component, loginRequired } = this.matchUrlToRoute(currentPath);
 
     const next = isAllowedRoute(loginRequired);
     if (!next) return this.replace('/');
@@ -23,23 +22,7 @@ class Router {
       WebRequestController.resetController();
     }
 
-    // REMOVE: 모든 페이지 바뀌기전까지 임시 라우팅----------
-    if (
-      path === '/' ||
-      path === '/study' ||
-      path === '/detail/:postId' ||
-      path === '/bookmark' ||
-      path === '/profile' ||
-      path === '/NotFound' ||
-      path === '/write'    ||
-      path === '/recommend'
-    ) {
-      new Component({ container: this.container });
-      return;
-    }
-    // REMOVE: 모든 페이지 바뀌기전까지 임시 라우팅-------------
-
-    new Component(this.container);
+    new Component({ container: this.container });
   }
 
   matchUrlToRoute(currentPath) {
