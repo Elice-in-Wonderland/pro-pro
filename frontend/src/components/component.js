@@ -1,45 +1,44 @@
+import { vDomToNode } from '../utils/jsx-runtime';
+
 class Component {
-  $dom;
-
-  props;
-
-  state;
-
-  constructor(props) {
+  constructor({ container, props }) {
+    this.container = container;
     this.props = props;
+
+    this.init();
+    this.render();
+    this.mounted();
+    this.setEvent();
   }
 
-  setState = nextState => {
+  init() {}
+
+  mounted() {}
+
+  setState(nextState) {
     this.state = nextState;
     this.render();
-  };
+  }
 
-  createDom = (tagName, attrs) => {
-    const $dom = document.createElement(tagName);
-    for (const [key, value] of Object.entries(attrs)) {
-      $dom[key] = value;
-    }
-    return $dom;
-  };
+  render() {
+    const vDOM = this.markup();
 
-  replaceElement = ($old, $new) => {
-    $old.parentElement.replaceChild($new, $old);
-  };
-
-  appendRoot = ($root, $new, isNav = false) => {
-    if (isNav) {
-      if ($root.childNodes[0]) $root.replaceChild($new, $root.childNodes[0]);
-      else $root.appendChild($new);
-      return;
+    // TODO: JSX관련해서 수정되면 제거
+    if (typeof vDOM === 'string') this.container.innerHTML = vDOM;
+    else {
+      const fragment = new DocumentFragment();
+      vDomToNode(vDOM, fragment);
+      this.container?.replaceChildren(fragment);
     }
 
-    if ($root.childNodes[1]) $root.replaceChild($new, $root.childNodes[1]);
-    else $root.appendChild($new);
-  };
+    this.renderCallback();
+  }
 
-  addEvent = () => {};
+  markup() {}
 
-  render = () => {};
+  renderCallback() {}
+
+  setEvent() {}
 }
 
 export default Component;

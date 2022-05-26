@@ -15,10 +15,10 @@ import {
   typescript,
   vue,
 } from '@assets/icons';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import './skillStacksFilter.scss';
 
-export default class SkillStacksFilter extends CustomComponent {
+export default class SkillStacksFilter extends Component {
   markup() {
     return <div class="skill__icon"></div>;
   }

@@ -1,9 +1,9 @@
-import CustomComponent from '../../components/CustomComponent';
+import Component from '../../components/Component';
 import img404 from '../../assets/images/img-404.svg';
 import './notFoundPage.scss';
 
 // TODO: 리팩토링 및 개선점 찾아보기
-export default class NotFoundPage extends CustomComponent {
+export default class NotFoundPage extends Component {
   markup() {
     return (
       <div class="wrapper-notfound">

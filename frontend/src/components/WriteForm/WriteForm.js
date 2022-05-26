@@ -2,13 +2,13 @@ import axiosInstance from '@utils/api';
 import { createPostCode } from '@utils/common';
 import checkForm from '@utils/validation';
 import { marked } from 'marked';
-import CustomComponent from '@/components/CustomComponent';
+import Component from '@/components/Component';
 import Toast from '@/components/Toast/Toast';
 import RouterContext from '@/router/RouterContext';
 import { defaultStacks } from '@/library/Profile/index';
 import './WriteForm.scss';
 
-export default class WriteForm extends CustomComponent {
+export default class WriteForm extends Component {
   init() {
     this.region = this.props.region;
   }

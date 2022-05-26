@@ -1,10 +1,10 @@
 import { state, removeState, removeToken } from '@utils/store';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import RouterContext from '../../router/RouterContext';
 import { defaultProfileImage } from '../../library/Profile';
 import './dropdown.scss';
 
-export default class Dropdown extends CustomComponent {
+export default class Dropdown extends Component {
   init() {
     this.toggleDropdown = this.toggleDropdown.bind(this);
     this.handleDropdownContent = this.handleDropdownContent.bind(this);

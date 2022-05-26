@@ -1,6 +1,6 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 
-class SelectorBox extends CustomComponent {
+class SelectorBox extends Component {
   markup() {
     const { id, items, defaultOption, selectedItem } = this.props;
 

@@ -3,7 +3,7 @@ import axiosInstance from '@utils/api';
 import { state as userState } from '@utils/store';
 import { createDom, replaceElement } from '@utils/dom';
 import { view } from '@assets/icons';
-import CustomComponent from '@/components/CustomComponent';
+import Component from '@/components/Component';
 import './detailPage.scss';
 
 import Stacks from '@/components/Stacks/Stacks';
@@ -18,7 +18,7 @@ import Loading from '@/components/Loading/Loading';
 import Toast from '@/components/Toast/Toast';
 import WebRequestController from '@/router/WebRequestController';
 
-export default class DetailPage extends CustomComponent {
+export default class DetailPage extends Component {
   init() {
     this.state = {
       isLoading: true,

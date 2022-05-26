@@ -1,7 +1,7 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import './stacks.scss';
 
-export default class Stacks extends CustomComponent {
+export default class Stacks extends Component {
   markup() {
     const { stacks } = this.props;
     return (

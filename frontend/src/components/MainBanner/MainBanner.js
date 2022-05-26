@@ -1,7 +1,7 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import './mainBanner.scss';
 
-export default class MainBanner extends CustomComponent {
+export default class MainBanner extends Component {
   markup() {
     return (
       <div class="banner__content">

@@ -16,7 +16,7 @@ import {
   vue,
 } from '@assets/icons';
 import { defaultStacks } from '@/library/Profile';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 
 const stackSvg = [
   cpp,
@@ -35,7 +35,7 @@ const stackSvg = [
   vue,
 ];
 
-export default class PostBanner extends CustomComponent {
+export default class PostBanner extends Component {
   init() {
     this.state = {
       stackSrc: [],

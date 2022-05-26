@@ -1,5 +1,5 @@
 import { searchIcon } from '@assets/icons';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import SkillStacksFilter from '../SkillStacksFilter/SkillStacksFilter';
 import {
   availFilter,
@@ -17,7 +17,7 @@ import {
 } from '../../store/reducer';
 import './MainFilter.scss';
 
-export default class MainFilterBar extends CustomComponent {
+export default class MainFilterBar extends Component {
   skillStackRender() {
     const skillsBar = this.container.querySelector('.main__filter-skills');
     new SkillStacksFilter({ container: skillsBar });

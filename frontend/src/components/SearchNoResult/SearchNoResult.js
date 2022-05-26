@@ -1,8 +1,8 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import './searchNoResult.scss';
 import noResult from '../../assets/images/no-result-img.svg';
 
-export default class SearchNoResult extends CustomComponent {
+export default class SearchNoResult extends Component {
   markup() {
     return (
       <div class="no-result">

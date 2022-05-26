@@ -5,12 +5,12 @@ import {
   defaultSigungu,
   defaultStacks,
 } from '../../library/Profile';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import SelectorBox from './SelectorBox';
 import StackCheckBoxes from './StackCheckBoxes';
 import './form.scss';
 
-class Form extends CustomComponent {
+class Form extends Component {
   init() {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleStackChange = this.handleStackChange.bind(this);
