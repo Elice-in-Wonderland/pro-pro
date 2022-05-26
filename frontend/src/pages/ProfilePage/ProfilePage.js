@@ -11,6 +11,10 @@ import { isCanceledRequest } from '../../utils/common';
 
 export default class ProfilePage extends CustomComponent {
   init() {
+    this.state = {
+      isLoadFailed: false,
+    };
+
     this.nonReRenderState = {
       current: {
         nickname: '',

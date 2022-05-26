@@ -66,22 +66,13 @@ class Form extends CustomComponent {
         </div>
 
         <div class="profile-edit__form__item">
-          {this.props.isLoadFailed ? (
-            <button
-              class="profile-edit__form__btn profile-edit__form__btn--submit"
-              aria-label="프로필 수정"
-              disabled
-            >
-              <span>수정 불가능</span>
-            </button>
-          ) : (
-            <button
-              class="profile-edit__form__btn profile-edit__form__btn--submit"
-              aria-label="프로필 수정"
-            >
-              <span>수정 완료</span>
-            </button>
-          )}
+          <button
+            class="profile-edit__form__btn profile-edit__form__btn--submit"
+            aria-label="프로필 수정"
+            disabled={this.props.isLoadFailed}
+          >
+            <span>수정 완료</span>
+          </button>
         </div>
       </form>
     );
