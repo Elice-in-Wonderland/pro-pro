@@ -4,7 +4,10 @@ import Card from '../../components/Card/Card';
 import RecommendNoResult from '../../components/RecommendNoResult/RecommendNoResult';
 import './recommendPage.scss';
 import { createDom, replaceElement } from '../../utils/dom';
+import Toast from '../../components/Toast/Toast';
 import Loading from '../../components/Loading/Loading';
+import WebRequestController from '../../router/WebRequestController';
+import { isCanceledRequest } from '../../utils/common';
 
 export default class RecommendPage extends CustomComponent {
   init() {
@@ -12,16 +15,20 @@ export default class RecommendPage extends CustomComponent {
   }
 
   async mounted() {
-    await axiosInstance
-      .get('/posts/recommendation/me', {
-        withCredentials: true,
-      })
-      .then(res => {
-        return res.data.data;
-      })
-      .then(cards => {
-        this.setState({ ...this.state, isLoading: false, cards });
+    try {
+      const {
+        data: { data },
+      } = await axiosInstance.get('/posts/recommendation/me', {
+        signal: WebRequestController.getController()?.signal,
       });
+
+      const cards = data;
+
+      this.setState({ ...this.state, isLoading: false, cards });
+    } catch (e) {
+      if (isCanceledRequest(e)) return;
+      new Toast({ content: '추천 정보 불러오기 실패', type: 'fail' });
+    }
   }
 
   markup() {

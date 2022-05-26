@@ -2,7 +2,7 @@ import CustomComponent from '../CustomComponent';
 import viewImage from '../../assets/icons/view.svg';
 import bookmarkImage from '../../assets/icons/bookmark.svg';
 import PostBanner from '../PostBanner/PostBanner';
-import './Card.scss';
+import './card.scss';
 import RouterContext from '../../router/RouterContext';
 import { shortSido } from '../../library/MainPage/index';
 import { createDom, replaceElement } from '../../utils/dom';
