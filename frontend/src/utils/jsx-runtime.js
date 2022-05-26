@@ -20,13 +20,13 @@ function jsx(type, attributes, ...children) {
   };
 }
 
-export function vDomToNode(vDOM, container, oldDOM) {
+export function vDomToNode(vDOM, container) {
   if (vDOM == null) return;
 
-  originNode(vDOM, container, oldDOM);
+  originNode(vDOM, container);
 }
 
-function originNode(vDOM, container, oldDOM) {
+function originNode(vDOM, container) {
   let newNode = null;
 
   if (vDOM.type === 'TEXT_NODE') {
@@ -58,8 +58,13 @@ function updateNode(newNode, vDOM) {
       return;
     }
 
+    if (isBooleanAttribute(key) && value === false) return;
+
     newNode.setAttribute(key, value);
   });
 }
+
+const isBooleanAttribute = attr =>
+  attr === 'disabled' || attr === 'checked' || attr === 'selected';
 
 export default jsx;
