@@ -16,7 +16,8 @@ import WebRequestController from '../../router/WebRequestController';
 
 export default class MainPage extends CustomComponent {
   init() {
-    this.projectOrStudy = RouterContext.state.pathname;
+    this.projectOrStudy =
+      RouterContext.state.pathname === '/' ? 'project' : 'study';
     this.state = { isLoading: true };
   }
 
@@ -73,37 +74,19 @@ export default class MainPage extends CustomComponent {
   }
 
   async mounted() {
-
     try {
-      if (this.projectOrStudy === '/study') {
-        const {
-          data: { data },
-        } = await axiosInstance.get('/posts?category=study&page=1&perPage=30', {
+      const {
+        data: { data },
+      } = await axiosInstance.get(
+        `/posts?category=${this.projectOrStudy}&page=1&perPage=30`,
+        {
           signal: WebRequestController.getController()?.signal,
-        });
-        store.dispatch(setTotal(data));
-        store.dispatch(setBasis(data));
-        store.dispatch(setPost(store.getState().sortStandard(data)));
-        this.state = { ...this.state, isLoading: false };
-      }
-    } catch (e) {
-      console.log('요청이 취소되었습니다.');
-    }
-    try {
-      if (this.projectOrStudy === '/') {
-        const {
-          data: { data },
-        } = await axiosInstance.get(
-          '/posts?category=project&page=1&perPage=30',
-          {
-            withCredentials: true,
-          },
-        );
-        store.dispatch(setTotal(data));
-        store.dispatch(setBasis(data));
-        store.dispatch(setPost(store.getState().sortStandard(data)));
-        this.state = { ...this.state, isLoading: false };
-      }
+        },
+      );
+      store.dispatch(setTotal(data));
+      store.dispatch(setBasis(data));
+      store.dispatch(setPost(store.getState().sortStandard(data)));
+      this.state = { ...this.state, isLoading: false };
     } catch (e) {
       console.log('요청이 취소되었습니다.');
     }
