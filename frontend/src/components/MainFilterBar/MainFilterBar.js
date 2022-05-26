@@ -62,27 +62,27 @@ export default class MainFilterBar extends CustomComponent {
       <div>
         <section class="main__filter-skills"></section>
         <section class="main__filter-btn">
-          <article class="main__filter-sort">
+          <div class="main__filter-sort">
             <button type="button" class="main__filter-recent">
               최신순
             </button>
             <button type="button" class="main__filter-populate">
               인기순
             </button>
-          </article>
+          </div>
 
           <div class="main__search">
             <input aria-label="검색" type="text" class="main__search-input" />
             <img src={searchIcon} alt="search image" class="main__search-btn" />
           </div>
-          <article class="main__filter-basis">
+          <div class="main__filter-basis">
             <button type="button" class="main__filter-entire activated">
               전체 글
             </button>
             <button type="button" class="main__filter-avail">
               모집중인 글
             </button>
-          </article>
+          </div>
         </section>
       </div>
     );
