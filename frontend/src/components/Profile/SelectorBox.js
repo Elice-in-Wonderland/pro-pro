@@ -13,15 +13,11 @@ class SelectorBox extends CustomComponent {
         <option value="" selected disabled hidden>
           {defaultOption}
         </option>
-        {items.map(item =>
-          item === selectedItem ? (
-            <option value={item} selected>
-              {item}
-            </option>
-          ) : (
-            <option value={item}>{item}</option>
-          ),
-        )}
+        {items.map(item => (
+          <option value={item} selected={item === selectedItem}>
+            {item}
+          </option>
+        ))}
       </select>
     );
   }

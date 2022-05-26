@@ -69,6 +69,7 @@ class Form extends CustomComponent {
           <button
             class="profile-edit__form__btn profile-edit__form__btn--submit"
             aria-label="프로필 수정"
+            disabled={this.props.isLoadFailed}
           >
             <span>수정 완료</span>
           </button>
