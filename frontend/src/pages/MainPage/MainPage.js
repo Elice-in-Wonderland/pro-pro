@@ -4,7 +4,6 @@ import './mainPage.scss';
 import { createDom } from '../../utils/dom';
 import Card from '../../components/Card/Card';
 import SearchNotFound from '../../components/SearchNoResult/SearchNoResult';
-import SkillStacksFilter from '../../components/SkillStacksFilter/SkillStacksFilter';
 import MainBanner from '../../components/MainBanner/MainBanner';
 import MainFilterBar from '../../components/MainFilterBar/MainFilterBar';
 import axiosInstance from '../../utils/api';
@@ -13,10 +12,13 @@ import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
 import { setPost, setTotal, setBasis, store } from '../../store/reducer';
 import { observe } from '../../store/observe';
 import { vDomToNode } from '../../utils/jsx-runtime';
+import WebRequestController from '../../router/WebRequestController';
 
 export default class MainPage extends CustomComponent {
   init() {
-    this.projectOrStudy = RouterContext.state.pathname;
+    this.projectOrStudy =
+      RouterContext.state.pathname === '/' ? 'project' : 'study';
+    this.state = { isLoading: true };
   }
 
   skeletonCardRender() {
@@ -42,26 +44,18 @@ export default class MainPage extends CustomComponent {
     cardContainer.innerHTML = '';
     const fragment = document.createDocumentFragment();
 
-    store
-      .getState()
-      .sortStandard(store.getState().post)
-      .forEach(el => {
-        const cardWrapper = createDom('div', {
-          className: 'card-wrapper',
-        });
-
-        new Card({
-          container: cardWrapper,
-          props: { post: el },
-        });
-        fragment.appendChild(cardWrapper);
+    store.getState().post.forEach(el => {
+      const cardWrapper = createDom('div', {
+        className: 'card-wrapper',
       });
-    cardContainer.appendChild(fragment);
-  }
 
-  skillStackRender() {
-    const skillsBar = this.container.querySelector('.main__skills');
-    new SkillStacksFilter({ container: skillsBar });
+      new Card({
+        container: cardWrapper,
+        props: { post: el },
+      });
+      fragment.appendChild(cardWrapper);
+    });
+    cardContainer.appendChild(fragment);
   }
 
   bannerRender() {
@@ -69,41 +63,32 @@ export default class MainPage extends CustomComponent {
     new MainBanner({ container: banner });
   }
 
-  searchNoResultRender = () => {
-    const cardContainer = this.container.querySelector('.card-container');
+  searchNoResultRender() {
+    const cardContainer = this.container.querySelector('.main-cards');
     new SearchNotFound({ container: cardContainer });
-  };
+  }
 
   MainFilterBar() {
-    const filterBar = this.container.querySelector('.main__filter-bar');
+    const filterBar = this.container.querySelector('.main__filter');
     new MainFilterBar({ container: filterBar });
   }
 
   async mounted() {
-    if (this.projectOrStudy === '/study') {
+    try {
       const {
         data: { data },
-      } = await axiosInstance.get('/posts?category=study&page=1&perPage=30', {
-        withCredentials: true,
-      });
-      this.totalData = data;
-      this.basisData = data;
+      } = await axiosInstance.get(
+        `/posts?category=${this.projectOrStudy}&page=1&perPage=30`,
+        {
+          signal: WebRequestController.getController()?.signal,
+        },
+      );
       store.dispatch(setTotal(data));
       store.dispatch(setBasis(data));
       store.dispatch(setPost(store.getState().sortStandard(data)));
-    }
-    if (this.projectOrStudy === '/') {
-      const {
-        data: { data },
-      } = await axiosInstance.get('/posts?category=project&page=1&perPage=30', {
-        withCredentials: true,
-      });
-      this.totalData = data;
-      this.basisData = data;
-
-      store.dispatch(setTotal(data));
-      store.dispatch(setBasis(data));
-      store.dispatch(setPost(store.getState().sortStandard(data)));
+      this.state = { ...this.state, isLoading: false };
+    } catch (e) {
+      console.log('요청이 취소되었습니다.');
     }
   }
 
@@ -111,19 +96,25 @@ export default class MainPage extends CustomComponent {
     return (
       <div class="main">
         <section class="main__banner"></section>
-        <section class="main__skills"></section>
-        <section class="main__filter-bar"></section>
+        <section class="main__filter"></section>
         <section class="main-cards"></section>
       </div>
     );
   }
 
   renderCallback() {
-    this.bannerRender();
-    this.skeletonCardRender();
     this.MainFilterBar();
 
-    if (store.getState().post.length !== 0) this.cardRender();
+    this.bannerRender();
+    if (this.state.isLoading) {
+      this.skeletonCardRender();
+    }
+    if (store.getState().post.length !== 0 && !this.state.isLoading) {
+      this.cardRender();
+    }
+    if (store.getState().post.length === 0 && !this.state.isLoading) {
+      this.searchNoResultRender();
+    }
   }
 
   render() {

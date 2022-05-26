@@ -27,7 +27,7 @@ export const toggleButton = (activated, deactivated) => {
   deactivated.classList.remove('activated');
 };
 
-export function debounce(eventHandlerFunc, leading = true) {
+export function debounce(eventHandlerFunc, leading = false) {
   let inDebounce;
   return (...args) => {
     const context = this;

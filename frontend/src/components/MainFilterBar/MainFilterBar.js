@@ -15,10 +15,11 @@ import {
   setFilter,
   store,
 } from '../../store/reducer';
+import './MainFilter.scss';
 
 export default class MainFilterBar extends CustomComponent {
   skillStackRender() {
-    const skillsBar = this.container.querySelector('.main__skills');
+    const skillsBar = this.container.querySelector('.main__filter-skills');
     new SkillStacksFilter({ container: skillsBar });
   }
 
@@ -59,24 +60,29 @@ export default class MainFilterBar extends CustomComponent {
   markup() {
     return (
       <div>
-        <section class="main__skills"></section>
-        <section class="main__filter">
-          <button type="button" class="main__filter-recent">
-            최신순
-          </button>
-          <button type="button" class="main__filter-populate">
-            인기순
-          </button>
+        <section class="main__filter-skills"></section>
+        <section class="main__filter-btn">
+          <div class="main__filter-sort">
+            <button type="button" class="main__filter-recent">
+              최신순
+            </button>
+            <button type="button" class="main__filter-populate">
+              인기순
+            </button>
+          </div>
+
           <div class="main__search">
             <input aria-label="검색" type="text" class="main__search-input" />
             <img src={searchIcon} alt="search image" class="main__search-btn" />
           </div>
-          <button type="button" class="main__filter-entire activated">
-            전체 글
-          </button>
-          <button type="button" class="main__filter-avail">
-            모집중인 글
-          </button>
+          <div class="main__filter-basis">
+            <button type="button" class="main__filter-entire activated">
+              전체 글
+            </button>
+            <button type="button" class="main__filter-avail">
+              모집중인 글
+            </button>
+          </div>
         </section>
       </div>
     );
@@ -112,6 +118,10 @@ export default class MainFilterBar extends CustomComponent {
       }
     };
 
+    const removeSkillStackFilter = () => {
+      store.dispatch(setFilter([]));
+    };
+
     skillIcon.addEventListener('click', e => {
       if (e.target?.nodeName !== 'IMG') return;
       const filterStack = store.getState().filterStacks;
@@ -133,10 +143,12 @@ export default class MainFilterBar extends CustomComponent {
 
     populate.addEventListener('click', () => {
       store.dispatch(setSort(populateSort));
+      store.dispatch(setPost(populateSort([...store.getState().post])));
     });
 
     recent.addEventListener('click', () => {
       store.dispatch(setSort(recentSort));
+      store.dispatch(setPost(recentSort([...store.getState().post])));
     });
 
     entirePost.addEventListener('click', () => {
@@ -160,16 +172,17 @@ export default class MainFilterBar extends CustomComponent {
     });
 
     const searchEventHandler = () => {
+      removeSkillStackFilter();
+
       if (!searchInput.value) {
         return;
       }
-      const searchList = store.getState().post.filter(character => {
+      const searchList = store.getState().basisData.filter(character => {
         return character.title.includes(searchInput.value);
       });
       if (searchList.length === 0) {
         store.dispatch(setPost([]));
         searchInput.value = null;
-        this.searchNoResultRender();
         return;
       }
       store.dispatch(setPost(searchList));
