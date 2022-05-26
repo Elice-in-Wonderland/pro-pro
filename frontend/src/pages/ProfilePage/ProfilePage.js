@@ -3,13 +3,13 @@ import { createDom } from '@utils/dom';
 import { updateUserInfo } from '@utils/auth';
 import Toast from '../../components/Toast/Toast';
 import RouterContext from '../../router/RouterContext';
-import CustomComponent from '../../components/CustomComponent';
+import Component from '../../components/Component';
 import Form from '../../components/Profile/Form';
 import './profilePage.scss';
 import WebRequestController from '../../router/WebRequestController';
 import { isCanceledRequest } from '../../utils/common';
 
-export default class ProfilePage extends CustomComponent {
+export default class ProfilePage extends Component {
   init() {
     this.state = {
       isLoadFailed: false,

@@ -1,9 +1,9 @@
 import './bookmark.scss';
 
 import { bookmark, bookmarkFilled } from '../../assets/icons';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 
-export default class Bookmark extends CustomComponent {
+export default class Bookmark extends Component {
   markup() {
     const { isMyBookmark, marks } = this.props;
     return (

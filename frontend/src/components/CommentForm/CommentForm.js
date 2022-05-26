@@ -1,7 +1,7 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import './commentForm.scss';
 
-export default class CommentForm extends CustomComponent {
+export default class CommentForm extends Component {
   markup() {
     const { userType } = this.props;
     return userType === 'loggedUser' || userType === 'author'

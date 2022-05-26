@@ -1,7 +1,7 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import './comments.scss';
 
-export default class Comments extends CustomComponent {
+export default class Comments extends Component {
   markup() {
     const { comments } = this.props;
     return (

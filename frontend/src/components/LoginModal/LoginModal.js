@@ -2,12 +2,12 @@ import proproLogo from '@assets/images/pro-pro.png';
 import xButton from '@assets/images/x-button.svg';
 import { parseJwt } from '@utils/common';
 import { requestLogin } from '@utils/auth';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import Toast from '../Toast/Toast';
 import { defaultProfileImage } from '../../library/Profile';
 import './loginModal.scss';
 
-export default class LoginModal extends CustomComponent {
+export default class LoginModal extends Component {
   init() {
     this.showModal = this.showModal.bind(this);
     this.hiddenModal = this.hiddenModal.bind(this);

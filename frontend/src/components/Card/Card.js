@@ -1,12 +1,12 @@
 import { view, bookmark } from '@assets/icons';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import PostBanner from '../PostBanner/PostBanner';
 import './card.scss';
 import RouterContext from '../../router/RouterContext';
 import { shortSido } from '../../library/MainPage/index';
 import { createDom, replaceElement } from '../../utils/dom';
 
-export default class Card extends CustomComponent {
+export default class Card extends Component {
   init() {
     this.state = {
       type: this.props.type,

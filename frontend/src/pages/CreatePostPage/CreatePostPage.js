@@ -1,7 +1,7 @@
-import CustomComponent from '@/components/CustomComponent';
+import Component from '@/components/Component';
 import WriteForm from '../../components/WriteForm/WriteForm';
 
-export default class CreatePostPage extends CustomComponent {
+export default class CreatePostPage extends Component {
   markup() {
     return <div class="write"></div>;
   }

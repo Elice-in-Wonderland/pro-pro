@@ -1,12 +1,12 @@
 import axiosInstance from '@utils/api';
-import CustomComponent from '@/components/CustomComponent';
+import Component from '@/components/Component';
 import WebRequestController from '@/router/WebRequestController';
 
 import Loading from '@/components/Loading/Loading';
 import RouterContext from '@/router/RouterContext';
 import WriteForm from '../../components/WriteForm/WriteForm';
 
-export default class EditPostPage extends CustomComponent {
+export default class EditPostPage extends Component {
   init() {
     this.state = {
       isLoading: true,

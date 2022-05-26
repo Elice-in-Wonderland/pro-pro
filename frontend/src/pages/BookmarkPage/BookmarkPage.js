@@ -1,14 +1,14 @@
 import axiosInstance from '../../utils/api';
 import Card from '../../components/Card/Card';
 import './bookmarkPage.scss';
-import CustomComponent from '../../components/CustomComponent';
+import Component from '../../components/Component';
 import { createDom } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
 import Loading from '../../components/Loading/Loading';
 import WebRequestController from '../../router/WebRequestController';
 import { isCanceledRequest } from '../../utils/common';
 
-export default class BookmarkPage extends CustomComponent {
+export default class BookmarkPage extends Component {
   init() {
     this.state = { isLoading: true, cards: [] };
   }

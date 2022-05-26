@@ -1,5 +1,5 @@
 import axiosInstance from '../../utils/api';
-import CustomComponent from '../../components/CustomComponent';
+import Component from '../../components/Component';
 import Card from '../../components/Card/Card';
 import RecommendNoResult from '../../components/RecommendNoResult/RecommendNoResult';
 import './recommendPage.scss';
@@ -9,7 +9,7 @@ import Loading from '../../components/Loading/Loading';
 import WebRequestController from '../../router/WebRequestController';
 import { isCanceledRequest } from '../../utils/common';
 
-export default class RecommendPage extends CustomComponent {
+export default class RecommendPage extends Component {
   init() {
     this.state = { isLoading: true, cards: [] };
   }

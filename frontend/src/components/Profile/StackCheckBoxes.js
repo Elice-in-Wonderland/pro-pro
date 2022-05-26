@@ -1,6 +1,6 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 
-export default class StackCheckBoxes extends CustomComponent {
+export default class StackCheckBoxes extends Component {
   markup() {
     const { stacks, selectedStacks } = this.props;
 
