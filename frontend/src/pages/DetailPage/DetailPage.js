@@ -2,7 +2,7 @@ import { createMap } from '@utils/common';
 import axiosInstance from '@utils/api';
 import { state as userState } from '@utils/store';
 import { createDom, replaceElement } from '@utils/dom';
-import viewIcon from '@assets/icons/view.svg';
+import { view } from '@assets/icons';
 import CustomComponent from '@/components/CustomComponent';
 import './detailPage.scss';
 
@@ -172,7 +172,7 @@ export default class DetailPage extends CustomComponent {
               </li>
               <li class="detail__info">
                 <div class="detail__view-wrapper">
-                  <img class="detail__view-image" src={viewIcon} />
+                  <img class="detail__view-image" src={view} />
                   <span class="detail__view-count">{views}</span>
                 </div>
                 <div class="detail__bookmark-wrapper"></div>

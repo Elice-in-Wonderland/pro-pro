@@ -1,5 +1,5 @@
+import { searchIcon } from '@assets/icons';
 import CustomComponent from '../CustomComponent';
-import searchIcon from '../../assets/icons/search-icon.svg';
 import SkillStacksFilter from '../SkillStacksFilter/SkillStacksFilter';
 import {
   availFilter,
