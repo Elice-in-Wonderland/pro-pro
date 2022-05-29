@@ -2,6 +2,7 @@
 
 .profile-edit__form {
   display: flex;
+  flex-direction: column;
 
   &__item {
     display: flex;
@@ -25,7 +26,7 @@
     width: 157px;
     height: 157px;
     border-radius: 50%;
-    margin-bottom: 70px;
+    margin-bottom: 50px;
 
     box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.19);
   }

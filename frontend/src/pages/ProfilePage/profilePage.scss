@@ -20,17 +20,3 @@ $nav-mobile-height: 60px;
     margin-top: $nav-mobile-height;
   }
 }
-
-// TODO: class 충돌
-#root {
-  padding-bottom: 0;
-}
-body main .form {
-  margin: 0;
-  padding: 0;
-}
-body main .form div {
-  margin: 0;
-}
-// TODO: class 충돌
-
