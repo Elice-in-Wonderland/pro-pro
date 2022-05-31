@@ -247,9 +247,7 @@ export default class WriteForm extends Component {
           ? 'project'
           : 'study';
       const title = document.querySelector('.write__input--title').value;
-      const content = document.querySelector(
-        '.write__markdown--output',
-      ).innerHTML;
+      const content = document.querySelector('.write__markdown--input').value;
       const stacks = Array.from(document.querySelectorAll('.write__stack'))
         .filter(stack => stack.checked === true)
         .map(stack => stack.value);
