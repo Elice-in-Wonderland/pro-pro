@@ -1,3 +1,4 @@
+import { marked } from 'marked';
 import { createMap } from '@utils/common';
 import axiosInstance from '@utils/api';
 import { state as userState } from '@utils/store';
@@ -227,7 +228,7 @@ export default class DetailPage extends Component {
       );
     }
     this.container.querySelector('.detail__post-description').innerHTML =
-      this.state.content;
+      marked.parse(this.state.content);
   }
 
   getMapImg() {
