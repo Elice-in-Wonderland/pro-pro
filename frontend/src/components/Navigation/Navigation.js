@@ -7,6 +7,7 @@ import Dropdown from '../Dropdown/Dropdown';
 import LoginModal from '../LoginModal/LoginModal';
 import RouterContext from '../../router/RouterContext';
 import './navigation.scss';
+import { getPathname } from '../../router/utils';
 
 export default class Navigation extends Component {
   init() {
@@ -184,6 +185,7 @@ export default class Navigation extends Component {
 
   handleLogin() {
     this.setState({ ...this.state, loginState: true });
-    RouterContext.state.reload();
+
+    RouterContext.state.push(getPathname());
   }
 }
