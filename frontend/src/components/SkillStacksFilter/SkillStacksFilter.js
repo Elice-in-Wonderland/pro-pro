@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import cpp from '../../assets/icons/cpp.svg';
 import django from '../../assets/icons/django-icon.svg';
 import flutter from '../../assets/icons/flutter.svg';
@@ -16,7 +16,7 @@ import typescript from '../../assets/icons/typescript.svg';
 import vue from '../../assets/icons/vue.svg';
 import './skillStacksFilter.scss';
 
-export default class SkillStacksFilter extends CustomComponent {
+export default class SkillStacksFilter extends Component {
   markup() {
     return <div class="skill__icon"></div>;
   }

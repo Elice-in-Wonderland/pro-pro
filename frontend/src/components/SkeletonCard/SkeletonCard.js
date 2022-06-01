@@ -1,7 +1,7 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import './skeletonCard.scss';
 
-export default class SkeletonCard extends CustomComponent {
+export default class SkeletonCard extends Component {
   markup() {
     return (
       <div class="card-body">

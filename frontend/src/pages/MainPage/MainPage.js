@@ -1,5 +1,5 @@
 // import Component from '../../components/component';
-import CustomComponent from '../../components/CustomComponent';
+import Component from '../../components/Component.js';
 import './mainPage.scss';
 import { createDom } from '../../utils/dom';
 import Card from '../../components/Card/Card';
@@ -14,7 +14,7 @@ import { observe } from '../../store/observe';
 import { vDomToNode } from '../../utils/jsx-runtime';
 import WebRequestController from '../../router/WebRequestController';
 
-export default class MainPage extends CustomComponent {
+export default class MainPage extends Component {
   init() {
     this.projectOrStudy =
       RouterContext.state.pathname === '/' ? 'project' : 'study';
