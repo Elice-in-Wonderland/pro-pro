@@ -10,7 +10,7 @@ import './loginModal.scss';
 export default class LoginModal extends Component {
   init() {
     this.showModal = this.showModal.bind(this);
-    this.hiddenModal = this.hiddenModal.bind(this);
+    this.handleModal = this.handleModal.bind(this);
     this.handleCredentialResponse = this.handleCredentialResponse.bind(this);
   }
 
@@ -25,7 +25,7 @@ export default class LoginModal extends Component {
           로그인
         </button>
         <div class="login-modal">
-          <div class="login-modal__background" onClick={this.hiddenModal}>
+          <div class="login-modal__background" onClick={this.handleModal}>
             <div class="login-modal__content">
               <button class="login-modal__button login-modal__button--close">
                 <img src={xButton} />
@@ -59,17 +59,21 @@ export default class LoginModal extends Component {
     );
   }
 
+  handleModal({ target }) {
+    const isInsideModal = target.closest('.login-modal__content');
+    const isClickCloseBtn = target.closest('.login-modal__button--close');
+    if (isInsideModal && !isClickCloseBtn) return;
+
+    this.hiddenModal();
+  }
+
   showModal() {
     const modalContainer = this.container.querySelector('.login-modal');
     modalContainer.classList.add('login-modal--active');
     document.body.style.overflow = 'hidden';
   }
 
-  hiddenModal({ target }) {
-    const isInsideModal = target.closest('.login-modal__content');
-    const isClickCloseBtn = target.closest('.login-modal__button--close');
-    if (isInsideModal && !isClickCloseBtn) return;
-
+  hiddenModal() {
     const modalContainer = this.container.querySelector('.login-modal');
 
     modalContainer.classList.remove('login-modal--active');
@@ -87,6 +91,8 @@ export default class LoginModal extends Component {
 
     try {
       await requestLogin(user);
+
+      this.hiddenModal();
       this.props.onLogin();
     } catch (e) {
       new Toast({ content: '로그인에 실패하였습니다', type: 'fail' });

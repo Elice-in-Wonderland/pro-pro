@@ -22,15 +22,10 @@ class Component {
 
   render() {
     const vDOM = this.markup();
+    const fragment = new DocumentFragment();
 
-    // TODO: JSX관련해서 수정되면 제거
-    if (typeof vDOM === 'string') this.container.innerHTML = vDOM;
-    else {
-      const fragment = new DocumentFragment();
-      vDomToNode(vDOM, fragment);
-      this.container?.replaceChildren(fragment);
-    }
-
+    vDomToNode(vDOM, fragment);
+    this.container?.replaceChildren(fragment);
     this.renderCallback();
   }
 

@@ -1,7 +1,7 @@
 const path = require('path');
-const webpack = require('webpack');
 const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { ProvidePlugin, DefinePlugin } = require('webpack');
 
 dotenv.config();
 
@@ -58,13 +58,13 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.ProvidePlugin({
+    new ProvidePlugin({
       jsx: [
         path.resolve(path.join(__dirname, 'src/utils/jsx-runtime.js')),
         'default',
       ],
     }),
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       'process.env': JSON.stringify(process.env),
     }),
     new HtmlWebpackPlugin({
