@@ -86,7 +86,7 @@ export default class MainPage extends CustomComponent {
       store.dispatch(setTotal(data));
       store.dispatch(setBasis(data));
       store.dispatch(setPost(store.getState().sortStandard(data)));
-      this.state = { ...this.state, isLoading: false };
+      this.setState({ ...this.state, isLoading: false });
     } catch (e) {
       console.log('요청이 취소되었습니다.');
     }
