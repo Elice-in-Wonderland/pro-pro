@@ -1,5 +1,4 @@
-// import Component from '../../components/component';
-import Component from '../../components/Component.js';
+import Component from '../../components/Component';
 import './mainPage.scss';
 import { createDom } from '../../utils/dom';
 import Card from '../../components/Card/Card';

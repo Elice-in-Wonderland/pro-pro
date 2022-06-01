@@ -1,6 +1,6 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 
-class SelectorBox extends CustomComponent {
+class SelectorBox extends Component {
   markup() {
     const { id, items, defaultOption, selectedItem } = this.props;
 
@@ -13,15 +13,11 @@ class SelectorBox extends CustomComponent {
         <option value="" selected disabled hidden>
           {defaultOption}
         </option>
-        {items.map(item =>
-          item === selectedItem ? (
-            <option value={item} selected>
-              {item}
-            </option>
-          ) : (
-            <option value={item}>{item}</option>
-          ),
-        )}
+        {items.map(item => (
+          <option value={item} selected={item === selectedItem}>
+            {item}
+          </option>
+        ))}
       </select>
     );
   }

@@ -1,6 +1,6 @@
 import { getToken } from '@utils/store';
 import { createDom } from '@utils/dom';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import Logo from '../Logo/Logo';
 import Link from '../Link/Link';
 import Dropdown from '../Dropdown/Dropdown';
@@ -8,7 +8,7 @@ import LoginModal from '../LoginModal/LoginModal';
 import RouterContext from '../../router/RouterContext';
 import './navigation.scss';
 
-export default class Navigation extends CustomComponent {
+export default class Navigation extends Component {
   init() {
     this.state = {
       loginState: !!getToken(),

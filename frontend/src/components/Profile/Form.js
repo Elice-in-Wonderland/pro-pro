@@ -5,12 +5,12 @@ import {
   defaultSigungu,
   defaultStacks,
 } from '../../library/Profile';
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import SelectorBox from './SelectorBox';
 import StackCheckBoxes from './StackCheckBoxes';
 import './form.scss';
 
-class Form extends CustomComponent {
+class Form extends Component {
   init() {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleStackChange = this.handleStackChange.bind(this);
@@ -69,6 +69,7 @@ class Form extends CustomComponent {
           <button
             class="profile-edit__form__btn profile-edit__form__btn--submit"
             aria-label="프로필 수정"
+            disabled={this.props.isLoadFailed}
           >
             <span>수정 완료</span>
           </button>

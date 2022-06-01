@@ -1,12 +1,12 @@
-import CustomComponent from '../CustomComponent';
-import viewImage from '../../assets/icons/view.svg';
-import bookmarkImage from '../../assets/icons/bookmark.svg';
+import { view, bookmark } from '@assets/icons';
+import Component from '../Component';
 import PostBanner from '../PostBanner/PostBanner';
-import './Card.scss';
+import './card.scss';
 import RouterContext from '../../router/RouterContext';
 import { shortSido } from '../../library/MainPage/index';
 import { createDom, replaceElement } from '../../utils/dom';
-export default class Card extends CustomComponent {
+
+export default class Card extends Component {
   init() {
     this.state = {
       type: this.props.type,
@@ -49,11 +49,11 @@ export default class Card extends CustomComponent {
             </div>
             <div class="card__body__info__number">
               <div class="card__body__info__number__detail">
-                <img src={viewImage} aria-label="조회수" />
+                <img src={view} aria-label="조회수" />
                 <div>{this.state.post.views}</div>
               </div>
               <div class="card__body__info__number__detail">
-                <img src={bookmarkImage} aria-label="북마크" />
+                <img src={bookmark} aria-label="북마크" />
                 <div>{this.state.post.marks}</div>
               </div>
             </div>

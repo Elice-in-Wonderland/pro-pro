@@ -1,24 +1,24 @@
-import CustomComponent from '../../components/CustomComponent';
+import { createMap } from '@utils/common';
+import axiosInstance from '@utils/api';
+import { state as userState } from '@utils/store';
+import { createDom, replaceElement } from '@utils/dom';
+import { view } from '@assets/icons';
+import Component from '@/components/Component';
 import './detailPage.scss';
-import viewIcon from '../../assets/icons/view.svg';
 
-import Stacks from '../../components/Stacks/Stacks';
-import Comments from '../../components/Comments/Comments';
-import CommentForm from '../../components/CommentForm/CommentForm';
-import PostBanner from '../../components/PostBanner/PostBanner';
-import EditButtons from '../../components/EditButtons/EditButtons';
-import Bookmark from '../../components/Bookmark/Bookmark';
+import Stacks from '@/components/Stacks/Stacks';
+import Comments from '@/components/Comments/Comments';
+import CommentForm from '@/components/CommentForm/CommentForm';
+import PostBanner from '@/components/PostBanner/PostBanner';
+import EditButtons from '@/components/EditButtons/EditButtons';
+import Bookmark from '@/components/Bookmark/Bookmark';
 
-import RouterContext from '../../router/RouterContext';
-import Loading from '../../components/Loading/Loading';
-import axiosInstance from '../../utils/api';
-import { state as userState } from '../../utils/store';
-import { createMap } from '../../utils/common';
-import { createDom, replaceElement } from '../../utils/dom';
-import Toast from '../../components/Toast/Toast';
-import WebRequestController from '../../router/WebRequestController';
+import RouterContext from '@/router/RouterContext';
+import Loading from '@/components/Loading/Loading';
+import Toast from '@/components/Toast/Toast';
+import WebRequestController from '@/router/WebRequestController';
 
-export default class DetailPage extends CustomComponent {
+export default class DetailPage extends Component {
   init() {
     this.state = {
       isLoading: true,
@@ -127,7 +127,6 @@ export default class DetailPage extends CustomComponent {
       updatedAt,
       registerDeadline,
       views,
-      content,
     } = this.state;
 
     return (
@@ -173,7 +172,7 @@ export default class DetailPage extends CustomComponent {
               </li>
               <li class="detail__info">
                 <div class="detail__view-wrapper">
-                  <img class="detail__view-image" src={viewIcon} />
+                  <img class="detail__view-image" src={view} />
                   <span class="detail__view-count">{views}</span>
                 </div>
                 <div class="detail__bookmark-wrapper"></div>
@@ -183,7 +182,7 @@ export default class DetailPage extends CustomComponent {
         </main>
         <div class="detail__description-wrapper">
           <h3>프로젝트 소개</h3>
-          <p class="detail__post-description">{content}</p>
+          <div class="detail__post-description markdown-body"></div>
         </div>
         <div class="detail__map-wrapper">
           <h3>팀 미팅 지역</h3>
@@ -227,6 +226,8 @@ export default class DetailPage extends CustomComponent {
         this.editButtons.container,
       );
     }
+    this.container.querySelector('.detail__post-description').innerHTML =
+      this.state.content;
   }
 
   getMapImg() {

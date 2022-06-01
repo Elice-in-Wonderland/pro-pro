@@ -105,6 +105,10 @@
       opacity: 0.9;
     }
   }
+
+  &__btn--submit[disabled]{
+    cursor: not-allowed;
+  }
 }
 
 .profile-edit__form--layout-grid {

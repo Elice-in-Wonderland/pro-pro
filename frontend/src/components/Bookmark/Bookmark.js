@@ -1,15 +1,14 @@
-import CustomComponent from '../CustomComponent';
 import './bookmark.scss';
 
-import markIcon from '../../assets/icons/bookmark.svg';
-import filledMarkIcon from '../../assets/icons/bookmark_filled.svg';
+import { bookmark, bookmarkFilled } from '../../assets/icons';
+import Component from '../Component';
 
-export default class Bookmark extends CustomComponent {
+export default class Bookmark extends Component {
   markup() {
     const { isMyBookmark, marks } = this.props;
     return (
       <fragment>
-        <img class="bookmark" src={isMyBookmark ? filledMarkIcon : markIcon} />
+        <img class="bookmark" src={isMyBookmark ? bookmarkFilled : bookmark} />
         <span class="bookmark-count">{marks}</span>
       </fragment>
     );

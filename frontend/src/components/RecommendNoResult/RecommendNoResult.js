@@ -1,8 +1,8 @@
-import CustomComponent from '../CustomComponent';
+import Component from '../Component';
 import './recommendNoResult.scss';
 import noResult from '../../assets/images/no-result-img.svg';
 
-export default class RecommendNoResult extends CustomComponent {
+export default class RecommendNoResult extends Component {
   markup() {
     return (
       <div class="recommend-no-result">

@@ -3,12 +3,18 @@ import { createDom } from '@utils/dom';
 import { updateUserInfo } from '@utils/auth';
 import Toast from '../../components/Toast/Toast';
 import RouterContext from '../../router/RouterContext';
-import CustomComponent from '../../components/CustomComponent';
+import Component from '../../components/Component';
 import Form from '../../components/Profile/Form';
 import './profilePage.scss';
+import WebRequestController from '../../router/WebRequestController';
+import { isCanceledRequest } from '../../utils/common';
 
-export default class ProfilePage extends CustomComponent {
+export default class ProfilePage extends Component {
   init() {
+    this.state = {
+      isLoadFailed: false,
+    };
+
     this.nonReRenderState = {
       current: {
         nickname: '',
@@ -27,7 +33,9 @@ export default class ProfilePage extends CustomComponent {
     try {
       const {
         data: { data },
-      } = await axiosInstance.get('/users');
+      } = await axiosInstance.get('/users', {
+        signal: WebRequestController.getController()?.signal,
+      });
 
       const profile = {
         nickname: data.nickname || '',
@@ -47,7 +55,13 @@ export default class ProfilePage extends CustomComponent {
         ...profile,
       });
     } catch (e) {
+      if (isCanceledRequest(e)) return;
+
       new Toast({ content: '프로필 정보 불러오기 실패', type: 'fail' });
+      this.setState({
+        ...this.state,
+        isLoadFailed: true,
+      });
     }
   }
 
@@ -63,6 +77,7 @@ export default class ProfilePage extends CustomComponent {
       container: form,
       props: {
         userInfo: this.nonReRenderState,
+        isLoadFailed: this.state?.isLoadFailed,
         onChangeUserInfo: this.handleChangeUserInfo.bind(this),
         onSubmit: this.handleSubmit.bind(this),
       },

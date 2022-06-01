@@ -1,29 +1,34 @@
 import axiosInstance from '../../utils/api';
 import Card from '../../components/Card/Card';
 import './bookmarkPage.scss';
-import CustomComponent from '../../components/CustomComponent';
+import Component from '../../components/Component';
 import { createDom } from '../../utils/dom';
 import Toast from '../../components/Toast/Toast';
 import Loading from '../../components/Loading/Loading';
+import WebRequestController from '../../router/WebRequestController';
+import { isCanceledRequest } from '../../utils/common';
 
-export default class BookmarkPage extends CustomComponent {
+export default class BookmarkPage extends Component {
   init() {
     this.state = { isLoading: true, cards: [] };
   }
 
   async mounted() {
     try {
-      await axiosInstance
-        .get('/users/mark?category=project&page=1&perPage=10', {
-          withCredentials: true,
-        })
-        .then(res => {
-          return res.data.data;
-        })
-        .then(cards => {
-          this.setState({ ...this.state, isLoading: false, cards });
-        });
+      const {
+        data: { data },
+      } = await axiosInstance.get(
+        '/users/mark?category=project&page=1&perPage=10',
+        {
+          signal: WebRequestController.getController()?.signal,
+        },
+      );
+
+      const cards = data;
+
+      this.setState({ ...this.state, isLoading: false, cards });
     } catch (e) {
+      if (isCanceledRequest(e)) return;
       new Toast({ content: '북마크 정보 불러오기 실패', type: 'fail' });
     }
   }
